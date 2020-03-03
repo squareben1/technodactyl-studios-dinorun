@@ -16,4 +16,8 @@ class Dino {
       this.jumpCounter = 30
     }
   }
+
+  resetJump() {
+    this.spaceCounter = 0
+  }
 }
