@@ -18,8 +18,6 @@ class RenderGame {
     var secondBackground = new Background(this.canvas, this.backgroundImage)
     secondBackground.reset()
     this.backgroundArray.push(secondBackground)
-    // for (var i = 0; i < this.canvas.clientWidth; i++)
-    //   this.backgroundArray.push()
   }
 
   _generateImages() {
