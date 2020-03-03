@@ -1,9 +1,10 @@
 
 class Background {
-  constructor(canvas) {
+  constructor(canvas, image) {
     this.x = 0
     this.y = 0
     this.canvas = canvas
+    this.image = image
   }
 
   move() {
