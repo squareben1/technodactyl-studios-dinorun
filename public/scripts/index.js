@@ -155,13 +155,14 @@ function draw() {
       blockArray.unshift(new Block())
     }
   }
-
   for (var i = 0; i < blockArray.length; i++) {
     canvasContext.drawImage(stoneBlock, blockArray[i].x, blockArray[i].y, 80, 80)
     blockArray[i].move()
   }
-  if (blockArray[-1].x <= -80) {
-    blockArray.pop()
+  if (blockArray.length > 0) {
+    if (blockArray[blockArray.length - 1].x <= -80) {
+      blockArray.pop()
+    }
   }
 
   // Draw Dino
