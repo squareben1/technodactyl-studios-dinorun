@@ -103,10 +103,20 @@ class Block {
     this.x -= 5
   }
 }
-var blocks = []
-blocks.push(new Block())
+var blockArray = []
 
 
+function checkGame() {
+  let filteredBlocks = blockArray.filter(function(item) {
+    return item.x >= 20 && item.x <= 180
+  })
+  if (filteredBlocks.length > 0 && dino.y >= canvas.height - 320 && dino.y <= canvas.height - 240) {
+    gameOver = true
+  }
+  if (dino.y >= canvas.height) {
+    gameOver = true
+  }
+}
 
 
 function draw() {
@@ -129,7 +139,7 @@ function draw() {
       
     }
     if (groundArray[i].x <= -240) {
-      groundArray.splice(i, 1);
+      groundArray.splice(i, 1)
     }
     else {
       groundArray[i].move()
@@ -137,6 +147,22 @@ function draw() {
   }
 
 
+
+  // Draw blocks
+
+  if (groundArray[0].x <= canvas.width - 240) {
+    if (Math.random(1) < 0.01) {
+      blockArray.push(new Block())
+    }
+  }
+
+  for (var i = 0; i < blockArray.length; i++) {
+    canvasContext.drawImage(stoneBlock, blockArray[i].x, blockArray[i].y, 80, 80)
+    blockArray[i].move()
+    if (blockArray[i].x <= -80) {
+      blockArray.splice(i, 1)
+    }
+  }
 
   // Draw Dino
   canvasContext.drawImage(dinoImage,dino.x,dino.y,120,120)
@@ -153,25 +179,18 @@ function draw() {
     }
     dino.applyJump()
   }
-  
 
-
-
-  // Draw blocks
-  for (var i = 0; i < blocks.length; i++) {
-    canvasContext.drawImage(stoneBlock, blocks[i].x, blocks[i].y, 80, 80)
-    blocks[i].move()
-
-    if ((i == blocks.length - 1) && (blocks[i].x <= canvas.width - 240)) {
-      if (Math.random(1) < 0.01) {
-        blocks.push(new Block())
-      }
-    }
-  }
-
-
-  requestAnimationFrame(draw)
+  checkGame()
+  console.log(gameOver)
+  refreshCount++
 
 }
 
-draw()
+var refreshCount = 0
+var animationFramHandle
+var interval = setInterval(function() {
+  cancelAnimationFrame(animationFramHandle);
+  animationFramHandle = requestAnimationFrame(draw);
+}, 16)
+
+var gameOver = false;
