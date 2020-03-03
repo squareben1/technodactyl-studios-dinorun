@@ -152,16 +152,16 @@ function draw() {
 
   if (groundArray[0].x <= canvas.width - 240) {
     if (Math.random(1) < 0.01) {
-      blockArray.push(new Block())
+      blockArray.unshift(new Block())
     }
   }
 
   for (var i = 0; i < blockArray.length; i++) {
     canvasContext.drawImage(stoneBlock, blockArray[i].x, blockArray[i].y, 80, 80)
     blockArray[i].move()
-    if (blockArray[i].x <= -80) {
-      blockArray.splice(i, 1)
-    }
+  }
+  if (blockArray[-1].x <= -80) {
+    blockArray.pop()
   }
 
   // Draw Dino
@@ -181,7 +181,6 @@ function draw() {
   }
 
   checkGame()
-  console.log(gameOver)
   refreshCount++
 
 }
