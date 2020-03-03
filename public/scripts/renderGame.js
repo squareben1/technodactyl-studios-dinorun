@@ -6,18 +6,27 @@ class RenderGame {
 
   setup() {
     this._generateImages()
-    this.backgroundArray = []
     this.groundArray = []
     this.blockArray = []
-    this._drawNewGame()
+    this._drawNewBackground()
   }
 
-  _drawNewGame() {
+  _drawNewBackground() {
     this.backgroundArray = []
     this.backgroundArray.push(new Background(this.canvas, this.backgroundImage))
     var secondBackground = new Background(this.canvas, this.backgroundImage)
     secondBackground.reset()
     this.backgroundArray.push(secondBackground)
+    // Draw background
+    for (var i = 0; i < this.backgroundArray.length; i++) {
+      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y)
+      if (this.backgroundArray[i].x == -this.canvas.width) {
+        this.backgroundArray[i].reset()
+      }
+      else {
+        this.backgroundArray[i].move()
+      }
+    }
   }
 
   _generateImages() {
