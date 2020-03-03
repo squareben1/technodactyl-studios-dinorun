@@ -12,36 +12,38 @@ class RenderGame {
   }
 
   _drawNewBackground() {
-    this.backgroundArray = []
-    this.backgroundArray.push(new Background(this.canvas, this.backgroundImage))
-    var secondBackground = new Background(this.canvas, this.backgroundImage)
-    secondBackground.reset()
-    this.backgroundArray.push(secondBackground)
-    // Draw background
-    for (var i = 0; i < this.backgroundArray.length; i++) {
-      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y)
-      if (this.backgroundArray[i].x == -this.canvas.width) {
-        this.backgroundArray[i].reset()
-      }
-      else {
-        this.backgroundArray[i].move()
+    this.backgroundImage = new Image()
+
+    self = this
+    
+    this.backgroundImage.onload = function() {
+      self.backgroundArray = []
+      self.backgroundArray.push(new Background(self.canvas, self.backgroundImage))
+      var secondBackground = new Background(self.canvas, self.backgroundImage)
+      secondBackground.reset()
+      self.backgroundArray.push(secondBackground)
+      // Draw background
+      for (var i = 0; i < self.backgroundArray.length; i++) {
+        self.canvasContext.drawImage(self.backgroundArray[i].image, self.backgroundArray[i].x, self.backgroundArray[i].y, self.canvas.width, self.canvas.height)
       }
     }
+
+    this.backgroundImage.src = 'images/bg.png'
+    
   }
 
   _generateImages() {
     // Create image objects
-    this.dinoImage = new Image()
-    this.dinoImage.src = 'images/dino_png/Run (2).png'
-    this.backgroundImage = new Image()
-    this.backgroundImage.src = 'images/deserttileset/png/BG.png'
-    this.stoneBlock = new Image()
-    this.stoneBlock.src = 'images/deserttileset/png/Objects/StoneBlock.png'
-    this.groundCentreImage = new Image()
-    this.groundCentreImage.src = 'images/deserttileset/png/2.png'
-    this.groundLeftImage = new Image()
-    this.groundLeftImage.src = 'images/deserttileset/png/1.png'
-    this.groundRightImage = new Image()
-    this.groundRightImage.src = 'images/deserttileset/png/3.png'
+    // this.dinoImage = new Image()
+    // this.dinoImage.src = '/dino_png/Run (2).png'
+
+    // this.stoneBlock = new Image()
+    // this.stoneBlock.src = 'images/deserttileset/png/Objects/StoneBlock.png'
+    // this.groundCentreImage = new Image()
+    // this.groundCentreImage.src = 'images/deserttileset/png/2.png'
+    // this.groundLeftImage = new Image()
+    // this.groundLeftImage.src = 'images/deserttileset/png/1.png'
+    // this.groundRightImage = new Image()
+    // this.groundRightImage.src = 'images/deserttileset/png/3.png'
   }
 }
