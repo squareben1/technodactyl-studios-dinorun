@@ -1,5 +1,5 @@
 
-describe("RenderGame", function() {
+xdescribe("RenderGame", function() {
   canvasContextDouble = {
     drawImage: function() {
       return ''

@@ -31,7 +31,6 @@ class RenderGame {
     }
 
     this.backgroundImage.src = 'images/bg.png'
-    
   }
 
   _generateImages() {
