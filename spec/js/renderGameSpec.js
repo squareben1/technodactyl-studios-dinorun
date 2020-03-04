@@ -33,14 +33,13 @@ describe("RenderGame", function() {
     expect(renderGame.backgroundArray.length).toEqual(2)
   })
 
-  it('adds background images to canvas', function() {
-    expect(spy).toHaveBeenCalledTimes(2)
+  it('adds background & ground images to canvas', function() {
+    expect(spy).toHaveBeenCalledTimes(13)
   })
 
   it('drawGround adds ground obj to groundArray', function() {
-    // console.log("ceil")
-    // console.log(Math.ceil(canvasDouble.width / 120))
-    // console.log(renderGame.groundArray)
     expect(renderGame.groundArray.length).toEqual(Math.ceil(canvasDouble.width / 120))
   })
+
+  // expect cannvasconetxt to have received
 })

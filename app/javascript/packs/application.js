@@ -18,12 +18,15 @@ require("channels")
 
 require("packs/background")
 require("packs/renderGame")
+require("packs/ground")
+require("packs/block")
+require("packs/dino")
 
 // Load Page => new game
 
 window.addEventListener('load', function(){
   var canvas = document.getElementById('canvas')
 
-  window.game = new window.RenderGame(canvas, window.Background)
+  window.game = new window.RenderGame(canvas, window.Background, window.Ground)
   game.setup()
 })

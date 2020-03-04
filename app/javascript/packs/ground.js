@@ -10,3 +10,5 @@ class Ground {
     this.x -= 5
   }
 }
+
+window.Ground = Ground

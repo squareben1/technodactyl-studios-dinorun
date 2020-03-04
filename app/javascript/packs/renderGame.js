@@ -5,6 +5,7 @@ class RenderGame {
     this.canvasContext = this.canvas.getContext('2d')
     this.backgroundClass = backgroundClass
     this.groundClass = groundClass
+    this.groundLevel = 100
   }
 
   setup() {
@@ -45,6 +46,7 @@ class RenderGame {
       for (var i = 0; i < (numberBlocks); i++ ) {
         let newGround = new self.groundClass(self.canvas, self.groundCentreImage)
         newGround.x = i*120
+        self.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, 120, 120)
         self.groundArray.push(newGround)
       }
     }
