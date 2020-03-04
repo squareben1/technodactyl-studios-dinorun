@@ -1,4 +1,5 @@
 class SongsController < ApplicationController
+  skip_before_action :require_login
   before_action :set_song, only: [:show, :edit, :update, :destroy]
 
   # GET /songs
