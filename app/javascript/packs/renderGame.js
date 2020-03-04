@@ -15,17 +15,11 @@ class RenderGame {
     this.groundArray = []
     this._generateImages()
     
-      // this._drawNewBackground()
-      // this._drawGround()
-      // this._drawDino()
-    
-    
   }
 
   _drawNewBackground() {
     self = this
-    
-    // this.backgroundImage.onload = function() {
+
       self.backgroundArray = []
       self.backgroundArray.push(new self.backgroundClass(self.canvas, self.backgroundImage))
       var secondBackground = new self.backgroundClass(self.canvas, self.backgroundImage)
@@ -35,16 +29,11 @@ class RenderGame {
       for (var i = 0; i < self.backgroundArray.length; i++) {
         self.canvasContext.drawImage(self.backgroundArray[i].image, self.backgroundArray[i].x, self.backgroundArray[i].y, self.canvas.width, self.canvas.height)
       }
-      
-      // selfself._drawGround()
-      
-    // }
 
   }
 
   _drawGround() {
     self = this
-    // this.groundCentreImage.onload = function() {
       var numberBlocks = Math.ceil(self.canvas.width / 120)
       for (var i = 0; i < (numberBlocks); i++ ) {
         let newGround = new self.groundClass(self.canvas, self.groundCentreImage)
@@ -52,19 +41,16 @@ class RenderGame {
         self.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, 120, 120)
         self.groundArray.push(newGround)
       }
-    // }
   }
 
   _drawDino() {
     self = this
 
-    // this.dinoImage.onload = function() {
       console.log("test")
       let newDino = new self.dinoClass(self.dinoImage)
       self.canvasContext.drawImage(newDino.image, newDino.x, newDino.y, 120, 120)
       self.dino = newDino
-      
-    // }
+
   }
 
   _generateImages() {
