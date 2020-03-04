@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_secure_password
 
   validates :password, length: {
     minimum: 6,
@@ -11,7 +12,4 @@ class User < ApplicationRecord
     message: 'Email already taken, please choose another'
   }
   
-  after_validation(on: :create) do
-    self.password = BCrypt::Password.create(password)
-  end
 end

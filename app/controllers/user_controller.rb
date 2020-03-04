@@ -12,4 +12,10 @@ class UserController < ApplicationController
       render json: {logged_in: false}
     end
   end
+
+  private 
+
+  def user_params
+    params.require(:user).permit(:username, :email, :password)
+  end
 end
