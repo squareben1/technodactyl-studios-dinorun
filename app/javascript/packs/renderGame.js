@@ -14,58 +14,47 @@ class RenderGame {
     this.backgroundArray = []
     this.groundArray = []
     this._generateImages()
-    
   }
 
   _drawNewBackground() {
-    self = this
-
-      self.backgroundArray = []
-      self.backgroundArray.push(new self.backgroundClass(self.canvas, self.backgroundImage))
-      var secondBackground = new self.backgroundClass(self.canvas, self.backgroundImage)
-      secondBackground.reset()
-      self.backgroundArray.push(secondBackground)
-      // Draw background
-      for (var i = 0; i < self.backgroundArray.length; i++) {
-        self.canvasContext.drawImage(self.backgroundArray[i].image, self.backgroundArray[i].x, self.backgroundArray[i].y, self.canvas.width, self.canvas.height)
-      }
-
+    this.backgroundArray.push(new this.backgroundClass(this.canvas, this.backgroundImage))
+    var secondBackground = new this.backgroundClass(this.canvas, this.backgroundImage)
+    secondBackground.reset()
+    this.backgroundArray.push(secondBackground)
+    // Draw background
+    for (var i = 0; i < this.backgroundArray.length; i++) {
+      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, this.canvas.width, this.canvas.height)
+    }
   }
 
   _drawGround() {
-    self = this
-      var numberBlocks = Math.ceil(self.canvas.width / 120)
-      for (var i = 0; i < (numberBlocks); i++ ) {
-        let newGround = new self.groundClass(self.canvas, self.groundCentreImage)
-        newGround.x = i*120
-        self.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, 120, 120)
-        self.groundArray.push(newGround)
-      }
+    var numberBlocks = Math.ceil(this.canvas.width / 120)
+    for (var i = 0; i < (numberBlocks); i++ ) {
+      let newGround = new this.groundClass(this.canvas, this.groundCentreImage)
+      newGround.x = i*120
+      this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, 120, 120)
+      this.groundArray.push(newGround)
+    }
   }
 
   _drawDino() {
-    self = this
-
-      console.log("test")
-      let newDino = new self.dinoClass(self.dinoImage)
-      self.canvasContext.drawImage(newDino.image, newDino.x, newDino.y, 120, 120)
-      self.dino = newDino
-
+    let newDino = new this.dinoClass(this.dinoImage)
+    this.canvasContext.drawImage(newDino.image, newDino.x, newDino.y, 120, 120)
+    this.dino = newDino
   }
 
   _generateImages() {
     self = this
     var imageCounter = 0
     var numberOfImages = 3
+
     this.dinoImage = new Image()
     this.groundCentreImage = new Image()
     this.backgroundImage = new Image()
 
     var onLoadCallback = function() {
       imageCounter++;
-      console.log(imageCounter)
       if (imageCounter == numberOfImages) {
-        console.log("all loaded")
         self._drawNewBackground()
         self._drawGround()
         self._drawDino()
