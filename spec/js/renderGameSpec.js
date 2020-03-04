@@ -13,14 +13,6 @@ describe("RenderGame", function() {
       return canvasContextDouble
     }
   }
-
-  var imageDouble = {}
-
-  var goundDouble = {
-    x: canvasDouble.width,
-    y: canvasDouble.height-120,
-    image: imageDouble
-  }
   
   beforeEach(function (done) {
     renderGame = new RenderGame(canvasDouble, Background, Ground, Dino) //Background/Ground double
@@ -41,9 +33,15 @@ describe("RenderGame", function() {
     expect(renderGame.groundArray.length).toEqual(Math.ceil(canvasDouble.width / 120))
   })
 
-  it('Animate background', function() {
+  it('timestep background', function() {
     renderGame.timeStepBackground()
     expect(renderGame.backgroundArray[0].x).toEqual(-2.5)
+  })
+
+  it('background resets when it moves off page', function() {
+    renderGame.backgroundArray[0].x = -canvasDouble.width + 2.5
+    renderGame.timeStepBackground()
+    expect(renderGame.backgroundArray[0].x).toEqual(canvasDouble.width)
   })
 
 })

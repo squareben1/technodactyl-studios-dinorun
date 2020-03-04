@@ -85,7 +85,12 @@ class RenderGame {
 
   timeStepBackground() {
     for (var i = 0; i < this.backgroundArray.length; i++) {
-      this.backgroundArray[i].move()
+      if (this.backgroundArray[i].x == -this.canvas.width + 2.5) {
+        this.backgroundArray[i].reset()
+      }
+      else {
+        this.backgroundArray[i].move()
+      }
       this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, 1280, 720)
     }
   }
