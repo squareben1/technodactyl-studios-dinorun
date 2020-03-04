@@ -1,9 +1,0 @@
-# Add enviroment variables here
-
-POSTGRES_USER: <psql-username>
-POSTGRES_PASSWORD: <psql-password>
-POSTGRES_HOST: localhost
-
-POSTGRES_DEVELOPMENT_DB: dinorun_development
-POSTGRES_TEST_DB: dinorun_test
-POSTGRES_DB: dinorun
