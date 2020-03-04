@@ -56,12 +56,13 @@
     }
 
     var getSong = function(event) {
+
       event.preventDefault();
+      let songId = $('#song_id').val()
       $.ajax({
-        url: '/songs/:id.json',
+        url: `/songs/${songId}.json`,
         type: "GET",
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-        data: {song: {id: '1'}}
+        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
       }).done(function( data ) {
         console.log(data)
       })
