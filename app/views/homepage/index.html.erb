@@ -12,7 +12,17 @@
     <button id='button1'>Signup</button>
     <button id='button2'>Login</button>
     <button id='button3'>Logout</button>
-    <button id='start_game_btn'>Start Game</button>
+  <div class='upload-music'>
+    <%= render 'form', song: @song%>
+  </div>
+
+  <form>
+      <%= select("song", "id", Song.all.collect {|p| [ p.title, p.id ] }, { include_blank: 'Select Song'}) %>
+      <input type ="submit" value="Play" id="play_button">
+  </form>
+  <div id='song_player'></div>
+
+  <button id='start_game_btn'>Start Game</button>
   
   <script>
   window.addEventListener('load', function() {
@@ -48,9 +58,36 @@
       })
     }
 
+    var getSong = function(event) {
+      event.preventDefault();
+      let songId = $('#song_id').val()
+      $.ajax({
+        url: `/songs/${songId}`,
+        type: "GET",
+        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
+      }).done(function( data ) {
+        let title = /(Title: )([\w\s\d()\-]*)/
+        let bpm = /(Bpm: )([\d]*)/
+        let analysed = /(Analysed: )([[\d,]*])/
+        let link = /(href=")([\d\w\s\/%()\-]*.mp3\?disposition=attachment)/
+        let titleMatch = data.match(title)
+        let bpmMatch = data.match(bpm)
+        let analysedMatch = data.match(analysed)
+        let linkMatch = data.match(link)
+        document.getElementById('song_player').innerHTML = `<audio controls autoplay><source src=${linkMatch[2]} type="audio/mpeg"></audio>`
+        console.log(titleMatch[2])
+        console.log(bpmMatch[2])
+        console.log(analysedMatch[2])
+        console.log(linkMatch[2])
+
+      })
+    }
+
     document.getElementById('button1').addEventListener('click', signup)
     document.getElementById('button2').addEventListener('click', login)
     document.getElementById('button3').addEventListener('click', logout)
+    document.getElementById('play_button').addEventListener('click', getSong)
+
 
     $(document).ajaxComplete(function( event, xhr, settings ) {
       console.log('ajax complete')
@@ -64,8 +101,8 @@
   <script src="https://sdk.scdn.co/spotify-player.js"></script>
   <script>
 
-  
-    
+
+
 
 
 
@@ -120,7 +157,7 @@
           url: `https://api.spotify.com/v1/audio-features/${trackId}`,
           type: "GET",
           beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + token );},
-          success: function(data) { 
+          success: function(data) {
             console.log(data.tempo)
           }
         });
