@@ -12,7 +12,10 @@
     <button id='button1'>Signup</button>
     <button id='button2'>Login</button>
     <button id='button3'>Logout</button>
-  
+  <div class='upload-music'>
+    <%= render 'form', song: @song%>
+  </div>
+
   <script>
   window.addEventListener('load', function() {
     var signup = function() {
@@ -63,8 +66,8 @@
   <script src="https://sdk.scdn.co/spotify-player.js"></script>
   <script>
 
-  
-    
+
+
 
 
 
@@ -119,7 +122,7 @@
           url: `https://api.spotify.com/v1/audio-features/${trackId}`,
           type: "GET",
           beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + token );},
-          success: function(data) { 
+          success: function(data) {
             console.log(data.tempo)
           }
         });
