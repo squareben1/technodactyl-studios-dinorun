@@ -6,9 +6,11 @@ describe("Ground", function() {
   }
   imageDouble = {}
 
-  it("move - takes 5 from x", function() {
-    ground = new Ground(canvasDouble, imageDouble)
-    ground.move()
-    expect(ground.x).toEqual(1275)
+  describe('#move', function() {
+    it("move - takes 5 from x", function() {
+      ground = new Ground(canvasDouble, imageDouble)
+      ground.move()
+      expect(ground.x).toEqual(1275)
+    })
   })
 })

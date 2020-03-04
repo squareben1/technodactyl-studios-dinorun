@@ -86,6 +86,7 @@ class RenderGame {
       animationFrameHandle = requestAnimationFrame(function() {
         self.timeStepBackground()
         self.timeStepGround()
+        self.timeStepDino()
       })
     }, 16)
   }
@@ -115,6 +116,23 @@ class RenderGame {
         this.groundArray[i].move()
       }
     }
+  }
+
+  timeStepDino() {
+    if (this.groundArray[0].x <= 300) {
+      let filteredGround = this.groundArray.filter(function(item) {
+          return item.x >= -20 && item.x <= 220
+      })
+      if (filteredGround.length > 0 && (this.dino.y <= this.canvas.height - 240 && this.dino.y >= this.canvas.height - 259)) {
+        this.dino.resetJump()
+        this.dino.y = this.canvas.height - 240
+      }
+      else {
+        this.dino.applyGravity()
+      }
+      this.dino.applyJump()
+    }
+    this.canvasContext.drawImage(this.dino.image, this.dino.x, this.dino.y, 120, 120)
   }
 }
 window.RenderGame = RenderGame

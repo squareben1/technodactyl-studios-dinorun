@@ -5,9 +5,11 @@ describe("Block", function() {
   }
   imageDouble = {}
 
-  it("move - takes 5 from x", function() {
-    block = new Block(canvasDouble, imageDouble)
-    block.move()
-    expect(block.x).toEqual(1275)
+  describe('#move', function() {
+    it("move - takes 5 from x", function() {
+      block = new Block(canvasDouble, imageDouble)
+      block.move()
+      expect(block.x).toEqual(1275)
+    })
   })
 })
