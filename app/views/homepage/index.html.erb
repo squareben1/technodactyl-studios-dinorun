@@ -41,7 +41,7 @@
         beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
         data: {user: {password: 'testpassword', email: 'testemail@email.com'}}
       }).done(function( data ) {
-        // console.log(data)
+        console.log(data)
       })
     }
 
@@ -51,19 +51,32 @@
         type: "DELETE",
         beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
       }).done(function( data ) {
-        // console.log(data)
+        console.log(data)
       })
     }
 
     var getSong = function(event) {
       event.preventDefault();
+      let songId = $('#song_id').val()
       $.ajax({
-        url: '/songs/:id.json',
+        url: `/songs/${songId}`,
         type: "GET",
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-        data: {song: {id: '1'}}
+        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
       }).done(function( data ) {
-        console.log(data)
+        let title = /(Title: )([\w\s\d()\-]*)/
+        let bpm = /(Bpm: )([\d]*)/
+        let analysed = /(Analysed: )([[\d,]*])/
+        let link = /(href=")([\d\w\s\/%()\-]*.mp3\?disposition=attachment)/
+        let titleMatch = data.match(title)
+        let bpmMatch = data.match(bpm)
+        let analysedMatch = data.match(analysed)
+        let linkMatch = data.match(link)
+
+        console.log(titleMatch[2])
+        console.log(bpmMatch[2])
+        console.log(analysedMatch[2])
+        console.log(linkMatch[2])
+
       })
     }
 

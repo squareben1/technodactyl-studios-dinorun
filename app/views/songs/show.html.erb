@@ -1,23 +1,8 @@
-<p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Title:</strong>
-  <%= @song.title %>
-</p>
+Title: <%= @song.title %>
 
-<p>
-  <strong>Bpm:</strong>
-  <%= @song.bpm %>
-</p>
+Bpm: <%= @song.bpm %>
 
-<p>
-  <strong>Analysed:</strong>
-  <%= @song.analysed %>
-</p>
+Analysed: <%= @song.analysed %>
 
 <%= link_to @song.mp3.filename, rails_blob_path(@song.mp3, disposition: "attachment") %>
-
-<br>
-
-<%= link_to 'Edit', edit_song_path(@song) %> |
-<%= link_to 'Back', songs_path %>

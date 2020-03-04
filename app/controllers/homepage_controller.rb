@@ -3,8 +3,7 @@ class HomepageController < ApplicationController
 
 
   def index
-    p session[:user_id]
+    session[:user_id]
     @song = Song.new
-    
   end
 end
