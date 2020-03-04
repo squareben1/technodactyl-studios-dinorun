@@ -14,58 +14,44 @@ class RenderGame {
     this.backgroundArray = []
     this.groundArray = []
     this._generateImages()
-    
   }
 
   _drawNewBackground() {
-    self = this
-
-      self.backgroundArray = []
-      self.backgroundArray.push(new self.backgroundClass(self.canvas, self.backgroundImage))
-      var secondBackground = new self.backgroundClass(self.canvas, self.backgroundImage)
-      secondBackground.reset()
-      self.backgroundArray.push(secondBackground)
-      // Draw background
-      for (var i = 0; i < self.backgroundArray.length; i++) {
-        self.canvasContext.drawImage(self.backgroundArray[i].image, self.backgroundArray[i].x, self.backgroundArray[i].y, self.canvas.width, self.canvas.height)
-      }
-
+    this.backgroundArray.push(new this.backgroundClass(this.canvas, this.backgroundImage))
+    var secondBackground = new this.backgroundClass(this.canvas, this.backgroundImage)
+    secondBackground.reset()
+    this.backgroundArray.push(secondBackground)
+    // Draw background
+    for (var i = 0; i < this.backgroundArray.length; i++) {
+      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, this.canvas.width, this.canvas.height)
+    }
   }
 
   _drawGround() {
-    self = this
-      var numberBlocks = Math.ceil(self.canvas.width / 120)
-      for (var i = 0; i < (numberBlocks); i++ ) {
-        let newGround = new self.groundClass(self.canvas, self.groundCentreImage)
-        newGround.x = i*120
-        self.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, 120, 120)
-        self.groundArray.push(newGround)
-      }
+    let newGround = new this.groundClass(this.canvas, this.groundLeftImage)
+    this.groundArray.push(newGround)
+    this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, 120, 120)
   }
 
   _drawDino() {
-    self = this
-
-      console.log("test")
-      let newDino = new self.dinoClass(self.dinoImage)
-      self.canvasContext.drawImage(newDino.image, newDino.x, newDino.y, 120, 120)
-      self.dino = newDino
-
+    let newDino = new this.dinoClass(this.dinoImage)
+    this.canvasContext.drawImage(newDino.image, newDino.x, newDino.y, 120, 120)
+    this.dino = newDino
   }
 
   _generateImages() {
     self = this
     var imageCounter = 0
-    var numberOfImages = 3
+    var numberOfImages = 4
+
+    this.backgroundImage = new Image()
     this.dinoImage = new Image()
     this.groundCentreImage = new Image()
-    this.backgroundImage = new Image()
+    this.groundLeftImage = new Image()
 
     var onLoadCallback = function() {
       imageCounter++;
-      console.log(imageCounter)
       if (imageCounter == numberOfImages) {
-        console.log("all loaded")
         self._drawNewBackground()
         self._drawGround()
         self._drawDino()
@@ -73,13 +59,15 @@ class RenderGame {
     }
 
     this.dinoImage.onload = onLoadCallback
-    this.groundCentreImage.onload = onLoadCallback
     this.backgroundImage.onload = onLoadCallback
+    this.groundCentreImage.onload = onLoadCallback
+    this.groundLeftImage.onload = onLoadCallback
 
     // Create image objects
     this.dinoImage.src = 'images/dino_png/Run (2).png'
-    this.groundCentreImage.src = 'images/deserttileset/png/Tile/2.png'
     this.backgroundImage.src = 'images/bg.png'
+    this.groundLeftImage.src = 'images/deserttileset/png/Tile/1.png'
+    this.groundCentreImage.src = 'images/deserttileset/png/Tile/2.png'
     // this.stoneBlock = new Image()
     // this.stoneBlock.src = 'images/deserttileset/png/Objects/StoneBlock.png'
     // this.groundCentreImage = new Image()
@@ -88,6 +76,45 @@ class RenderGame {
     // this.groundLeftImage.src = 'images/deserttileset/png/1.png'
     // this.groundRightImage = new Image()
     // this.groundRightImage.src = 'images/deserttileset/png/3.png'
+  }
+
+  startGame() {
+    self = this
+    var animationFrameHandle
+    var gameInterval = setInterval(function() {
+      cancelAnimationFrame(animationFrameHandle)
+      animationFrameHandle = requestAnimationFrame(function() {
+        self.timeStepBackground()
+        self.timeStepGround()
+      })
+    }, 16)
+  }
+
+  timeStepBackground() {
+    for (var i = 0; i < this.backgroundArray.length; i++) {
+      if (this.backgroundArray[i].x == -this.canvas.width + 2.5) {
+        this.backgroundArray[i].reset()
+      }
+      else {
+        this.backgroundArray[i].move()
+      }
+      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, 1280, 720)
+    }
+  }
+
+  timeStepGround() {
+    for (var i = 0; i < this.groundArray.length; i++) {
+      this.canvasContext.drawImage(this.groundArray[i].image, this.groundArray[i].x, this.groundArray[i].y, 120, 120)
+      if ((i == this.groundArray.length - 1) && (this.groundArray[i].x <= this.canvas.width - 120)) {
+        this.groundArray.push(new this.groundClass(this.canvas, this.groundCentreImage))
+      }
+      if (this.groundArray[i].x <= -240) {
+        this.groundArray.splice(i, 1)
+      }
+      else {
+        this.groundArray[i].move()
+      }
+    }
   }
 }
 window.RenderGame = RenderGame
