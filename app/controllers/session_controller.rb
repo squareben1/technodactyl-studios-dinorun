@@ -5,7 +5,7 @@ class SessionController < ApplicationController
     # check credentials
     user = User.find_by(email: user_params[:email])
     if user && user.authenticate(user_params[:password])
-      # reset_session #reduce risk of session fixation
+      reset_session #reduce risk of session fixation
       session[:user_id] = user.id
       render json: {logged_in: true}
     else
@@ -15,8 +15,7 @@ class SessionController < ApplicationController
 
   def destroy
     # Log user out
-    # reset_session #reduce risk of session fixation
-    session[:user_id] = nil
+    reset_session #reduce risk of session fixation
     render json: {logged_in: false, message: 'You have been logged out'}
   end
 
