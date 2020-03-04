@@ -19,6 +19,7 @@
   <form>
       <%= select("song", "id", Song.all.collect {|p| [ p.title, p.id ] }, { include_blank: 'Select Song'}) %>
       <input type ="submit" value="Play" id="play_button">
+      <div id="song_name"></div>
   </form>
 
   <script>
@@ -65,6 +66,7 @@
         beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
       }).done(function( data ) {
         console.log(data)
+        document.getElementById('song_name').innerHTML = data.title + " is playing"
       })
     }
 
