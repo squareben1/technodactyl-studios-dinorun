@@ -1,31 +1,44 @@
 
 describe("RenderGame", function() {
-  canvasContextDouble = {
+  var canvasContextDouble = {
     drawImage: function() {
       return ''
     }
   }
-  canvasDouble = {
+
+  var canvasDouble = {
     width: 1280,
+    height: 720,
     getContext: function(dimensions) {
       return canvasContextDouble
     }
   }
-  imageDouble = {}
 
-  beforeAll(function (done) {
-    renderGame = new RenderGame(canvasDouble, Background)
+  var imageDouble = {}
+
+  var goundDouble = {
+    x: canvasDouble.width,
+    y: canvasDouble.height-120,
+    image: imageDouble
+  }
+  
+  beforeEach(function (done) {
+    renderGame = new RenderGame(canvasDouble, Background, Ground, Dino) //Background/Ground double
     spy = spyOn(canvasContextDouble, 'drawImage')  
     renderGame.setup()
-    setTimeout(done, 4000);
+    setTimeout(done, 1000);
   })
 
   it('adds background images to backgroundArray', function() {
-    console.log(renderGame)
     expect(renderGame.backgroundArray.length).toEqual(2)
   })
 
-  it('adds background images to canvas', function() {
-    expect(spy).toHaveBeenCalledTimes(2)
+  it('adds background, dino & ground images to canvas', function() {
+    expect(spy).toHaveBeenCalledTimes(14)
   })
+
+  it('drawGround adds ground obj to groundArray', function() {
+    expect(renderGame.groundArray.length).toEqual(Math.ceil(canvasDouble.width / 120))
+  })
+
 })
