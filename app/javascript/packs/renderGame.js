@@ -28,13 +28,9 @@ class RenderGame {
   }
 
   _drawGround() {
-    var numberBlocks = Math.ceil(this.canvas.width / 120)
-    for (var i = 0; i < (numberBlocks); i++ ) {
-      let newGround = new this.groundClass(this.canvas, this.groundCentreImage)
-      newGround.x = i*120
-      this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, 120, 120)
-      this.groundArray.push(newGround)
-    }
+    let newGround = new this.groundClass(this.canvas, this.groundLeftImage)
+    this.groundArray.push(newGround)
+    this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, 120, 120)
   }
 
   _drawDino() {
@@ -46,11 +42,12 @@ class RenderGame {
   _generateImages() {
     self = this
     var imageCounter = 0
-    var numberOfImages = 3
+    var numberOfImages = 4
 
+    this.backgroundImage = new Image()
     this.dinoImage = new Image()
     this.groundCentreImage = new Image()
-    this.backgroundImage = new Image()
+    this.groundLeftImage = new Image()
 
     var onLoadCallback = function() {
       imageCounter++;
@@ -62,13 +59,15 @@ class RenderGame {
     }
 
     this.dinoImage.onload = onLoadCallback
-    this.groundCentreImage.onload = onLoadCallback
     this.backgroundImage.onload = onLoadCallback
+    this.groundCentreImage.onload = onLoadCallback
+    this.groundLeftImage.onload = onLoadCallback
 
     // Create image objects
     this.dinoImage.src = 'images/dino_png/Run (2).png'
-    this.groundCentreImage.src = 'images/deserttileset/png/Tile/2.png'
     this.backgroundImage.src = 'images/bg.png'
+    this.groundLeftImage.src = 'images/deserttileset/png/Tile/1.png'
+    this.groundCentreImage.src = 'images/deserttileset/png/Tile/2.png'
     // this.stoneBlock = new Image()
     // this.stoneBlock.src = 'images/deserttileset/png/Objects/StoneBlock.png'
     // this.groundCentreImage = new Image()
@@ -79,8 +78,16 @@ class RenderGame {
     // this.groundRightImage.src = 'images/deserttileset/png/3.png'
   }
 
-  playGame() {
-
+  startGame() {
+    self = this
+    var animationFrameHandle
+    var gameInterval = setInterval(function() {
+      cancelAnimationFrame(animationFrameHandle)
+      animationFrameHandle = requestAnimationFrame(function() {
+        self.timeStepBackground()
+        self.timeStepGround()
+      })
+    }, 16)
   }
 
   timeStepBackground() {
@@ -92,6 +99,21 @@ class RenderGame {
         this.backgroundArray[i].move()
       }
       this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, 1280, 720)
+    }
+  }
+
+  timeStepGround() {
+    for (var i = 0; i < this.groundArray.length; i++) {
+      this.canvasContext.drawImage(this.groundArray[i].image, this.groundArray[i].x, this.groundArray[i].y, 120, 120)
+      if ((i == this.groundArray.length - 1) && (this.groundArray[i].x <= this.canvas.width - 120)) {
+        this.groundArray.push(new this.groundClass(this.canvas, this.groundCentreImage))
+      }
+      if (this.groundArray[i].x <= -240) {
+        this.groundArray.splice(i, 1)
+      }
+      else {
+        this.groundArray[i].move()
+      }
     }
   }
 }

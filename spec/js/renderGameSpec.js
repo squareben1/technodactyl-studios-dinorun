@@ -26,11 +26,11 @@ describe("RenderGame", function() {
   })
 
   it('adds background, dino & ground images to canvas', function() {
-    expect(spy).toHaveBeenCalledTimes(14)
+    expect(spy).toHaveBeenCalledTimes(4)
   })
 
   it('drawGround adds ground obj to groundArray', function() {
-    expect(renderGame.groundArray.length).toEqual(Math.ceil(canvasDouble.width / 120))
+    expect(renderGame.groundArray.length).toEqual(1)
   })
 
   it('timestep background', function() {
@@ -44,4 +44,14 @@ describe("RenderGame", function() {
     expect(renderGame.backgroundArray[0].x).toEqual(canvasDouble.width)
   })
 
+  it('timestep ground', function() {
+    renderGame.timeStepGround()
+    expect(renderGame.groundArray[0].x).toEqual(1275)
+  })
+
+  it('new ground gets added when last position is fully on screen', function() {
+    renderGame.groundArray[renderGame.groundArray.length-1].x = canvasDouble.width-120
+    renderGame.timeStepGround()
+    expect(renderGame.groundArray[renderGame.groundArray.length-1].x).toEqual(canvasDouble.width - 5)
+  })
 })

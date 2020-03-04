@@ -29,4 +29,13 @@ window.addEventListener('load', function(){
 
   window.game = new window.RenderGame(canvas, window.Background, window.Ground, window.Dino)
   game.setup()
+
+  window.startGame = function() {
+    var animationFrameHandle
+    var gameInterval = setInterval(function() {
+      cancelAnimationFrame(animationFrameHandle)
+      animationFrameHandle = requestAnimationFrame(window.game.drawFrame)
+    }, 16)
+  }
+
 })
