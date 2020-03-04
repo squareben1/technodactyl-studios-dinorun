@@ -1,16 +1,19 @@
+
 class RenderGame {
-  constructor(canvas, backgroundClass) {
+  constructor(canvas, backgroundClass, groundClass) {
     this.canvas = canvas
     this.canvasContext = this.canvas.getContext('2d')
     this.backgroundClass = backgroundClass
+    this.groundClass = groundClass
   }
 
   setup() {
     this._generateImages()
-    this.groundArray = []
     this.blockArray = []
     this.backgroundArray = []
     this._drawNewBackground()
+    this.groundArray = []
+    this._drawGround()
   }
 
   _drawNewBackground() {
@@ -32,6 +35,20 @@ class RenderGame {
 
     this.backgroundImage.src = 'images/bg.png'
     
+  }
+
+  _drawGround() {
+    this.groundCentreImage = new Image()
+    self = this
+    this.groundCentreImage.onload = function() {
+      var numberBlocks = Math.ceil(self.canvas.width / 120)
+      for (var i = 0; i < (numberBlocks); i++ ) {
+        let newGround = new self.groundClass(self.canvas, self.groundCentreImage)
+        newGround.x = i*120
+        self.groundArray.push(newGround)
+      }
+    }
+    this.groundCentreImage.src = 'images/deserttileset/png/Tile/2.png'
   }
 
   _generateImages() {
