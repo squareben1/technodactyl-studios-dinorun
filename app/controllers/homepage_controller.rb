@@ -1,7 +1,7 @@
 class HomepageController < ApplicationController
+  skip_before_action :require_login
+  
   def index
-    session[:id] = '20'
-    session[:secret] = 'secret'
-    p session
+    p session[:user_id]
   end
 end
