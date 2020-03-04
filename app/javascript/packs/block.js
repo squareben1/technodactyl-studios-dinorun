@@ -1,8 +1,8 @@
 
-class Ground {
+class Block {
   constructor(canvas, image) {
     this.x = canvas.width
-    this.y = canvas.height - 120
+    this.y = canvas.height - 200
     this.image = image
   }
 
@@ -10,5 +10,3 @@ class Ground {
     this.x -= 5
   }
 }
-
-window.Ground = Ground
