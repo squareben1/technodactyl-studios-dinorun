@@ -1,10 +1,11 @@
 
 class Dino {
-  constructor() {
+  constructor(image) {
     this.x = 100
     this.y = 100
     this.spaceCounter = 0
     this.jumpCounter = 0
+    this.image = image
   }
 
   applyGravity() {
@@ -30,3 +31,5 @@ class Dino {
   }
 
 }
+
+window.Dino = Dino

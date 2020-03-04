@@ -27,6 +27,6 @@ require("packs/dino")
 window.addEventListener('load', function(){
   var canvas = document.getElementById('canvas')
 
-  window.game = new window.RenderGame(canvas, window.Background, window.Ground)
+  window.game = new window.RenderGame(canvas, window.Background, window.Ground, window.Dino)
   game.setup()
 })
