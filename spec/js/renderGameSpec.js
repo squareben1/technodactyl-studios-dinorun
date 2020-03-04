@@ -1,20 +1,20 @@
 
-xdescribe("RenderGame", function() {
-  canvasContextDouble = {
+describe("RenderGame", function() {
+  var canvasContextDouble = {
     drawImage: function() {
       return ''
     }
   }
-  canvasDouble = {
+  var canvasDouble = {
     width: 1280,
     getContext: function(dimensions) {
       return canvasContextDouble
     }
   }
-  imageDouble = {}
-
+  var imageDouble = {}
+  
   beforeAll(function (done) {
-    renderGame = new RenderGame(canvasDouble, Background)
+    renderGame = new RenderGame(canvasDouble, Background) //Background double
     spy = spyOn(canvasContextDouble, 'drawImage')  
     renderGame.setup()
     setTimeout(done, 4000);
