@@ -16,6 +16,11 @@
     <%= render 'form', song: @song%>
   </div>
 
+  <form>
+      <%= select("song", "id", Song.all.collect {|p| [ p.title, p.id ] }, { include_blank: 'Select Song'}) %>
+      <input type ="submit" value="Play" id="play_button">
+  </form>
+
   <script>
   window.addEventListener('load', function() {
     var signup = function() {
@@ -36,7 +41,7 @@
         beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
         data: {user: {password: 'testpassword', email: 'testemail@email.com'}}
       }).done(function( data ) {
-        console.log(data)
+        // console.log(data)
       })
     }
 
@@ -46,6 +51,18 @@
         type: "DELETE",
         beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
       }).done(function( data ) {
+        // console.log(data)
+      })
+    }
+
+    var getSong = function(event) {
+      event.preventDefault();
+      $.ajax({
+        url: '/songs/:id.json',
+        type: "GET",
+        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+        data: {song: {id: '1'}}
+      }).done(function( data ) {
         console.log(data)
       })
     }
@@ -53,6 +70,8 @@
     document.getElementById('button1').addEventListener('click', signup)
     document.getElementById('button2').addEventListener('click', login)
     document.getElementById('button3').addEventListener('click', logout)
+    document.getElementById('play_button').addEventListener('click', getSong)
+
 
     $(document).ajaxComplete(function( event, xhr, settings ) {
       console.log('ajax complete')
