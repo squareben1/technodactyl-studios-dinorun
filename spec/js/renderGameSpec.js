@@ -41,4 +41,9 @@ describe("RenderGame", function() {
     expect(renderGame.groundArray.length).toEqual(Math.ceil(canvasDouble.width / 120))
   })
 
+  it('Animate background', function() {
+    renderGame.timeStepBackground()
+    expect(renderGame.backgroundArray[0].x).toEqual(-2.5)
+  })
+
 })

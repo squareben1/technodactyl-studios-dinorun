@@ -78,5 +78,16 @@ class RenderGame {
     // this.groundRightImage = new Image()
     // this.groundRightImage.src = 'images/deserttileset/png/3.png'
   }
+
+  playGame() {
+
+  }
+
+  timeStepBackground() {
+    for (var i = 0; i < this.backgroundArray.length; i++) {
+      this.backgroundArray[i].move()
+      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, 1280, 720)
+    }
+  }
 }
 window.RenderGame = RenderGame
