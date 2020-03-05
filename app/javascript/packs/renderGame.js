@@ -1,13 +1,14 @@
 class RenderGame {
   constructor(canvas, backgroundClass, groundClass, dinoClass, blockClass) {
-    this.canvas = canvas;
-    this.canvasContext = this.canvas.getContext("2d");
-    this.backgroundClass = backgroundClass;
-    this.groundClass = groundClass;
-    this.dinoClass = dinoClass;
-    this.blockClass = blockClass;
-    this.groundLevel = 100;
-    this.fps = 1000 / 59.94;
+    this.canvas = canvas
+    this.canvasContext = this.canvas.getContext('2d')
+    this.backgroundClass = backgroundClass
+    this.groundClass = groundClass
+    this.dinoClass = dinoClass
+    this.blockClass = blockClass
+    this.groundLevel = 100
+    this.fps = 59.94
+    this.frameInterval = 1000/59.94
   }
 
   setup() {
@@ -19,15 +20,10 @@ class RenderGame {
   }
 
   _drawNewBackground() {
-    this.backgroundArray.push(
-      new this.backgroundClass(this.canvas, this.backgroundImage)
-    );
-    var secondBackground = new this.backgroundClass(
-      this.canvas,
-      this.backgroundImage
-    );
-    secondBackground.reset();
-    this.backgroundArray.push(secondBackground);
+    this.backgroundArray.push(new this.backgroundClass(this.backgroundImage, this.canvas.width, this.canvas.height))
+    var secondBackground = new this.backgroundClass(this.backgroundImage, this.canvas.width, this.canvas.height)
+    secondBackground.x = this.canvas.width
+    this.backgroundArray.push(secondBackground)
     // Draw background
     for (var i = 0; i < this.backgroundArray.length; i++) {
       this.canvasContext.drawImage(
@@ -141,65 +137,31 @@ class RenderGame {
     // this.groundRightImage.src = 'images/deserttileset/png/3.png'
   }
 
-  startGame(bpm, difficulty) {
-    //frequencyArray,
-    this.blockGeneratorArray = [
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      1,
-      1,
-      0,
-      1,
-      0,
-      1,
-      0,
-      1,
-      0,
-      0,
-      0,
-      1,
-      1,
-      0,
-      1,
-      0,
-      0,
-      1,
-      1,
-      1,
-      1,
-      1
-    ];
-    this._generateFramesPerBeat(bpm);
-    this._calculateObjectVelocity(difficulty);
-    this.animateGame();
+  startGame(bpm, difficulty) { //frequencyArray, 
+    this.blockGeneratorArray = [1,1,1,1,1,1,1,1,1,1,0,1,0,1,0,1,0,0,0,1,1,0,1,0,0,1,1,1,1,1]
+    this._generateFramesPerBeat(bpm)
+    this._calculateObjectVelocity(difficulty)
+    this.animateGame()
   }
 
   _generateFramesPerBeat(bpm) {
-    this.fpb = Math.round(this.fps / (bpm / 60));
-    console.log("bpm");
-    console.log(bpm);
-    console.log("fpb");
-    console.log(this.fpb);
-    console.log("fps");
-    console.log(this.fps);
+    let bps = bpm / 60
+    this.fpb = (Math.round(this.fps / bps) / 2) * 2
+    console.log('bpm')
+    console.log(bpm)
+    console.log('fps')
+    console.log(this.fps)
+    console.log('fpb')
+    console.log(this.fpb)
   }
 
   _calculateObjectVelocity(difficulty) {
-    this.objectVelocity =
-      Math.ceil(
-        (this.canvas.width - this.dino.x - this.dino.xSize) /
-          difficulty /
-          this.fpb /
-          5
-      ) * 5;
-    console.log("objectVelocity");
-    console.log(this.objectVelocity);
+    let pixelsToDino = this.canvas.width - this.dino.x - this.dino.xSize
+    console.log('pixels to Dino')
+    console.log(pixelsToDino)
+    this.objectVelocity = (Math.round(pixelsToDino / this.fpb) / 2) * 2
+    console.log('objectVelocity')
+    console.log(this.objectVelocity)
   }
 
   animateGame() {
@@ -208,32 +170,19 @@ class RenderGame {
     var gameInterval = setInterval(function() {
       cancelAnimationFrame(animationFrameHandle);
       animationFrameHandle = requestAnimationFrame(function() {
-        self.frameCounter++;
-        self.timeStepBackground();
-        self.timeStepGround();
-        self.timeStepDino();
-        self.timeStepBlocks();
-      });
-    }, self.fps);
+        self.frameCounter++
+        self.timeStepBackground()
+        self.timeStepGround()
+        self.timeStepDino()
+        self.timeStepBlocks()
+      })
+    }, self.frameInterval)
   }
 
   timeStepBackground() {
     for (var i = 0; i < this.backgroundArray.length; i++) {
-      if (
-        this.backgroundArray[i].x ==
-        -this.canvas.width + this.objectVelocity / 2
-      ) {
-        this.backgroundArray[i].reset();
-      } else {
-        this.backgroundArray[i].move(this.objectVelocity);
-      }
-      this.canvasContext.drawImage(
-        this.backgroundArray[i].image,
-        this.backgroundArray[i].x,
-        this.backgroundArray[i].y,
-        this.backgroundArray[i].xSize,
-        this.backgroundArray[i].ySize
-      );
+      this.backgroundArray[i].move(this.objectVelocity)
+      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, this.backgroundArray[i].xSize, this.backgroundArray[i].ySize)
     }
   }
 
@@ -289,12 +238,8 @@ class RenderGame {
   }
 
   timeStepBlocks() {
-    if (
-      this.frameCounter >= 300 &&
-      (this.frameCounter - 300 + this.fpb) % this.fpb == 0
-    ) {
-      //always start with first block on inital 300th frame
-      let newBlockValue = this.blockGeneratorArray.shift();
+    if (this.frameCounter >= 300 && ((this.frameCounter - 300 + this.fpb) % this.fpb == 0)) { //always start with first block on inital 300th frame
+      let newBlockValue = this.blockGeneratorArray.shift()
       if (newBlockValue == 1) {
         console.log("newblock");
         this.blocksArray.push(

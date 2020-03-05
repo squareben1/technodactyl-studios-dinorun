@@ -42,14 +42,13 @@ describe("RenderGame", function() {
         -renderGame.objectVelocity / 2
       );
     });
-
-    it("background resets when it moves off page", function() {
-      renderGame.backgroundArray[0].x =
-        -canvasDouble.width + renderGame.objectVelocity / 2;
-      renderGame.timeStepBackground();
-      expect(renderGame.backgroundArray[0].x).toEqual(canvasDouble.width);
-    });
-  });
+  
+  describe('#timeStepBackground', function() { 
+    it('timestep background', function() {
+      renderGame.timeStepBackground()
+      expect(renderGame.backgroundArray[0].x).toEqual(-renderGame.objectVelocity / 5)
+    })
+  })
 
   describe("#timeStepGround", function() {
     it("timestep ground", function() {
