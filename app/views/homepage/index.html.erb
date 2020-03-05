@@ -12,17 +12,20 @@
     <button id='button1'>Signup</button>
     <button id='button2'>Login</button>
     <button id='button3'>Logout</button>
+    <button id='start_game_btn'>Start Game</button>
+    <button id='get_song'>Get Song</button>
+
   <div class='upload-music'>
     <%= render 'form', song: @song%>
   </div>
 
-  <form>
-      <%= select("song", "id", Song.all.collect {|p| [ p.title, p.id ] }, { include_blank: 'Select Song'}) %>
-      <input type ="submit" value="Play" id="play_button">
-  </form>
+  <select id="song_selection">
+    <option value="">--select--</option>   
+  </select>
+
   <div id='song_player'></div>
 
-  <button id='start_game_btn'>Start Game</button>
+  
   
   <script>
   window.addEventListener('load', function() {
@@ -59,34 +62,48 @@
     }
 
     var getSong = function(event) {
-      event.preventDefault();
-      let songId = $('#song_id').val()
+      var songSelector = document.querySelector('#song_selection')
+      var selectedSongId = songSelector.options[songSelector.selectedIndex].value
+      if (selectedSongId == '') {
+        return
+      }
+      var audioPlayer = document.querySelector('#song_player')
       $.ajax({
-        url: `/songs/${songId}`,
+        url: `/songs/${selectedSongId}.json`,
         type: "GET",
         beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
-      }).done(function( data ) {
-        let title = /(Title: )([\w\s\d()\-]*)/
-        let bpm = /(Bpm: )([\d]*)/
-        let analysed = /(Analysed: )([[\d,]*])/
-        let link = /(href=")([\d\w\s\/%()\-]*.mp3\?disposition=attachment)/
-        let titleMatch = data.match(title)
-        let bpmMatch = data.match(bpm)
-        let analysedMatch = data.match(analysed)
-        let linkMatch = data.match(link)
-        document.getElementById('song_player').innerHTML = `<audio controls autoplay><source src=${linkMatch[2]} type="audio/mpeg"></audio>`
-        console.log(titleMatch[2])
-        console.log(bpmMatch[2])
-        console.log(analysedMatch[2])
-        console.log(linkMatch[2])
-
+      }).done(function(data) {
+        console.log(data)
+        var sound = document.createElement('audio')
+        sound.id = 'audio_player'
+        sound.src = data['mp3_url']
+        sound.type = 'audio/mpeg'
+        sound.autoplay = 'true'
+        audioPlayer.appendChild(sound)
       })
     }
+
+    var getSongList = function() {
+      var songSelector = document.querySelector('#song_selection')
+      $.ajax({
+        url: `/songs.json`,
+        type: "GET",
+        datatype: JSON,
+        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
+      }).done(function( data ) {
+        console.log(data)
+        songSelector.innerHTML = "<option value=''>--Select Song--</option>"
+        data.forEach(function(song) {
+          songSelector.innerHTML += `<option value="${song['id']}">${song['title']}</option>`
+        })
+      })
+    }
+
 
     document.getElementById('button1').addEventListener('click', signup)
     document.getElementById('button2').addEventListener('click', login)
     document.getElementById('button3').addEventListener('click', logout)
-    document.getElementById('play_button').addEventListener('click', getSong)
+    document.getElementById('get_song').addEventListener('click', getSong)
 
 
     $(document).ajaxComplete(function( event, xhr, settings ) {
@@ -95,17 +112,19 @@
       if (header_token) $('meta[name=csrf-token]').attr('content', header_token)
     })
 
+    //run on page load 
+    getSongList()
+
   })
   </script>
 
+
+
+
+
+
   <script src="https://sdk.scdn.co/spotify-player.js"></script>
   <script>
-
-
-
-
-
-
     window.onSpotifyWebPlaybackSDKReady = () => {
       const token = 'BQC-sZERWsYVzhAtXEaeNeZNw7FTQFO57CIurGMULEzrL60J0Y_jbc0khfjMES2DpPUE5XiC5ZXQ6Jo0XVrukfQD541EFbWrxsB_UV01PVjEHNJHfh7vf35H-mkjBTtarpP0038rl1DVDIs7qCqLVIUej-veq_pihRc';
       const player = new Spotify.Player({
