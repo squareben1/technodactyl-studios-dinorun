@@ -22,9 +22,9 @@ describe("Background", function() {
   })
 
   describe('#move', function() {
-    it("deduct 2.5 from x axis", function() {
-      background.move()
-      expect(background.x).toEqual(-2.5)
+    it("deduct half of objectVelocity from x axis", function() {
+      background.move(10)
+      expect(background.x).toEqual(-5)
     })
   })
 

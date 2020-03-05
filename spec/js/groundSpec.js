@@ -7,10 +7,10 @@ describe("Ground", function() {
   imageDouble = {}
 
   describe('#move', function() {
-    it("move - takes 5 from x", function() {
+    it("move - takes velocity from x", function() {
       ground = new Ground(canvasDouble, imageDouble)
-      ground.move()
-      expect(ground.x).toEqual(1275)
+      ground.move(10)
+      expect(ground.x).toEqual(1270)
     })
   })
 })
