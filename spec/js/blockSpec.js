@@ -8,8 +8,8 @@ describe("Block", function() {
   describe('#move', function() {
     it("move - takes velocity from location x", function() {
       block = new Block(canvasDouble, imageDouble)
-      block.move(5)
-      expect(block.x).toEqual(1275)
+      block.move(10)
+      expect(block.x).toEqual(1270)
     })
   })
 })

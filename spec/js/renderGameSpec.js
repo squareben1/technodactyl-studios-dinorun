@@ -18,6 +18,7 @@ describe("RenderGame", function() {
     renderGame = new RenderGame(canvasDouble, Background, Ground, Dino) //Background/Ground double
     spy = spyOn(canvasContextDouble, 'drawImage')  
     renderGame.setup()
+    renderGame.objectVelocity = 10
     setTimeout(done, 500);
   })
 
@@ -53,13 +54,13 @@ describe("RenderGame", function() {
   describe('#timeStepGround', function() { 
     it('timestep ground', function() {
       renderGame.timeStepGround()
-      expect(renderGame.groundArray[0].x).toEqual(1275)
+      expect(renderGame.groundArray[0].x).toEqual(canvasDouble.width - this.objectVelocity)
     })
   
     it('new ground gets added when last position is fully on screen', function() {
       renderGame.groundArray[renderGame.groundArray.length-1].x = canvasDouble.width-120
       renderGame.timeStepGround()
-      expect(renderGame.groundArray[renderGame.groundArray.length-1].x).toEqual(canvasDouble.width - 5)
+      expect(renderGame.groundArray[renderGame.groundArray.length-1].x).toEqual(canvasDouble.width - this.objectVelocity)
     })
   })
 

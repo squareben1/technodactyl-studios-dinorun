@@ -111,7 +111,7 @@ class RenderGame {
         this.backgroundArray[i].reset()
       }
       else {
-        this.backgroundArray[i].move()
+        this.backgroundArray[i].move(this.objectVelocity)
       }
       this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, 1280, 720)
     }
