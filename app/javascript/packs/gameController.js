@@ -14,7 +14,7 @@ window.addEventListener('load', function(){
   }
 
   document.getElementById('start_game_btn').addEventListener('click', function() {
-    game.startGame()
+    game.startGame(10, 1)
   })
 
 })

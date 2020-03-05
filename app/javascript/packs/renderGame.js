@@ -40,10 +40,6 @@ class RenderGame {
     this.dino = newDino
   }
 
-  _generateFramesPerBeat(bpm) {
-    this.fpb = this.fps / (bpm / 60)
-  }
-
   _generateImages() {
     self = this
     var imageCounter = 0
@@ -83,13 +79,19 @@ class RenderGame {
     // this.groundRightImage.src = 'images/deserttileset/png/3.png'
   }
 
-  startGame(bpm, frequencyArray, difficulty) {
+  startGame(bpm, difficulty) { //frequencyArray, 
+    this._generateFramesPerBeat(bpm)
+    this._calculateObjectVelocity(difficulty)
     this.animateGame()
-    _calculateObjectVelocity(difficulty)
+    
+  }
+
+  _generateFramesPerBeat(bpm) {
+    this.fpb = this.fps / (bpm / 60)
   }
 
   _calculateObjectVelocity(difficulty) {
-    this.objectVelocity = ((this.canvas.width - this.dino.x - this.dino.xSize) / difficulty) / this.fpb
+    this.objectVelocity = Math.ceil((((this.canvas.width - this.dino.x - this.dino.xSize) / difficulty) / this.fpb)/5) *5
   }
 
   animateGame() {
@@ -107,13 +109,13 @@ class RenderGame {
 
   timeStepBackground() {
     for (var i = 0; i < this.backgroundArray.length; i++) {
-      if (this.backgroundArray[i].x == -this.canvas.width + 2.5) {
+      if (this.backgroundArray[i].x == -this.canvas.width + (this.objectVelocity / 2)) {
         this.backgroundArray[i].reset()
       }
       else {
         this.backgroundArray[i].move(this.objectVelocity)
       }
-      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, 1280, 720)
+      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, this.backgroundArray[i].xSize, this.backgroundArray[i].ySize)
     }
   }
 
@@ -127,7 +129,7 @@ class RenderGame {
         this.groundArray.splice(i, 1)
       }
       else {
-        this.groundArray[i].move()
+        this.groundArray[i].move(this.objectVelocity)
       }
     }
   }
@@ -146,7 +148,7 @@ class RenderGame {
       }
       this.dino.applyJump()
     }
-    this.canvasContext.drawImage(this.dino.image, this.dino.x, this.dino.y, 120, 120)
+    this.canvasContext.drawImage(this.dino.image, this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize)
   }
 }
 window.RenderGame = RenderGame

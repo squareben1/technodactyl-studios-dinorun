@@ -8,8 +8,8 @@ class Background {
     this.image = image
   }
 
-  move() {
-    this.x -= 2.5
+  move(velocity) {
+    this.x -= velocity / 2
   }
 
   reset() {
