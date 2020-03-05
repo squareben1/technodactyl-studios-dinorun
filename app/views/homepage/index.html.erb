@@ -1,104 +1,93 @@
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
-
 <body>
   Dinorun
   <canvas id='canvas' width='1280' height="720"></canvas>
-
   <h1>Spotify Web Playback SDK Quick Start Tutorial</h1>
   <h2>Open your console log: <code>View > Developer > JavaScript Console</code></h2>
-
+  <span id="user-message"></span>
+  <br>
   <button id='button1'>Signup</button>
-  <form id="register_form">
-    <input type='text' id="username" name="user[name]" placeholder="username" required>
-    <input type='email' id="email" name='user[email]' placeholder="email" required>
-    <input type='password' id="password" name='user[password]' placeholder="password" required>
-    <input type="submit" id="register_button" value="Register">
+  <form id="register[form]">
+    <input type='text' id="register[username]" name="register[username]" placeholder="Username" required>
+    <input type='email' id="register[email]" name='register[email]' placeholder="Email" required>
+    <input type='password' id="register[password]" name='register[password]' placeholder="Password" required>
+    <input type="submit" id="register[button]" value="Register">
   </form>
-
-  <span id="form_alert_signup">
-
-  </span>
-
+  <br>
   <button id='button2'>Login</button>
   <button id='button3'>Logout</button>
   <button id='start_game_btn'>Start Game</button>
   <button id='get_song'>Get Song</button>
-
   <div class='upload-music'>
     <%= render 'form', song: @song%>
   </div>
-
   <select id="song_selection">
     <option value="">--select--</option>
   </select>
-
   <div id='song_player'></div>
-
   <script>
-  window.addEventListener('load', function() {
-    var signup = function(event) {
-      var checkValidity = document.getElementById("register_form").checkValidity()
-      event.preventDefault()
-      var username = document.getElementById("username")
-      var password = document.getElementById("password")
-      var email = document.getElementById("email")
-      if (checkValidity) {
-      $.ajax({
-        url: '/user.json',
-        type: "POST",
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-        data: {user: {username: username.value, password: password.value, email: email.value}}
-      }).done(function( data ) {
-        username.value = ""
-        email.value = ""
-        password.value = ""
-        document.getElementById("form_alert_signup").innerHTML = "Welcome Imraan to DinoRun!"
-        console.log(data)
-      })}
-    }
-
-    var login = function() {
-      $.ajax({
-        url: '/session.json',
-        type: "POST",
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-        data: {user: {password: 'testpassword', email: 'testemail@email.com'}}
-      }).done(function( data ) {
-        console.log(data)
+    window.addEventListener('load', function() {
+      var signup = function(event) {
+        event.preventDefault()
+        var isValid = document.getElementById("register[form]").checkValidity()
+        var username = document.getElementById("register[username]")
+        var email = document.getElementById("register[email]")
+        var password = document.getElementById("register[password]")
+        if (isValid) {
+        $.ajax({
+          url: '/user.json',
+          type: "POST",
+          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+          data: {user: {username: username.value, password: password.value, email: email.value}}
+        }).done(function( data ) {
+          username.value = ""
+          email.value = ""
+          password.value = ""
+          userMessage = document.getElementById("user-message")
+          if (data['username']) {
+            userMessage.innerHTML = data['username'] + ' welcome to DinoRun!'
+          } else {
+            userMessage.innerHTML = 'Username or email are already taken!'
+          }
+        })}
+      }
+    
+      var login = function() {
+        $.ajax({
+          url: '/session.json',
+          type: "POST",
+          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+          data: {user: {password: 'testpassword', email: 'testemail@email.com'}}
+        }).done(function( data ) {
+          console.log(data)
+        })
+      }
+    
+      var logout = function() {
+        $.ajax({
+          url: '/session.json',
+          type: "DELETE",
+          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
+        }).done(function( data ) {
+          console.log(data)
+        })
+      }
+    
+      document.getElementById('register[button]').addEventListener('click', signup)
+      document.getElementById('button2').addEventListener('click', login)
+      document.getElementById('button3').addEventListener('click', logout)
+    
+    
+      $(document).ajaxComplete(function( event, xhr, settings ) {
+        console.log('ajax complete')
+        header_token = xhr.getResponseHeader('X-CSRF-Token')
+        if (header_token) $('meta[name=csrf-token]').attr('content', header_token)
       })
-    }
-
-    var logout = function() {
-      $.ajax({
-        url: '/session.json',
-        type: "DELETE",
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
-      }).done(function( data ) {
-        console.log(data)
-      })
-    }
-
-    document.getElementById('register_button').addEventListener('click', signup)
-    document.getElementById('button2').addEventListener('click', login)
-    document.getElementById('button3').addEventListener('click', logout)
-
-
-    $(document).ajaxComplete(function( event, xhr, settings ) {
-      console.log('ajax complete')
-      header_token = xhr.getResponseHeader('X-CSRF-Token')
-      if (header_token) $('meta[name=csrf-token]').attr('content', header_token)
+    
     })
-
-  })
   </script>
-
-
-
-
-
-
   <script src="https://sdk.scdn.co/spotify-player.js"></script>
 </body>
 </html>
