@@ -8,7 +8,7 @@ class Block {
     this.image = image
   }
 
-  move() {
-    this.x -= 5
+  move(velocity) {
+    this.x -= velocity
   }
 }
