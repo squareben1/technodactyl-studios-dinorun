@@ -83,13 +83,13 @@ class RenderGame {
     // this.groundRightImage.src = 'images/deserttileset/png/3.png'
   }
 
-  startGame(bpm, frequencyArray) {
-    var difficulty = 2.5 // hardcoded for now
+  startGame(bpm, frequencyArray, difficulty) {
     this.animateGame()
+    _calculateObjectVelocity(difficulty)
   }
 
-  _calculateObjectVelocity() {
-    return this.canvas.width - this.dino.x - 120
+  _calculateObjectVelocity(difficulty) {
+    this.objectVelocity = ((this.canvas.width - this.dino.x - this.dino.xSize) / difficulty) / this.fpb
   }
 
   animateGame() {

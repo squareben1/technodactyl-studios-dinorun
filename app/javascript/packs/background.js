@@ -2,8 +2,8 @@ class Background {
   constructor(canvas, image) {
     this.x = 0
     this.y = 0
-    this.xSize = this.canvas.width
-    this.ySize = this.canvas.height
+    this.xSize = canvas.width
+    this.ySize = canvas.height
     this.canvas = canvas
     this.image = image
   }

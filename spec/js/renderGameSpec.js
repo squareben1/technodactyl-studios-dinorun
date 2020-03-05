@@ -18,7 +18,7 @@ describe("RenderGame", function() {
     renderGame = new RenderGame(canvasDouble, Background, Ground, Dino) //Background/Ground double
     spy = spyOn(canvasContextDouble, 'drawImage')  
     renderGame.setup()
-    setTimeout(done, 100);
+    setTimeout(done, 500);
   })
 
   describe('#setup', function() { 
