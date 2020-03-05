@@ -8,7 +8,8 @@ class RenderGame {
     this.dinoClass = dinoClass
     this.blockClass = blockClass
     this.groundLevel = 100
-    this.fps = 1000/59.94
+    this.fps = 59.94
+    this.frameInterval = 1000/59.94
   }
 
   setup() {
@@ -20,9 +21,9 @@ class RenderGame {
   }
 
   _drawNewBackground() {
-    this.backgroundArray.push(new this.backgroundClass(this.canvas, this.backgroundImage))
-    var secondBackground = new this.backgroundClass(this.canvas, this.backgroundImage)
-    secondBackground.reset()
+    this.backgroundArray.push(new this.backgroundClass(this.backgroundImage, this.canvas.width, this.canvas.height))
+    var secondBackground = new this.backgroundClass(this.backgroundImage, this.canvas.width, this.canvas.height)
+    secondBackground.x = this.canvas.width
     this.backgroundArray.push(secondBackground)
     // Draw background
     for (var i = 0; i < this.backgroundArray.length; i++) {
@@ -83,24 +84,28 @@ class RenderGame {
   }
 
   startGame(bpm, difficulty) { //frequencyArray, 
-    this.blockGeneratorArray = [1,1,1,1,1,1,0,0,1,1,0,1,0,1,0,1,0,0,0,1,1,0,1,0,0,1,1,1,1,1]
+    this.blockGeneratorArray = [1,1,1,1,1,1,1,1,1,1,0,1,0,1,0,1,0,0,0,1,1,0,1,0,0,1,1,1,1,1]
     this._generateFramesPerBeat(bpm)
     this._calculateObjectVelocity(difficulty)
     this.animateGame()
   }
 
   _generateFramesPerBeat(bpm) {
-    this.fpb = Math.round(this.fps / (bpm / 60))
+    let bps = bpm / 60
+    this.fpb = (Math.round(this.fps / bps) / 2) * 2
     console.log('bpm')
     console.log(bpm)
-    console.log('fpb')
-    console.log(this.fpb)
     console.log('fps')
     console.log(this.fps)
+    console.log('fpb')
+    console.log(this.fpb)
   }
 
   _calculateObjectVelocity(difficulty) {
-    this.objectVelocity = Math.ceil((((this.canvas.width - this.dino.x - this.dino.xSize) / difficulty) / this.fpb)/5) *5
+    let pixelsToDino = this.canvas.width - this.dino.x - this.dino.xSize
+    console.log('pixels to Dino')
+    console.log(pixelsToDino)
+    this.objectVelocity = (Math.round(pixelsToDino / this.fpb) / 2) * 2
     console.log('objectVelocity')
     console.log(this.objectVelocity)
   }
@@ -117,17 +122,12 @@ class RenderGame {
         self.timeStepDino()
         self.timeStepBlocks()
       })
-    }, self.fps)
+    }, self.frameInterval)
   }
 
   timeStepBackground() {
     for (var i = 0; i < this.backgroundArray.length; i++) {
-      if (this.backgroundArray[i].x == -this.canvas.width + (this.objectVelocity / 2)) {
-        this.backgroundArray[i].reset()
-      }
-      else {
-        this.backgroundArray[i].move(this.objectVelocity)
-      }
+      this.backgroundArray[i].move(this.objectVelocity)
       this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, this.backgroundArray[i].xSize, this.backgroundArray[i].ySize)
     }
   }
@@ -165,7 +165,7 @@ class RenderGame {
   }
 
   timeStepBlocks() {
-    if (this.frameCounter >= 300 && (this.frameCounter - 300 + this.fpb) % this.fpb == 0) { //always start with first block on inital 300th frame
+    if (this.frameCounter >= 300 && ((this.frameCounter - 300 + this.fpb) % this.fpb == 0)) { //always start with first block on inital 300th frame
       let newBlockValue = this.blockGeneratorArray.shift()
       if (newBlockValue == 1) {
         console.log('newblock')
