@@ -7,6 +7,9 @@ class Dino {
     this.spaceCounter = 0;
     this.jumpCounter = 0;
     this.imageArray = imageArray;
+    this.numImages = imageArray.length;
+    this.imageInterval = 20;
+    this.animationCounterMax = this.numImages * this.imageInterval;
     this.animationCounter = 0;
   }
 
@@ -33,15 +36,14 @@ class Dino {
   }
 
   image() {
-    if (this.animationCounter < 30) {
-      return this.imageArray[0];
-    } else if (this.animationCounter < 30 * 2) {
-      return this.imageArray[1];
-    } else if (this.animationCounter < 60 + 1) {
+    let imageIndex = Math.floor(this.animationCounter / this.imageInterval);
+    console.log(imageIndex);
+    let imageToReturn = this.imageArray[imageIndex];
+    this.animationCounter++;
+    if (this.animationCounter >= this.animationCounterMax) {
       this.animationCounter = 0;
-      return this.imageArray[0];
     }
-    m;
+    return imageToReturn;
   }
 }
 

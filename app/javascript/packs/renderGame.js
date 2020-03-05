@@ -259,7 +259,6 @@ class RenderGame {
       this.dino.xSize,
       this.dino.ySize
     );
-    this.dino.animationCounter++;
     console.log(this.dino.animationCounter);
   }
 

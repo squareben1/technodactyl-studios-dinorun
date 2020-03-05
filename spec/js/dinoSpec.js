@@ -45,8 +45,13 @@ describe("Dino", function() {
     });
 
     it("returns second image in dinoImgArray", function() {
-      dino.animationCounter = 31;
+      dino.animationCounter = dino.imageInterval;
       expect(dino.image()).toEqual(dino.imageArray[1]);
+    });
+
+    it("increments dino.animationCounter by 1", function() {
+      dino.image();
+      expect(dino.animationCounter).toEqual(1);
     });
   });
 });
