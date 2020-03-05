@@ -7,7 +7,7 @@ class SessionController < ApplicationController
     if user && user.authenticate(user_params[:password])
       reset_session #reduce risk of session fixation
       session[:user_id] = user.id
-      render json: {logged_in: true}
+      render json: {logged_in: true, username: user.username}
     else
       render json: {logged_in: false, message: 'Login not found'}
     end

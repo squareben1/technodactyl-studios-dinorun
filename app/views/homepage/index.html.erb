@@ -17,6 +17,11 @@
   </form>
   <br>
   <button id='button2'>Login</button>
+  <form id='login[form]'>
+    <input type='text' id='login[email]' name='login[email]' placeholder='Email'>
+    <input type='password' id='login[password]' name ='login[password]' placeholder='Password'>
+    <input type='submit' id='login[button]' value='Sign in'>
+  </form>
   <button id='button3'>Logout</button>
   <button id='start_game_btn'>Start Game</button>
   <button id='get_song'>Get Song</button>
@@ -54,14 +59,24 @@
         })}
       }
     
-      var login = function() {
+      var login = function(event) {
+        event.preventDefault()
+        var email = document.getElementById("login[email]")
+        var password = document.getElementById("login[password]")
         $.ajax({
           url: '/session.json',
           type: "POST",
           beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-          data: {user: {password: 'testpassword', email: 'testemail@email.com'}}
+          data: {user: {password: password.value, email: email.value}}
         }).done(function( data ) {
-          console.log(data)
+          email.value = ""
+          password.value = ""
+          userMessage = document.getElementById("user-message")
+          if (data['username']) {
+            userMessage.innerHTML = data['username'] + ' welcome back to DinoRun!'
+          } else {
+            userMessage.innerHTML = 'Email or password is not correct!'
+          }
         })
       }
     
@@ -76,7 +91,7 @@
       }
     
       document.getElementById('register[button]').addEventListener('click', signup)
-      document.getElementById('button2').addEventListener('click', login)
+      document.getElementById('login[button]').addEventListener('click', login)
       document.getElementById('button3').addEventListener('click', logout)
     
     
