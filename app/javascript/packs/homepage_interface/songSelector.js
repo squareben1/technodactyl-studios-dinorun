@@ -25,7 +25,13 @@ var getSong = function(event) {
     type: "GET",
     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
   }).done(function(data) {
-    audioPlayer.innerHTML = `<audio autoplay><source src="${data['mp3_url']}" type="audio/mpeg"></audio>`
+    audioPlayer.innerHTML = ''
+    var sound = document.createElement('audio')
+    sound.id = 'audio_player'
+    sound.src = data['mp3_url']
+    sound.type = 'audio/mpeg'
+    sound.autoplay = 'true'
+    audioPlayer.appendChild(sound)
   })
 }
 
