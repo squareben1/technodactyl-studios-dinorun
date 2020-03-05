@@ -9,11 +9,11 @@
   <h1>Spotify Web Playback SDK Quick Start Tutorial</h1>
   <h2>Open your console log: <code>View > Developer > JavaScript Console</code></h2>
 
-    <button id='button1'>Signup</button>
-    <button id='button2'>Login</button>
-    <button id='button3'>Logout</button>
-    <button id='start_game_btn'>Start Game</button>
-    <button id='get_song'>Get Song</button>
+  <button id='button1'>Signup</button>
+  <button id='button2'>Login</button>
+  <button id='button3'>Logout</button>
+  <button id='start_game_btn'>Start Game</button>
+  <button id='get_song'>Get Song</button>
 
   <div class='upload-music'>
     <%= render 'form', song: @song%>
@@ -59,49 +59,14 @@
       })
     }
 
-    var getSong = function(event) {
-      var songSelector = document.querySelector('#song_selection')
-      var selectedSongId = songSelector.options[songSelector.selectedIndex].value
-      if (selectedSongId == '') {
-        return
-      }
-      var audioPlayer = document.querySelector('#song_player')
-      $.ajax({
-        url: `/songs/${selectedSongId}.json`,
-        type: "GET",
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
-      }).done(function(data) {
-        console.log(data)
-        var sound = document.createElement('audio')
-        sound.id = 'audio_player'
-        sound.src = data['mp3_url']
-        sound.type = 'audio/mpeg'
-        sound.autoplay = 'true'
-        audioPlayer.appendChild(sound)
-      })
-    }
+    
 
-    var getSongList = function() {
-      var songSelector = document.querySelector('#song_selection')
-      $.ajax({
-        url: `/songs.json`,
-        type: "GET",
-        datatype: JSON,
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
-      }).done(function( data ) {
-        console.log(data)
-        songSelector.innerHTML = "<option value=''>--Select Song--</option>"
-        data.forEach(function(song) {
-          songSelector.innerHTML += `<option value="${song['id']}">${song['title']}</option>`
-        })
-      })
-    }
+
 
 
     document.getElementById('button1').addEventListener('click', signup)
     document.getElementById('button2').addEventListener('click', login)
     document.getElementById('button3').addEventListener('click', logout)
-    document.getElementById('get_song').addEventListener('click', getSong)
 
 
     $(document).ajaxComplete(function( event, xhr, settings ) {
@@ -109,9 +74,6 @@
       header_token = xhr.getResponseHeader('X-CSRF-Token')
       if (header_token) $('meta[name=csrf-token]').attr('content', header_token)
     })
-
-    //run on page load 
-    getSongList()
 
   })
   </script>
@@ -122,73 +84,5 @@
 
 
   <script src="https://sdk.scdn.co/spotify-player.js"></script>
-  <script>
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      const token = 'BQC-sZERWsYVzhAtXEaeNeZNw7FTQFO57CIurGMULEzrL60J0Y_jbc0khfjMES2DpPUE5XiC5ZXQ6Jo0XVrukfQD541EFbWrxsB_UV01PVjEHNJHfh7vf35H-mkjBTtarpP0038rl1DVDIs7qCqLVIUej-veq_pihRc';
-      const player = new Spotify.Player({
-        name: 'Web Playback SDK Quick Start Player',
-        getOAuthToken: cb => { cb(token); }
-      });
-
-      // Error handling
-      player.addListener('initialization_error', ({ message }) => { console.error(message); });
-      player.addListener('authentication_error', ({ message }) => { console.error(message); });
-      player.addListener('account_error', ({ message }) => { console.error(message); });
-      player.addListener('playback_error', ({ message }) => { console.error(message); });
-
-      // Playback status updates
-      player.addListener('player_state_changed', state => { console.log(state); });
-
-      // Play
-      const play = ({
-        spotify_uri,
-        playerInstance: {
-          _options: {
-            getOAuthToken,
-            id
-          }
-        }
-      }) => {
-        getOAuthToken(access_token => {
-          fetch(`https://api.spotify.com/v1/me/player/play?device_id=${id}`, {
-            method: 'PUT',
-            body: JSON.stringify({ uris: [spotify_uri] }),
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${access_token}`
-            },
-          });
-        });
-      };
-
-      // Ready
-      player.addListener('ready', ({ device_id }) => {
-        console.log('Ready with Device ID', device_id)
-        var trackUrl = 'spotify:track:6yismmdmRHNsfTufirziX0'
-        var trackId = '6yismmdmRHNsfTufirziX0'
-        play({
-          spotify_uri: trackUrl,
-          playerInstance: player
-        });
-        $.ajax({
-          url: `https://api.spotify.com/v1/audio-features/${trackId}`,
-          type: "GET",
-          beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + token );},
-          success: function(data) {
-            console.log(data.tempo)
-          }
-        });
-      });
-
-      // Not Ready
-      player.addListener('not_ready', ({ device_id }) => {
-        console.log('Device ID has gone offline', device_id);
-      });
-
-      // Connect to the player!
-      player.connect();
-    };
-  </script>
-
 </body>
 </html>
