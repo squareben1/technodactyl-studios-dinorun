@@ -7,6 +7,7 @@ class RenderGame {
     this.groundClass = groundClass
     this.dinoClass = dinoClass
     this.groundLevel = 100
+    this.fps = 1000/59.94
   }
 
   setup() {
@@ -37,6 +38,10 @@ class RenderGame {
     let newDino = new this.dinoClass(this.dinoImage)
     this.canvasContext.drawImage(newDino.image, newDino.x, newDino.y, 120, 120)
     this.dino = newDino
+  }
+
+  _generateFramesPerBeat(bpm) {
+    this.fpb = this.fps / (bpm / 60)
   }
 
   _generateImages() {
@@ -88,7 +93,7 @@ class RenderGame {
         self.timeStepGround()
         self.timeStepDino()
       })
-    }, 16)
+    }, self.fps)
   }
 
   timeStepBackground() {
