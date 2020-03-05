@@ -24,19 +24,19 @@ class RenderGame {
     this.backgroundArray.push(secondBackground)
     // Draw background
     for (var i = 0; i < this.backgroundArray.length; i++) {
-      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, this.canvas.width, this.canvas.height)
+      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, this.backgroundArray[i].xSize, this.backgroundArray[i].ySize)
     }
   }
 
   _drawGround() {
     let newGround = new this.groundClass(this.canvas, this.groundLeftImage)
     this.groundArray.push(newGround)
-    this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, 120, 120)
+    this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, newGround.x, newGround.y)
   }
 
   _drawDino() {
     let newDino = new this.dinoClass(this.dinoImage)
-    this.canvasContext.drawImage(newDino.image, newDino.x, newDino.y, 120, 120)
+    this.canvasContext.drawImage(newDino.image, newDino.x, newDino.y, newDino.xSize, newDino.ySize)
     this.dino = newDino
   }
 
@@ -83,7 +83,16 @@ class RenderGame {
     // this.groundRightImage.src = 'images/deserttileset/png/3.png'
   }
 
-  startGame() {
+  startGame(bpm, frequencyArray) {
+    var difficulty = 2.5 // hardcoded for now
+    this.animateGame()
+  }
+
+  _calculateObjectVelocity() {
+    return this.canvas.width - this.dino.x - 120
+  }
+
+  animateGame() {
     self = this
     var animationFrameHandle
     var gameInterval = setInterval(function() {

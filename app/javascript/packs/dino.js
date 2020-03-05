@@ -3,6 +3,8 @@ class Dino {
   constructor(image) {
     this.x = 100
     this.y = 100
+    this.xSize = 120
+    this.ySize = 120
     this.spaceCounter = 0
     this.jumpCounter = 0
     this.image = image
