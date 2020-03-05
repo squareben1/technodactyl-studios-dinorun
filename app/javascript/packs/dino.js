@@ -1,13 +1,13 @@
 
 class Dino {
-  constructor(image) {
+  constructor(imageArray) {
     this.x = 100
     this.y = 100
     this.xSize = 120
     this.ySize = 120
     this.spaceCounter = 0
     this.jumpCounter = 0
-    this.image = image
+    this.imageArray = imageArray
     this.animationCounter = 0
   }
 
@@ -31,6 +31,10 @@ class Dino {
       this.spaceCounter += 1
       this.jumpCounter = 30
     }
+  }
+
+  image() {
+    return this.imageArray[0]
   }
 
 }

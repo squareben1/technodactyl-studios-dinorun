@@ -36,8 +36,13 @@ class RenderGame {
     this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, newGround.x, newGround.y)
   }
 
+  _createDinoImageArray() {
+    this.dinoImageArray = []
+    return this.dinoImageArray.push(this.dinoImage, this.dinoImage2)
+  }
+
   _drawDino() {
-    let newDino = new this.dinoClass(this.dinoImage)
+    let newDino = new this.dinoClass(this._createDinoImageArray())
     this.canvasContext.drawImage(newDino.image, newDino.x, newDino.y, newDino.xSize, newDino.ySize)
     this.dino = newDino
   }
@@ -49,6 +54,7 @@ class RenderGame {
 
     this.backgroundImage = new Image()
     this.dinoImage = new Image()
+    this.dinoImage2 = new Image()
     this.groundCentreImage = new Image()
     this.groundLeftImage = new Image()
     this.stoneBlockImage = new Image()
@@ -63,13 +69,15 @@ class RenderGame {
     }
 
     this.dinoImage.onload = onLoadCallback
+    this.dinoImage2.onload = onLoadCallback
     this.backgroundImage.onload = onLoadCallback
     this.groundCentreImage.onload = onLoadCallback
     this.groundLeftImage.onload = onLoadCallback
     this.stoneBlockImage.onload = onLoadCallback
 
     // Create image objects
-    this.dinoImage.src = 'images/dino_png/Run (2).png'
+    this.dinoImage.src = 'images/dino_png/Run (1).png'
+    this.dinoImage2.src = 'images/dino_png/Run (3).png'
     this.backgroundImage.src = 'images/bg.png'
     this.groundCentreImage.src = 'images/deserttileset/png/Tile/2.png'
     this.groundLeftImage.src = 'images/deserttileset/png/Tile/1.png'

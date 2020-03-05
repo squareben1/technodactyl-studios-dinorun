@@ -2,7 +2,10 @@
 describe("Dino", function() {
 
   beforeEach(function () {
-    dino = new Dino
+    imageDouble = {}
+    imageDouble2 = {}
+    dinoImageArray = [imageDouble, imageDouble2]
+    dino = new Dino(dinoImageArray)
   })
 
   
@@ -37,6 +40,14 @@ describe("Dino", function() {
       dino.jump()
       expect(dino.jumpCounter).toEqual(30)
       expect(dino.spaceCounter).toEqual(1)
+    })
+  })
+
+
+  describe('#image', function() {
+    it("returns first image in dinoImgArray", function() {
+      console.log(dino.imageArray[0])
+      expect(dino.image()).toEqual(dino.imageArray[0])
     })
   })
 })
