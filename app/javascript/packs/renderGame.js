@@ -139,23 +139,20 @@ class RenderGame {
 
   startGame(bpm, difficulty) { //frequencyArray, 
     this.blockGeneratorArray = [1,1,1,1,1,1,1,1,1,1,0,1,0,1,0,1,0,0,0,1,1,0,1,0,0,1,1,1,1,1]
+    console.log(bpm)
     this._generateFramesPerBeat(bpm)
-    this._calculateObjectVelocity(difficulty)
+    this._calculateObjectVelocity()
     this.animateGame()
   }
 
   _generateFramesPerBeat(bpm) {
-    let bps = bpm / 60
+    let bps = Math.round(bpm / 60)
     this.fpb = (Math.round(this.fps / bps) / 2) * 2
-    console.log('bpm')
+    console.log('bpm 2')
     console.log(bpm)
-    console.log('fps')
-    console.log(this.fps)
-    console.log('fpb')
-    console.log(this.fpb)
   }
 
-  _calculateObjectVelocity(difficulty) {
+  _calculateObjectVelocity() {
     let pixelsToDino = this.canvas.width - this.dino.x - this.dino.xSize
     console.log('pixels to Dino')
     console.log(pixelsToDino)

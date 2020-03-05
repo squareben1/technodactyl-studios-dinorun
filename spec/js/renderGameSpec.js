@@ -34,19 +34,11 @@ describe("RenderGame", function() {
       expect(renderGame.groundArray.length).toEqual(1);
     });
   });
-
-  describe("#timeStepBackground", function() {
-    it("timestep background", function() {
-      renderGame.timeStepBackground();
-      expect(renderGame.backgroundArray[0].x).toEqual(
-        -renderGame.objectVelocity / 2
-      );
-    });
   
   describe('#timeStepBackground', function() { 
     it('timestep background', function() {
       renderGame.timeStepBackground()
-      expect(renderGame.backgroundArray[0].x).toEqual(-renderGame.objectVelocity / 5)
+      expect(renderGame.backgroundArray[0].x).toEqual(-2)
     })
   })
 
@@ -62,8 +54,6 @@ describe("RenderGame", function() {
       renderGame.groundArray[renderGame.groundArray.length - 1].x =
         canvasDouble.width - 120;
       renderGame.timeStepGround();
-      console.log(canvasDouble.width);
-      console.log(this.objectVelocity);
       expect(
         renderGame.groundArray[renderGame.groundArray.length - 1].x
       ).toEqual(canvasDouble.width - renderGame.objectVelocity);
