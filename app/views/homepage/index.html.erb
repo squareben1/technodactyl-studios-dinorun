@@ -64,6 +64,9 @@
     var getSong = function(event) {
       var songSelector = document.querySelector('#song_selection')
       var selectedSongId = songSelector.options[songSelector.selectedIndex].value
+      if (selectedSongId == '') {
+        return
+      }
       var audioPlayer = document.querySelector('#song_player')
       $.ajax({
         url: `/songs/${selectedSongId}.json`,
@@ -89,6 +92,7 @@
         beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
       }).done(function( data ) {
         console.log(data)
+        songSelector.innerHTML = "<option value=''>--Select Song--</option>"
         data.forEach(function(song) {
           songSelector.innerHTML += `<option value="${song['id']}">${song['title']}</option>`
         })
