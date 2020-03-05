@@ -10,6 +10,17 @@
   <h2>Open your console log: <code>View > Developer > JavaScript Console</code></h2>
 
   <button id='button1'>Signup</button>
+  <form id="register_form">
+    <input type='text' id="username" name="user[name]" placeholder="username" required>
+    <input type='email' id="email" name='user[email]' placeholder="email" required>
+    <input type='password' id="password" name='user[password]' placeholder="password" required>
+    <input type="submit" id="register_button" value="Register">
+  </form>
+
+  <span id="form_alert_signup">
+
+  </span>
+
   <button id='button2'>Login</button>
   <button id='button3'>Logout</button>
   <button id='start_game_btn'>Start Game</button>
@@ -20,22 +31,32 @@
   </div>
 
   <select id="song_selection">
-    <option value="">--select--</option>   
+    <option value="">--select--</option>
   </select>
 
   <div id='song_player'></div>
 
   <script>
   window.addEventListener('load', function() {
-    var signup = function() {
+    var signup = function(event) {
+      var checkValidity = document.getElementById("register_form").checkValidity()
+      event.preventDefault()
+      var username = document.getElementById("username")
+      var password = document.getElementById("password")
+      var email = document.getElementById("email")
+      if (checkValidity) {
       $.ajax({
         url: '/user.json',
         type: "POST",
         beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-        data: {user: {username: 'testusername', password: 'testpassword', email: 'testemail@email.com'}}
+        data: {user: {username: username.value, password: password.value, email: email.value}}
       }).done(function( data ) {
+        username.value = ""
+        email.value = ""
+        password.value = ""
+        document.getElementById("form_alert_signup").innerHTML = "Welcome Imraan to DinoRun!"
         console.log(data)
-      })
+      })}
     }
 
     var login = function() {
@@ -59,12 +80,7 @@
       })
     }
 
-    
-
-
-
-
-    document.getElementById('button1').addEventListener('click', signup)
+    document.getElementById('register_button').addEventListener('click', signup)
     document.getElementById('button2').addEventListener('click', login)
     document.getElementById('button3').addEventListener('click', logout)
 
