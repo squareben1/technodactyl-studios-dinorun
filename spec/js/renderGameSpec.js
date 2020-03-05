@@ -102,6 +102,10 @@ describe("RenderGame", function() {
       renderGame.timeStepDino()
       expect(renderGame.dino.y).toEqual(490)
     })
-  })
 
+    it('increments dino.animationCounter by 1', function() {
+      renderGame.timeStepDino()
+      expect(renderGame.dino.animationCounter).toEqual(1)
+    })
+  })
 })

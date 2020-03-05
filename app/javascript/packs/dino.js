@@ -8,6 +8,7 @@ class Dino {
     this.spaceCounter = 0
     this.jumpCounter = 0
     this.image = image
+    this.animationCounter = 0
   }
 
   applyGravity() {

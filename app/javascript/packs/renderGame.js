@@ -162,6 +162,7 @@ class RenderGame {
       this.dino.applyJump()
     }
     this.canvasContext.drawImage(this.dino.image, this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize)
+    this.dino.animationCounter++
   }
 
   timeStepBlocks() {
