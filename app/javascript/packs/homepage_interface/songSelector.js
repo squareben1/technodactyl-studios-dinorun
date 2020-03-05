@@ -29,8 +29,18 @@ var getSong = function(event) {
   })
 }
 
+var updateSongList = function() {
+  document.getElementById("song_mp3").value = ""
+  getSongList()
+}
+
+var onCreateSong = function() {
+  setTimeout(updateSongList, 1500)
+}
+
 
 window.addEventListener('load', function(){
   getSongList()
   document.getElementById('get_song').addEventListener('click', getSong)
+  document.getElementById('create-song').addEventListener('click', onCreateSong)
 })
