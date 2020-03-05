@@ -1,17 +1,19 @@
 
 class RenderGame {
-  constructor(canvas, backgroundClass, groundClass, dinoClass) {
+  constructor(canvas, backgroundClass, groundClass, dinoClass, blockClass) {
     this.canvas = canvas
     this.canvasContext = this.canvas.getContext('2d')
     this.backgroundClass = backgroundClass
     this.groundClass = groundClass
     this.dinoClass = dinoClass
+    this.blockClass = blockClass
     this.groundLevel = 100
     this.fps = 1000/59.94
   }
 
   setup() {
-    this.blockArray = []
+    this.frameCounter = 0
+    this.blocksArray = []
     this.backgroundArray = []
     this.groundArray = []
     this._generateImages()
@@ -43,12 +45,13 @@ class RenderGame {
   _generateImages() {
     self = this
     var imageCounter = 0
-    var numberOfImages = 4
+    var numberOfImages = 5
 
     this.backgroundImage = new Image()
     this.dinoImage = new Image()
     this.groundCentreImage = new Image()
     this.groundLeftImage = new Image()
+    this.stoneBlockImage = new Image()
 
     var onLoadCallback = function() {
       imageCounter++;
@@ -63,14 +66,14 @@ class RenderGame {
     this.backgroundImage.onload = onLoadCallback
     this.groundCentreImage.onload = onLoadCallback
     this.groundLeftImage.onload = onLoadCallback
+    this.stoneBlockImage.onload = onLoadCallback
 
     // Create image objects
     this.dinoImage.src = 'images/dino_png/Run (2).png'
     this.backgroundImage.src = 'images/bg.png'
-    this.groundLeftImage.src = 'images/deserttileset/png/Tile/1.png'
     this.groundCentreImage.src = 'images/deserttileset/png/Tile/2.png'
-    // this.stoneBlock = new Image()
-    // this.stoneBlock.src = 'images/deserttileset/png/Objects/StoneBlock.png'
+    this.groundLeftImage.src = 'images/deserttileset/png/Tile/1.png'
+    this.stoneBlockImage.src = 'images/deserttileset/png/Objects/StoneBlock.png'
     // this.groundCentreImage = new Image()
     // this.groundCentreImage.src = 'images/deserttileset/png/2.png'
     // this.groundLeftImage = new Image()
@@ -80,18 +83,26 @@ class RenderGame {
   }
 
   startGame(bpm, difficulty) { //frequencyArray, 
+    this.blockGeneratorArray = [1,1,1,1,1,1,0,0,1,1,0,1,0,1,0,1,0,0,0,1,1,0,1,0,0,1,1,1,1,1]
     this._generateFramesPerBeat(bpm)
     this._calculateObjectVelocity(difficulty)
     this.animateGame()
-    
   }
 
   _generateFramesPerBeat(bpm) {
-    this.fpb = this.fps / (bpm / 60)
+    this.fpb = Math.round(this.fps / (bpm / 60))
+    console.log('bpm')
+    console.log(bpm)
+    console.log('fpb')
+    console.log(this.fpb)
+    console.log('fps')
+    console.log(this.fps)
   }
 
   _calculateObjectVelocity(difficulty) {
     this.objectVelocity = Math.ceil((((this.canvas.width - this.dino.x - this.dino.xSize) / difficulty) / this.fpb)/5) *5
+    console.log('objectVelocity')
+    console.log(this.objectVelocity)
   }
 
   animateGame() {
@@ -100,9 +111,11 @@ class RenderGame {
     var gameInterval = setInterval(function() {
       cancelAnimationFrame(animationFrameHandle)
       animationFrameHandle = requestAnimationFrame(function() {
+        self.frameCounter++
         self.timeStepBackground()
         self.timeStepGround()
         self.timeStepDino()
+        self.timeStepBlocks()
       })
     }, self.fps)
   }
@@ -149,6 +162,20 @@ class RenderGame {
       this.dino.applyJump()
     }
     this.canvasContext.drawImage(this.dino.image, this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize)
+  }
+
+  timeStepBlocks() {
+    if (this.frameCounter >= 300 && (this.frameCounter - 300 + this.fpb) % this.fpb == 0) { //always start with first block on inital 300th frame
+      let newBlockValue = this.blockGeneratorArray.shift()
+      if (newBlockValue == 1) {
+        console.log('newblock')
+        this.blocksArray.push(new this.blockClass(this.canvas, this.stoneBlockImage))
+      }
+    }
+    for (var i = 0; i < this.blocksArray.length; i++) {
+      this.canvasContext.drawImage(this.blocksArray[i].image, this.blocksArray[i].x, this.blocksArray[i].y, this.blocksArray[i].xSize, this.blocksArray[i].ySize)
+      this.blocksArray[i].move(this.objectVelocity)
+    }
   }
 }
 window.RenderGame = RenderGame
