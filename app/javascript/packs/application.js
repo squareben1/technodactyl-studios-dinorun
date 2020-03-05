@@ -21,7 +21,8 @@ require("packs/renderGame")
 require("packs/ground")
 require("packs/block")
 require("packs/dino")
-
+require("packs/spotify/spotify")
+require("packs/mp3_analysis/mp3_info")
 // Load Page => new game
 
 window.addEventListener('load', function(){
