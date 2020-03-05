@@ -54,7 +54,16 @@ class RenderGame {
 
   _createDinoImageArray() {
     this.dinoImageArray = [];
-    this.dinoImageArray.push(this.dinoImage, this.dinoImage2);
+    this.dinoImageArray.push(
+      this.dinoImage1,
+      this.dinoImage2,
+      this.dinoImage3,
+      this.dinoImage4,
+      this.dinoImage5,
+      this.dinoImage6,
+      this.dinoImage7,
+      this.dinoImage8
+    );
   }
 
   _drawDino() {
@@ -76,8 +85,14 @@ class RenderGame {
     var numberOfImages = 5;
 
     this.backgroundImage = new Image();
-    this.dinoImage = new Image();
+    this.dinoImage1 = new Image();
     this.dinoImage2 = new Image();
+    this.dinoImage3 = new Image();
+    this.dinoImage4 = new Image();
+    this.dinoImage5 = new Image();
+    this.dinoImage6 = new Image();
+    this.dinoImage7 = new Image();
+    this.dinoImage8 = new Image();
     this.groundCentreImage = new Image();
     this.groundLeftImage = new Image();
     this.stoneBlockImage = new Image();
@@ -91,16 +106,28 @@ class RenderGame {
       }
     };
 
-    this.dinoImage.onload = onLoadCallback;
+    this.dinoImage1.onload = onLoadCallback;
     this.dinoImage2.onload = onLoadCallback;
+    this.dinoImage3.onload = onLoadCallback;
+    this.dinoImage4.onload = onLoadCallback;
+    this.dinoImage5.onload = onLoadCallback;
+    this.dinoImage6.onload = onLoadCallback;
+    this.dinoImage7.onload = onLoadCallback;
+    this.dinoImage8.onload = onLoadCallback;
     this.backgroundImage.onload = onLoadCallback;
     this.groundCentreImage.onload = onLoadCallback;
     this.groundLeftImage.onload = onLoadCallback;
     this.stoneBlockImage.onload = onLoadCallback;
 
     // Create image objects
-    this.dinoImage.src = "images/dino_png/Run (1).png";
-    this.dinoImage2.src = "images/dino_png/Run (3).png";
+    this.dinoImage1.src = "images/dino_png/Run (1).png";
+    this.dinoImage2.src = "images/dino_png/Run (2).png";
+    this.dinoImage3.src = "images/dino_png/Run (3).png";
+    this.dinoImage4.src = "images/dino_png/Run (4).png";
+    this.dinoImage5.src = "images/dino_png/Run (5).png";
+    this.dinoImage6.src = "images/dino_png/Run (6).png";
+    this.dinoImage7.src = "images/dino_png/Run (7).png";
+    this.dinoImage8.src = "images/dino_png/Run (8).png";
     this.backgroundImage.src = "images/bg.png";
     this.groundCentreImage.src = "images/deserttileset/png/Tile/2.png";
     this.groundLeftImage.src = "images/deserttileset/png/Tile/1.png";
@@ -259,7 +286,6 @@ class RenderGame {
       this.dino.xSize,
       this.dino.ySize
     );
-    console.log(this.dino.animationCounter);
   }
 
   timeStepBlocks() {

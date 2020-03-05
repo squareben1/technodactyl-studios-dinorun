@@ -8,7 +8,7 @@ class Dino {
     this.jumpCounter = 0;
     this.imageArray = imageArray;
     this.numImages = imageArray.length;
-    this.imageInterval = 20;
+    this.imageInterval = 10;
     this.animationCounterMax = this.numImages * this.imageInterval;
     this.animationCounter = 0;
   }
@@ -37,7 +37,6 @@ class Dino {
 
   image() {
     let imageIndex = Math.floor(this.animationCounter / this.imageInterval);
-    console.log(imageIndex);
     let imageToReturn = this.imageArray[imageIndex];
     this.animationCounter++;
     if (this.animationCounter >= this.animationCounterMax) {
