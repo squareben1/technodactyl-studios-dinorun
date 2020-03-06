@@ -184,27 +184,21 @@ class RenderGame {
   }
 
   timeStepGround() {
+    // Move array of blocks and draw
     for (var i = 0; i < this.groundArray.length; i++) {
-      this.canvasContext.drawImage(
-        this.groundArray[i].image,
-        this.groundArray[i].x,
-        this.groundArray[i].y,
-        120,
-        120
-      );
-      if (
-        i == this.groundArray.length - 1 &&
-        this.groundArray[i].x <= this.canvas.width - 120
-      ) {
-        this.groundArray.push(
-          new this.groundClass(this.canvas, this.groundCentreImage)
-        );
-      }
-      if (this.groundArray[i].x <= -240) {
-        this.groundArray.splice(i, 1);
-      } else {
-        this.groundArray[i].move(this.objectVelocity);
-      }
+      this.groundArray[i].move(this.objectVelocity)
+      this.canvasContext.drawImage(this.groundArray[i].image, this.groundArray[i].x, this.groundArray[i].y, this.groundArray[i].xSize, this.groundArray[i].ySize);
+    }
+    // Delete first if off screen
+    if (this.groundArray[0].x <= -this.groundArray[0].xSize) {
+      this.groundArray.shift()
+    } 
+    // Check for new ground
+    let newGroundLoc = this.groundArray[(this.groundArray.length-1)].isNewGroundNeeded(this.objectVelocity)
+    if (newGroundLoc) {
+      let newGround = new this.groundClass(this.canvas, this.groundCentreImage)
+      newGround.x = newGroundLoc
+      this.groundArray.push(newGround)
     }
   }
 
@@ -213,46 +207,30 @@ class RenderGame {
       let filteredGround = this.groundArray.filter(function(item) {
         return item.x >= -20 && item.x <= 220;
       });
-      if (
-        filteredGround.length > 0 &&
-        this.dino.y <= this.canvas.height - 240 &&
-        this.dino.y >= this.canvas.height - 259
-      ) {
+      if (filteredGround.length > 0 && this.dino.y <= this.canvas.height - 240 && this.dino.y >= this.canvas.height - 259) {
         this.dino.resetJump();
         this.dino.y = this.canvas.height - 240;
-      } else {
+      } 
+      else {
         this.dino.applyGravity();
       }
       this.dino.applyJump();
     }
-    this.canvasContext.drawImage(
-      this.dino.image(),
-      this.dino.x,
-      this.dino.y,
-      this.dino.xSize,
-      this.dino.ySize
-    );
+    this.canvasContext.drawImage(this.dino.image(), this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize);
   }
 
   timeStepBlocks() {
     if (this.frameCounter >= 300 && ((this.frameCounter - 300 + this.fpb) % this.fpb == 0)) { //always start with first block on inital 300th frame
       let newBlockValue = this.blockGeneratorArray.shift()
       if (newBlockValue == 1) {
-        console.log("newblock");
         this.blocksArray.push(
           new this.blockClass(this.canvas, this.stoneBlockImage)
         );
       }
     }
     for (var i = 0; i < this.blocksArray.length; i++) {
-      this.canvasContext.drawImage(
-        this.blocksArray[i].image,
-        this.blocksArray[i].x,
-        this.blocksArray[i].y,
-        this.blocksArray[i].xSize,
-        this.blocksArray[i].ySize
-      );
-      this.blocksArray[i].move(this.objectVelocity);
+      this.canvasContext.drawImage(this.blocksArray[i].image, this.blocksArray[i].x, this.blocksArray[i].y, this.blocksArray[i].xSize, this.blocksArray[i].ySize)
+      this.blocksArray[i].move(this.objectVelocity)
     }
   }
 }
