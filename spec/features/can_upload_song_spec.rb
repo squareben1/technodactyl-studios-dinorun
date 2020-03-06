@@ -7,7 +7,6 @@ feature 'user can upload song', js: true do
     fill_in 'login[email]', with: 'imraan21@hotmail.co.uk'
     fill_in 'login[password]', with: 'securepass1'
     click_button 'Sign in'
-    visit '/'
     attach_file("song[mp3]", Rails.root + "spec/fixtures/test_music.mp3")
     click_button "Create Song"
     attach_file("song[mp3]", Rails.root + "spec/fixtures/test_music.mp3")
