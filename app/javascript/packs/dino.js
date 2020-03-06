@@ -48,6 +48,10 @@ class Dino {
   objectCentre() {
     return [this.x + (this.xSize / 2), this.y + (this.ySize / 2)]
   }
+
+  objectRadius() {
+    return this.xSize / 2
+  }
 }
 
 window.Dino = Dino;

@@ -60,4 +60,10 @@ describe("Dino", function() {
       expect(dino.objectCentre()).toEqual([160, 160])
     })
   })
+
+  describe('#objectRadius', function() {
+    it('returns raidus of object circle', function() {
+      expect(dino.objectRadius()).toEqual(60)
+    })
+  })
 });
