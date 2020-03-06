@@ -114,4 +114,6 @@ describe("RenderGame", function() {
       expect(renderGame.deathInteractionBlock(0)).toEqual(true)
     })
   })
+
+
 });

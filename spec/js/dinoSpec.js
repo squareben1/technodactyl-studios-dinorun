@@ -2,8 +2,9 @@ describe("Dino", function() {
   beforeEach(function() {
     imageDouble = {};
     imageDouble2 = { a: 1 };
-    dinoImageArray = [imageDouble, imageDouble2];
-    dino = new Dino(dinoImageArray);
+    dinoRunImageArray = [imageDouble, imageDouble2];
+    dinoDeadImageArray = [imageDouble, imageDouble2];
+    dino = new Dino(dinoRunImageArray, dinoDeadImageArray);
   });
 
   describe("#applyGravity", function() {
@@ -31,6 +32,12 @@ describe("Dino", function() {
     });
   });
 
+  describe('#imageDead', function() {
+    it('returns corresponding images of dead dino', function() {
+      expect(dino.imageDead(10)).toEqual(imageDouble2)
+    })
+  })
+
   describe("#jump", function() {
     it("jump increases spacecounter by 1 & sets jumpCounter to 30", function() {
       dino.jump();
@@ -39,18 +46,18 @@ describe("Dino", function() {
     });
   });
 
-  describe("#image", function() {
+  describe("#imageRun", function() {
     it("returns first image in dinoImgArray", function() {
-      expect(dino.image()).toEqual(dino.imageArray[0]);
+      expect(dino.imageRun()).toEqual(dinoRunImageArray[0]);
     });
 
     it("returns second image in dinoImgArray", function() {
       dino.animationCounter = dino.imageInterval;
-      expect(dino.image()).toEqual(dino.imageArray[1]);
+      expect(dino.imageRun()).toEqual(dinoRunImageArray[1]);
     });
 
     it("increments dino.animationCounter by 1", function() {
-      dino.image();
+      dino.imageRun();
       expect(dino.animationCounter).toEqual(1);
     });
   });
