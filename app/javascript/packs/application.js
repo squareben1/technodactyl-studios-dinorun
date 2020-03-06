@@ -21,6 +21,7 @@ require("packs/renderGame")
 require("packs/ground")
 require("packs/block")
 require("packs/dino")
+require("packs/gameController")
 require("packs/spotify/spotify")
 require("packs/mp3_analysis/mp3_info")
 require("packs/homepage_interface/songSelector")
@@ -28,23 +29,3 @@ require("packs/homepage_interface/userSession")
 require("packs/homepage_interface/userInterface")
 
 // Load Page => new game
-
-window.addEventListener('load', function(){
-  var canvas;
-  var game;
-  
-  var canvas = document.getElementById('canvas')
-
-  game = new window.RenderGame(canvas, window.Background, window.Ground, window.Dino)
-  game.setup()
-
-  document.body.onkeyup = function(e){
-    if(e.keyCode == 32){
-      game.dino.jump()
-    }
-  }
-
-  document.getElementById('start_game_btn').addEventListener('click', function() {
-    game.startGame()
-  })
-})

@@ -1,12 +1,10 @@
 
 describe("Background", function() {
-  canvasDouble = {
-    width: 1280
-  }
   imageDouble = {}
 
   beforeEach(function() {
-    background = new Background(canvasDouble, imageDouble)
+    background = new Background(imageDouble, 1280, 720)
+    velocity = 60
   })
 
   describe('#constructor', function() {
@@ -22,17 +20,31 @@ describe("Background", function() {
   })
 
   describe('#move', function() {
-    it("deduct 2.5 from x axis", function() {
-      background.move()
-      expect(background.x).toEqual(-2.5)
+    it("deduct objectVelocity divided by parralaxCorrection from x axis", function() {
+      background.parallaxCorrection = 5
+      background.move(10)
+      expect(background.x).toEqual(-2)
+    })
+    it('should calculate overflow parameters if first method run', function() {
+      background.move(velocity)
+      expect(background.resetAt).toEqual(-1272)
+    })
+    it('should reset image if it is at the resetAt location', function() {
+      background._calculateOverflowParameters(velocity)
+      background.x = -1272
+      background.move(velocity)
+      expect(background.x).toEqual(1275)
     })
   })
 
-  describe('#reset', function() {
-    it("reset should reset x axis to canvas.width", function() {
-      background.move()
-      background.reset()
-      expect(background.x).toEqual(canvasDouble.width)
+  describe('#_calculateOverflowParameters', function() {
+    it('generates resetAt location for background', function() {
+      background._calculateOverflowParameters(velocity)
+      expect(background.resetAt).toEqual(-1272)
+    })
+    it('generates resetTo location for background', function() {
+      background._calculateOverflowParameters(velocity)
+      expect(background.resetTo).toEqual(1275)
     })
   })
 })

@@ -6,10 +6,10 @@ describe("Block", function() {
   imageDouble = {}
 
   describe('#move', function() {
-    it("move - takes 5 from x", function() {
+    it("move - takes velocity from location x", function() {
       block = new Block(canvasDouble, imageDouble)
-      block.move()
-      expect(block.x).toEqual(1275)
+      block.move(10)
+      expect(block.x).toEqual(1270)
     })
   })
 })
