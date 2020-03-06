@@ -23,9 +23,21 @@ require("packs/block")
 require("packs/dino")
 require("packs/gameController")
 require("packs/spotify/spotify")
-require("packs/mp3_analysis/mp3_info")
 require("packs/homepage_interface/songSelector")
 require("packs/homepage_interface/userSession")
 require("packs/homepage_interface/userInterface")
+require("packs/mp3_analysis/mp3_info")
 
 // Load Page => new game
+
+window.addEventListener('load', function(){
+  
+  window.gameController = new GameController
+  gameController.setupGame()
+
+  document.getElementById('start_game_btn').addEventListener('click', function() {
+    gameController.startGame()
+  })
+
+})
+
