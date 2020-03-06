@@ -19,8 +19,13 @@ describe("Block", function() {
 
   describe('#objectCentre', function() {
     it('returns centre point of dino object', function() {
-      console.log()
       expect(block.objectCentre()).toEqual([1320, 560])
+    })
+  })
+
+  describe('#objectRadius', function() {
+    it('returns radius of object circle', function() {
+      expect(block.objectRadius()).toEqual(40)
     })
   })
 })

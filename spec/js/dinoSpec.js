@@ -62,7 +62,7 @@ describe("Dino", function() {
   })
 
   describe('#objectRadius', function() {
-    it('returns raidus of object circle', function() {
+    it('returns radius of object circle', function() {
       expect(dino.objectRadius()).toEqual(60)
     })
   })
