@@ -1,5 +1,5 @@
 class RenderGame {
-  constructor(canvas, backgroundClass, groundClass, dinoClass, blockClass) {
+  constructor(canvas, backgroundClass, groundClass, dinoClass, blockClass, gameController) {
     this.canvas = canvas
     this.canvasContext = this.canvas.getContext('2d')
     this.backgroundClass = backgroundClass
@@ -9,6 +9,7 @@ class RenderGame {
     this.groundLevel = 100
     this.fps = 59.94
     this.frameInterval = 1000/this.fps
+    this.gameController = gameController
   }
 
   //=================================================================================
@@ -210,6 +211,7 @@ class RenderGame {
         gameOverFrameCounter++;
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
+          self.gameController.gameComplete()
         }
       })
     }, self.frameInterval)
