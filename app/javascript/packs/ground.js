@@ -14,10 +14,6 @@ class Ground {
   }
 
   isNewGroundNeeded(velocity) {
-    // block.width % velocity == remainder 
-    // canvas.width - block.width + remainder == addNewGroundLoc
-    // canvas.width + remainder == newGroundLoc
-    // return false if no, and adjusted location if yes
     let nextStep = this.canvasWidth - (this.x - velocity)
     if (nextStep >= this.xSize) {
       return (this.x + this.xSize)

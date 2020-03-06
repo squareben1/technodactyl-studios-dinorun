@@ -13,6 +13,8 @@ describe("RenderGame", function() {
     }
   };
 
+  var imageDouble = {}
+
   beforeEach(function(done) {
     renderGame = new RenderGame(canvasDouble, Background, Ground, Dino); //Background/Ground double
     spy = spyOn(canvasContextDouble, "drawImage");
@@ -47,6 +49,12 @@ describe("RenderGame", function() {
       renderGame.timeStepGround();
       expect(renderGame.groundArray[0].x).toEqual(canvasDouble.width - renderGame.objectVelocity);
     });
+    it('deletes first block if off screen', function() {
+      renderGame.groundArray[0].x = -240
+      renderGame.groundArray[1] = new Ground(canvasDouble, imageDouble)
+      renderGame.timeStepGround()
+      expect(renderGame.groundArray[0].x).toEqual(1270)
+    })
   });
 
   describe("#timeStepDino", function() {
