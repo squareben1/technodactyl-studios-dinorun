@@ -1,6 +1,14 @@
 require 'rails_helper'
 
 feature 'user can signup', js: true do
+
+  scenario 'user needs to click signup to show the form', driver: :selenium_chrome_headless do
+    visit '/'
+    expect(page).not_to have_button("Register")
+    click_button "Signup"
+    expect(page).to have_button 'Register'
+  end
+
   scenario 'user clicks signup and fills in form to signup', driver: :selenium_chrome_headless do
     visit '/'
     click_button "Signup"

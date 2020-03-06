@@ -1,6 +1,6 @@
 var signup = function(event) {
   event.preventDefault()
-  var isValid = document.getElementById("register[form]").checkValidity()
+  var isValid = document.getElementById("register-form").checkValidity()
   var username = document.getElementById("register[username]")
   var email = document.getElementById("register[email]")
   var password = document.getElementById("register[password]")
