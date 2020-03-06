@@ -1,6 +1,11 @@
 class SessionController < ApplicationController
   skip_before_action :require_login
 
+  # GET /session.json
+  def index
+    render json: session[:user_id]
+  end
+
   def create
     # check credentials
     user = User.find_by(email: user_params[:email])
