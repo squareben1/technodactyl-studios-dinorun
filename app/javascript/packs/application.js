@@ -1,3 +1,4 @@
+
 // This file is automatically compiled by Webpack, along with any other files
 // present in this directory. You're encouraged to place your actual application logic in
 // a relevant structure within app/javascript and only use these pack files to reference
@@ -31,9 +32,17 @@ require("packs/mp3_analysis/mp3_info")
 // Load Page => new game
 
 window.addEventListener('load', function(){
+  window.songSelector = new SongSelector
+  songSelector.getSongList()
   
   window.gameController = new GameController
   gameController.setupGame()
 
-})
+  document.getElementById('start_game_btn').addEventListener('click', function(){
+    songSelector.getSong()
+  })
 
+  // document.getElementById('create-song').addEventListener('click', function(){
+  //   setTimeout(songSelector.updateSongList(), 1500)
+  // })
+})
