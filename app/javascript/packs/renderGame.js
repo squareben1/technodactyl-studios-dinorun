@@ -26,8 +26,10 @@ class RenderGame {
   }
 
   _drawScore() {
+    this.newScore = new Score
+    this.newScore.updateScore(this.frameCounter)
     this.canvasContext.font = "30px Arial";
-    this.canvasContext.strokeText(`${this.scoreClass.findScore(this.frameCounter)}`, this.canvas.width - 200, 50);
+    this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50);
   }
 
   _drawNewBackground() {
@@ -110,6 +112,7 @@ class RenderGame {
         self._drawNewBackground();
         self._drawGround();
         self._drawDino();
+        self._drawScore();
       }
     };
 
@@ -184,7 +187,7 @@ class RenderGame {
         self.timeStepGround()
         self.timeStepDino()
         self.timeStepBlocks()
-        self._drawScore()
+        self._drawScore();
         console.log(self.gameOver)
       })
     }, self.frameInterval)

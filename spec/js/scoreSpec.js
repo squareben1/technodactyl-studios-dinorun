@@ -5,6 +5,8 @@ describe('Score', function() {
 
   it('divides framecounter by 10 to reach final score', function() {
     score = new Score()
-    expect(score.findScore(renderGameDouble.frameCounter)).toEqual(100)
+    expect(score.updateScore(renderGameDouble.frameCounter)).toEqual(100)
   })
+
+  
 })

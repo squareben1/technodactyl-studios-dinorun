@@ -1,9 +1,11 @@
 class Score {
   constructor() {
-
+    this.currentScore = 0
   }
 
-  findScore(frames) {
-    return frames / 10
+  updateScore(frames) {
+    return this.currentScore += Math.round(frames / 10)
   }
 }
+
+window.Score = Score

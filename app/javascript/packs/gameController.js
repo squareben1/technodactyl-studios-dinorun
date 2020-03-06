@@ -4,7 +4,7 @@ window.addEventListener('load', function(){
   
   var canvas = document.getElementById('canvas')
 
-  game = new window.RenderGame(canvas, window.Background, window.Ground, window.Dino, window.Block)
+  game = new window.RenderGame(canvas, window.Background, window.Ground, window.Dino, window.Block, window.Score)
   game.setup()
 
   document.body.onkeyup = function(e){
