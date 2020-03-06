@@ -3,8 +3,11 @@ describe('Score', function() {
     frameCounter: 1000
   }
 
-  it('divides framecounter by 10 to reach final score', function() {
+  beforeEach(function() {
     score = new Score()
+  })
+
+  it('divides framecounter by 10 to reach final score', function() {
     expect(score.updateScore(renderGameDouble.frameCounter)).toEqual(100)
   })
 

@@ -2,6 +2,9 @@ describe("RenderGame", function() {
   var canvasContextDouble = {
     drawImage: function() {
       return "";
+    },
+    strokeText: function() {
+      return ''
     }
   };
 
