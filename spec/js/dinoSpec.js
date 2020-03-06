@@ -54,4 +54,16 @@ describe("Dino", function() {
       expect(dino.animationCounter).toEqual(1);
     });
   });
+
+  describe('#objectCentre', function() {
+    it('returns centre point of dino object', function() {
+      expect(dino.objectCentre()).toEqual([160, 160])
+    })
+  })
+
+  describe('#objectRadius', function() {
+    it('returns radius of object circle', function() {
+      expect(dino.objectRadius()).toEqual(60)
+    })
+  })
 });

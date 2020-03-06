@@ -98,4 +98,20 @@ describe("RenderGame", function() {
       expect(renderGame.dino.y).toEqual(490);
     });
   });
+
+  describe('#deathInteractionBlock', function() {
+    it('if objects do not intersect false is returned', function() {
+      renderGame.blocksArray.push(new Block(canvasDouble, imageDouble))
+      renderGame.blocksArray[0].x = renderGame.dino.x + renderGame.dino.xSize
+      renderGame.dino.y = renderGame.blocksArray[0].y
+      expect(renderGame.deathInteractionBlock(0)).toEqual(false)
+    })
+
+    it('if objects DO intersect true is returned', function() {
+      renderGame.blocksArray.push(new Block(canvasDouble, imageDouble))
+      renderGame.blocksArray[0].x = renderGame.dino.x + (renderGame.dino.xSize - 1)
+      renderGame.dino.y = renderGame.blocksArray[0].y - (renderGame.dino.ySize - renderGame.blocksArray[0].ySize) / 2
+      expect(renderGame.deathInteractionBlock(0)).toEqual(true)
+    })
+  })
 });

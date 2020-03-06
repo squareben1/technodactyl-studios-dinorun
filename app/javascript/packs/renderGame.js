@@ -8,11 +8,16 @@ class RenderGame {
     this.blockClass = blockClass
     this.groundLevel = 100
     this.fps = 59.94
-    this.frameInterval = 1000/59.94
+    this.frameInterval = 1000/this.fps
   }
+
+  //=================================================================================
+  //                           Setup Game
+  //=================================================================================
 
   setup() {
     this.frameCounter = 0;
+    this.gameOver = false
     this.blocksArray = [];
     this.backgroundArray = [];
     this.groundArray = [];
@@ -137,26 +142,27 @@ class RenderGame {
     // this.groundRightImage.src = 'images/deserttileset/png/3.png'
   }
 
+  //=================================================================================
+  //                           Animate Game
+  //=================================================================================
+
   startGame(bpm, difficulty) { //frequencyArray, 
     this.blockGeneratorArray = [1,1,1,1,1,1,1,1,1,1,0,1,0,1,0,1,0,0,0,1,1,0,1,0,0,1,1,1,1,1]
-    console.log(bpm)
     this._generateFramesPerBeat(bpm)
-    this._calculateObjectVelocity()
+    this._calculateObjectVelocity(difficulty)
     this.animateGame()
   }
 
   _generateFramesPerBeat(bpm) {
-    let bps = Math.round(bpm / 60)
+    let bps = bpm / 60
     this.fpb = (Math.round(this.fps / bps) / 2) * 2
-    console.log('bpm 2')
-    console.log(bpm)
   }
 
-  _calculateObjectVelocity() {
+  _calculateObjectVelocity(difficulty) {
     let pixelsToDino = this.canvas.width - this.dino.x - this.dino.xSize
     console.log('pixels to Dino')
     console.log(pixelsToDino)
-    this.objectVelocity = (Math.round(pixelsToDino / this.fpb) / 2) * 2
+    this.objectVelocity = (Math.round((pixelsToDino / this.fpb) / difficulty) / 2) * 2
     console.log('objectVelocity')
     console.log(this.objectVelocity)
   }
@@ -172,6 +178,7 @@ class RenderGame {
         self.timeStepGround()
         self.timeStepDino()
         self.timeStepBlocks()
+        console.log(self.gameOver)
       })
     }, self.frameInterval)
   }
@@ -230,8 +237,19 @@ class RenderGame {
     }
     for (var i = 0; i < this.blocksArray.length; i++) {
       this.canvasContext.drawImage(this.blocksArray[i].image, this.blocksArray[i].x, this.blocksArray[i].y, this.blocksArray[i].xSize, this.blocksArray[i].ySize)
+      if (this.deathInteractionBlock(i)) {
+        this.gameOver = true
+      }
       this.blocksArray[i].move(this.objectVelocity)
     }
+  }
+
+  deathInteractionBlock(i) {
+    let dinoCentre = this.dino.objectCentre()
+    let blockCentre = this.blocksArray[i].objectCentre()
+    let circlesDifference = Math.sqrt(((dinoCentre[0] - blockCentre[0])**2) + ((dinoCentre[1] - blockCentre[1])**2))
+    let radiusSum = this.dino.objectRadius() + this.blocksArray[i].objectRadius()
+    return circlesDifference < radiusSum
   }
 }
 window.RenderGame = RenderGame;
