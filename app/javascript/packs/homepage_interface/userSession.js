@@ -36,11 +36,14 @@ var login = function(event) {
     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
     data: {user: {password: password.value, email: email.value}}
   }).done(function( data ) {
+    console.log(data)
     email.value = ""
     password.value = ""
     userMessage = document.getElementById("user-message")
     if (data['username']) {
       userMessage.innerHTML = data['username'] + ' welcome back to DinoRun!'
+      document.getElementById("logged-out").style.display = "none";
+      document.getElementById("logged-in").style.display = "block"
     } else {
       userMessage.innerHTML = 'Email or password is not correct!'
     }
