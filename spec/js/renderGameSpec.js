@@ -100,6 +100,9 @@ describe("RenderGame", function() {
   });
 
   describe('#deathInteractionBlock', function() {
-    it('')
+    it('if objects do not intersect false is returned', function() {
+      renderGame.blocksArray.push(new Block(canvasDouble, imageDouble))
+      expect(renderGame.deathInteractionBlock()).toEqual(False)
+    })
   })
 });

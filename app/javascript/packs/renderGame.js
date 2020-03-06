@@ -230,5 +230,9 @@ class RenderGame {
       this.blocksArray[i].move(this.objectVelocity)
     }
   }
+
+  deathInteractionBlock() {
+    return false
+  }
 }
 window.RenderGame = RenderGame;
