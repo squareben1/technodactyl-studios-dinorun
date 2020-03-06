@@ -35,9 +35,5 @@ window.addEventListener('load', function(){
   window.gameController = new GameController
   gameController.setupGame()
 
-  document.getElementById('start_game_btn').addEventListener('click', function() {
-    gameController.startGame()
-  })
-
 })
 
