@@ -17,6 +17,8 @@ var signup = function(event) {
     userMessage = document.getElementById("user-message")
     if (data['username']) {
       userMessage.innerHTML = data['username'] + ' welcome to DinoRun!'
+      $("#logged-out").hide()
+      $("#logged-in").show()
     } else {
       userMessage.innerHTML = ''
       for (const message in data.error_message) {
