@@ -47,6 +47,6 @@ var onCreateSong = function() {
 
 window.addEventListener('load', function(){
   getSongList()
-  document.getElementById('get_song').addEventListener('click', getSong)
+  document.getElementById('start_game_btn').addEventListener('click', getSong)
   document.getElementById('create-song').addEventListener('click', onCreateSong)
 })

@@ -19,15 +19,13 @@
 <div id="logged-in" style='display: none;'>
   <button id='logout'>Logout</button>
   <br>
-  <br>
-  <button id='start_game_btn'>Start Game</button>
   <div class='upload-music'>
     <%= render 'form', song: @song%>
   </div>
   <select id="song_selection">
     <option value="">--select--</option>
   </select>
-  <button id='get_song'>Get Song</button>
+  <button id='start_game_btn'>Play</button>
   <div id='song_player'></div>
 </div>
 <canvas id='canvas' width='1280' height="720"></canvas>
