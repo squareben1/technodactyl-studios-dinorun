@@ -98,4 +98,8 @@ describe("RenderGame", function() {
       expect(renderGame.dino.y).toEqual(490);
     });
   });
+
+  describe('#deathInteractionBlock', function() {
+    it('')
+  })
 });

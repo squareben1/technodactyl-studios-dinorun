@@ -44,6 +44,10 @@ class Dino {
     }
     return imageToReturn;
   }
+
+  objectCentre() {
+    return [this.x + (this.xSize / 2), this.y + (this.ySize / 2)]
+  }
 }
 
 window.Dino = Dino;
