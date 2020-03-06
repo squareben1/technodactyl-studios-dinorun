@@ -58,6 +58,9 @@ var logout = function() {
   }).done(function( data ) {
     userMessage = document.getElementById("user-message")
     userMessage.innerHTML = ""
+    document.getElementById("logged-out").style.display = "block";
+    document.getElementById("logged-in").style.display = "none";
+
   })
 }
 
