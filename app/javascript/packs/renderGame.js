@@ -227,12 +227,17 @@ class RenderGame {
     }
     for (var i = 0; i < this.blocksArray.length; i++) {
       this.canvasContext.drawImage(this.blocksArray[i].image, this.blocksArray[i].x, this.blocksArray[i].y, this.blocksArray[i].xSize, this.blocksArray[i].ySize)
+
       this.blocksArray[i].move(this.objectVelocity)
     }
   }
 
-  deathInteractionBlock() {
-    return false
+  deathInteractionBlock(i) {
+    let dinoCentre = this.dino.objectCentre()
+    let blockCentre = this.blocksArray[i].objectCentre()
+    let circlesDifference = Math.sqrt(((dinoCentre[0] - blockCentre[0])**2) + ((dinoCentre[1] - blockCentre[1])**2))
+    let radiusSum = this.dino.objectRadius() + this.blocksArray[i].objectRadius()
+    return circlesDifference < radiusSum
   }
 }
 window.RenderGame = RenderGame;
