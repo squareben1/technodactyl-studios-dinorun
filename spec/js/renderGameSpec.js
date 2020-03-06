@@ -45,18 +45,7 @@ describe("RenderGame", function() {
   describe("#timeStepGround", function() {
     it("timestep ground", function() {
       renderGame.timeStepGround();
-      expect(renderGame.groundArray[0].x).toEqual(
-        canvasDouble.width - renderGame.objectVelocity
-      );
-    });
-
-    it("new ground gets added when last position is fully on screen", function() {
-      renderGame.groundArray[renderGame.groundArray.length - 1].x =
-        canvasDouble.width - 120;
-      renderGame.timeStepGround();
-      expect(
-        renderGame.groundArray[renderGame.groundArray.length - 1].x
-      ).toEqual(canvasDouble.width - renderGame.objectVelocity);
+      expect(renderGame.groundArray[0].x).toEqual(canvasDouble.width - renderGame.objectVelocity);
     });
   });
 
