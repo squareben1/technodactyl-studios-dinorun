@@ -49,11 +49,16 @@ describe("RenderGame", function() {
       renderGame.timeStepGround();
       expect(renderGame.groundArray[0].x).toEqual(canvasDouble.width - renderGame.objectVelocity);
     });
-    it('deletes first block if off screen', function() {
+    it('deletes first ground if off screen', function() {
       renderGame.groundArray[0].x = -240
       renderGame.groundArray[1] = new Ground(canvasDouble, imageDouble)
       renderGame.timeStepGround()
       expect(renderGame.groundArray[0].x).toEqual(1270)
+    })
+    it('generates new ground when last ground will be fully on screen', function() {
+      renderGame.groundArray[0].x = 1165
+      renderGame.timeStepGround()
+      expect(renderGame.groundArray.length).toEqual(2)
     })
   });
 
