@@ -6,7 +6,7 @@ class UserController < ApplicationController
     if user.valid?
       user.save
       session[:user_id] = user.id
-      render json: {logged_in: true}
+      render json: {logged_in: true, username: user.username}
     else
       render json: {logged_in: false, error_message: user.errors.messages}
     end

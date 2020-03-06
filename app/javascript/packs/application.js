@@ -25,4 +25,7 @@ require("packs/gameController")
 require("packs/spotify/spotify")
 require("packs/mp3_analysis/mp3_info")
 require("packs/homepage_interface/songSelector")
+require("packs/homepage_interface/userSession")
+require("packs/homepage_interface/userInterface")
+
 // Load Page => new game

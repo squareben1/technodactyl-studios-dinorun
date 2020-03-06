@@ -11,5 +11,9 @@ class User < ApplicationRecord
   validates :email, uniqueness: {
     message: 'Email already taken, please choose another'
   }
+
+  validates :username, presence: true, uniqueness: {
+    message: 'Username already taken, please choose another'
+  }
   
 end

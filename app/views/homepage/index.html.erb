@@ -1,82 +1,33 @@
-<head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-</head>
-
-<body>
-  Dinorun
-  <canvas id='canvas' width='1280' height="720"></canvas>
-
-  <h1>Spotify Web Playback SDK Quick Start Tutorial</h1>
-  <h2>Open your console log: <code>View > Developer > JavaScript Console</code></h2>
-
-  <button id='button1'>Signup</button>
-  <button id='button2'>Login</button>
-  <button id='button3'>Logout</button>
+<span id="user-message"></span>
+<br>
+<div id="logged-out" style='display: none;'>
+  <button id='signup'>Signup</button>
+  <form id="register-form" style='display: none;'>
+    <input type='text' id="register[username]" name="register[username]" placeholder="Username" required>
+    <input type='email' id="register[email]" name='register[email]' placeholder="Email" required>
+    <input type='password' id="register[password]" name='register[password]' placeholder="Password" required>
+    <input type="submit" id="register[button]" value="Register">
+  </form>
+  <br>
+  <button id='login'>Login</button>
+  <form id='login-form' style="display: none;">
+    <input type='text' id='login[email]' name='login[email]' placeholder='Email'>
+    <input type='password' id='login[password]' name ='login[password]' placeholder='Password'>
+    <input type='submit' id='login[button]' value='Sign in'>
+  </form>
+</div>
+<div id="logged-in" style='display: none;'>
+  <button id='logout'>Logout</button>
+  <br>
+  <br>
   <button id='start_game_btn'>Start Game</button>
-  <button id='get_song'>Get Song</button>
-
   <div class='upload-music'>
     <%= render 'form', song: @song%>
   </div>
-
   <select id="song_selection">
-    <option value="">--select--</option>   
+    <option value="">--select--</option>
   </select>
-
+  <button id='get_song'>Get Song</button>
   <div id='song_player'></div>
-
-  <script>
-  window.addEventListener('load', function() {
-    var signup = function() {
-      $.ajax({
-        url: '/user.json',
-        type: "POST",
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-        data: {user: {username: 'testusername', password: 'testpassword', email: 'testemail@email.com'}}
-      }).done(function( data ) {
-        console.log(data)
-      })
-    }
-
-    var login = function() {
-      $.ajax({
-        url: '/session.json',
-        type: "POST",
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-        data: {user: {password: 'testpassword', email: 'testemail@email.com'}}
-      }).done(function( data ) {
-        console.log(data)
-      })
-    }
-
-    var logout = function() {
-      $.ajax({
-        url: '/session.json',
-        type: "DELETE",
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
-      }).done(function( data ) {
-        console.log(data)
-      })
-    }
-
-    
-
-
-
-
-    document.getElementById('button1').addEventListener('click', signup)
-    document.getElementById('button2').addEventListener('click', login)
-    document.getElementById('button3').addEventListener('click', logout)
-
-
-    $(document).ajaxComplete(function( event, xhr, settings ) {
-      console.log('ajax complete')
-      header_token = xhr.getResponseHeader('X-CSRF-Token')
-      if (header_token) $('meta[name=csrf-token]').attr('content', header_token)
-    })
-
-  })
-  </script>
-
-</body>
-</html>
+</div>
+<canvas id='canvas' width='1280' height="720"></canvas>
