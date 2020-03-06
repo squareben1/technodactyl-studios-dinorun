@@ -17,8 +17,10 @@ feature 'user can signup', js: true do
     click_button "Signup"
     fill_in 'register[username]', with: 'Imraan'
     fill_in 'register[email]', with: 'imraan21@hotmail.co.uk'
-    fill_in 'register[password]', with: 'securepass1'
+    fill_in 'register[password]', with: 'sec'
     click_button 'Register'
-    expect(page).to have_content 'Username or email are already taken!'
+    expect(page).to have_content 'Email already taken'
+    expect(page).to have_content 'Username already taken'
+    expect(page).to have_content 'at least 6'
   end
 end

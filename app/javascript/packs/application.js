@@ -24,6 +24,8 @@ require("packs/dino")
 require("packs/spotify/spotify")
 require("packs/mp3_analysis/mp3_info")
 require("packs/homepage_interface/songSelector")
+require("packs/homepage_interface/userSession")
+
 // Load Page => new game
 
 window.addEventListener('load', function(){
