@@ -11,8 +11,13 @@ class RenderGame {
     this.frameInterval = 1000/this.fps
   }
 
+  //=================================================================================
+  //                           Setup Game
+  //=================================================================================
+
   setup() {
     this.frameCounter = 0;
+    this.gameOver = false
     this.blocksArray = [];
     this.backgroundArray = [];
     this.groundArray = [];
@@ -137,6 +142,10 @@ class RenderGame {
     // this.groundRightImage.src = 'images/deserttileset/png/3.png'
   }
 
+  //=================================================================================
+  //                           Animate Game
+  //=================================================================================
+
   startGame(bpm, difficulty) { //frequencyArray, 
     this.blockGeneratorArray = [1,1,1,1,1,1,1,1,1,1,0,1,0,1,0,1,0,0,0,1,1,0,1,0,0,1,1,1,1,1]
     this._generateFramesPerBeat(bpm)
@@ -169,6 +178,7 @@ class RenderGame {
         self.timeStepGround()
         self.timeStepDino()
         self.timeStepBlocks()
+        console.log(self.gameOver)
       })
     }, self.frameInterval)
   }
@@ -227,7 +237,9 @@ class RenderGame {
     }
     for (var i = 0; i < this.blocksArray.length; i++) {
       this.canvasContext.drawImage(this.blocksArray[i].image, this.blocksArray[i].x, this.blocksArray[i].y, this.blocksArray[i].xSize, this.blocksArray[i].ySize)
-
+      if (this.deathInteractionBlock(i)) {
+        this.gameOver = true
+      }
       this.blocksArray[i].move(this.objectVelocity)
     }
   }

@@ -14,7 +14,7 @@ window.addEventListener('load', function(){
   }
 
   document.getElementById('start_game_btn').addEventListener('click', function() {
-    game.startGame(120, 2.5) //bpm, difficulty(blocks on screen, lower = faster and fewer)
+    game.startGame(60, 2) //bpm, difficulty(blocks on screen, lower = faster and fewer)
   })
 
 })
