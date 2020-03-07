@@ -6,6 +6,10 @@ class Score {
   updateScore(frames) {
     return this.currentScore += Math.round(frames / 10)
   }
+
+  jumpScore() {
+    this.currentScore += 10
+  }
 }
 
 window.Score = Score

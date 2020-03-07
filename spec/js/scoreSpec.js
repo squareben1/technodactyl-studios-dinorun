@@ -7,8 +7,17 @@ describe('Score', function() {
     score = new Score()
   })
 
-  it('divides framecounter by 10 to reach final score', function() {
-    expect(score.updateScore(renderGameDouble.frameCounter)).toEqual(100)
+  describe("#updateScore", function() {
+    it('divides framecounter by 10 to reach final score', function() {
+      expect(score.updateScore(renderGameDouble.frameCounter)).toEqual(100)
+    })
+  })
+
+  describe("#jumpScore", function() {
+    it('adds 10 to score', function() {
+      score.jumpScore()
+      expect(score.currentScore).toEqual(10)
+    })
   })
 
   
