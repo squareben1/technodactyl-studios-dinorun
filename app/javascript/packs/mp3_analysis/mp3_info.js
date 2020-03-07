@@ -1,52 +1,67 @@
-window.addEventListener('load', function(){
+class SongAnalyser{
 
-  var audio_file = document.getElementById("song_mp3");
-
-  audio_file.onchange = function() {
-    var file = this.files[0];
-    song_title.value = file.name;
-    var reader = new FileReader();
-    var context = new (window.AudioContext || window.webkitAudioContext)();
-    reader.onload = function() {
-      context.decodeAudioData(reader.result, function(buffer) {
-        json(buffer);
-        bpm(buffer);
-      });
+  setup(){
+    song = this
+    var audio_file = document.getElementById("song_mp3");
+    audio_file.onchange = function() {
+      var file = this.files[0];
+      song_title.value = file.name;
+      var reader = new FileReader();
+      var context = new (window.AudioContext || window.webkitAudioContext)();
+      reader.onload = function() {
+        context.decodeAudioData(reader.result, function(buffer) {
+          song.json(buffer); 
+        });
+      };
+      reader.readAsArrayBuffer(file);
     };
-    reader.readAsArrayBuffer(file);
-  };
-
-  function json(buffer) {
-    var offlineContext = new OfflineAudioContext(
-      1,
-      buffer.length,
-      buffer.sampleRate
-    );
-    var source = offlineContext.createBufferSource();
-    source.buffer = buffer;
-    var filter = offlineContext.createBiquadFilter();
-    filter.type = "lowpass";
-    source.connect(filter);
-    filter.connect(offlineContext.destination);
-    source.start(0);
-    offlineContext.startRendering().then(function(lowPassAudioBuffer) {
-      var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      var song = audioCtx.createBufferSource();
-      song.buffer = lowPassAudioBuffer;
-      song.connect(audioCtx.destination);
-      window.lowPassBuffer = song.buffer.getChannelData(0);
-
-      lowPassBuffer = getSampleClip(lowPassBuffer, 150);
-      lowPassBuffer = normalizeArray(lowPassBuffer);
-      lowPassBuffer = lowPassBuffer.filter(function(value) {
-        return !Number.isNaN(value);
-      });
-
-      song_analysed.value = JSON.stringify(lowPassBuffer);
-    });
   }
 
-  function getSampleClip(data, samples) {
+  //// getting both frequency array and bpm of the audio file
+  json(buffer) {
+      var offlineContext = new OfflineAudioContext(
+        1,
+        buffer.length,
+        buffer.sampleRate
+      );
+      var source = offlineContext.createBufferSource();
+      source.buffer = buffer;
+      var filter = offlineContext.createBiquadFilter();
+      filter.type = "lowpass";
+      source.connect(filter);
+      filter.connect(offlineContext.destination);
+      source.start(0);
+      self = this
+      offlineContext.startRendering().then(function(lowPassAudioBuffer) {
+        var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        var song = audioCtx.createBufferSource();
+        song.buffer = lowPassAudioBuffer;
+        songLength = song.buffer.duration
+        song.connect(audioCtx.destination);
+        window.lowPassBuffer = song.buffer.getChannelData(0);
+
+
+        /// Tempo
+        gettingTempo = self.getSampleClip(lowPassBuffer, 400);
+        gettingTempo = self.normalizeArray(gettingTempo);
+        var tempo = self.countFlatLineGroupings(gettingTempo);
+        var finalTempo = tempo * 6;
+        song_bpm.value = finalTempo;
+        console.log("bpm", finalTempo)
+
+
+        /// Frequency Array
+        lowPassBuffer = self.getSampleClip(lowPassBuffer, finalTempo * songLength/60);
+        lowPassBuffer = self.normalizeArray(lowPassBuffer);
+        lowPassBuffer = lowPassBuffer.filter(function(value) {
+          return !Number.isNaN(value);
+        });
+        console.log("buffer array", lowPassBuffer)
+        song_analysed.value = JSON.stringify(lowPassBuffer);
+      });
+    }
+
+  getSampleClip(data, samples) {
     var newArray = [];
     var modulus_coefficient = Math.round(data.length / samples);
 
@@ -58,7 +73,7 @@ window.addEventListener('load', function(){
     return newArray;
   }
 
-  function normalizeArray(data) {
+  normalizeArray(data) {
     var newArray = [];
 
     for (var i = 0; i < data.length; i++) {
@@ -68,53 +83,9 @@ window.addEventListener('load', function(){
     return newArray;
   }
 
-//////////////
-
-  function bpm(buffer) {
-    var offlineContext = new OfflineAudioContext(
-      1,
-      buffer.length,
-      buffer.sampleRate
-    );
-    var source = offlineContext.createBufferSource();
-    source.buffer = buffer;
-    var filter = offlineContext.createBiquadFilter();
-    filter.type = "lowpass";
-    source.connect(filter);
-    filter.connect(offlineContext.destination);
-    source.start(0);
-    offlineContext.startRendering().then(function(lowPassAudioBuffer) {
-      var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      var song = audioCtx.createBufferSource();
-      song.buffer = lowPassAudioBuffer;
-      song.connect(audioCtx.destination);
-
-      window.lowPassBuffer = song.buffer.getChannelData(0);
-
-      // window.lowPassFilter = getClip(10, 10, lowPassBuffer)
-
-      lowPassBuffer = getSampleClip(lowPassBuffer, 400);
-      lowPassBuffer = normalizeArray(lowPassBuffer);
-      var tempo = countFlatLineGroupings(lowPassBuffer);
-      song_bpm.value = tempo * 6;
-    });
-  }
-
-  function getClip(length, startTime, data) {
-    var clip_length = length * 44100;
-    var section = startTime * 44100;
-    var newArr = [];
-
-    for (var i = 0; i < clip_length; i++) {
-      newArr.push(data[section + i]);
-    }
-
-    return newArr;
-  }
-
-  function countFlatLineGroupings(data) {
+  countFlatLineGroupings(data) {
     var groupings = 0;
-    var newArray = normalizeArray(data);
+    var newArray = this.normalizeArray(data);
 
     function getMax(a) {
       var m = -Infinity,
@@ -161,4 +132,5 @@ window.addEventListener('load', function(){
 
     return count;
   }
-})
+}
+window.SongAnalyser = SongAnalyser

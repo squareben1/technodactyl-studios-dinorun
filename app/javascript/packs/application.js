@@ -35,5 +35,9 @@ window.addEventListener('load', function(){
   window.gameController = new GameController
   gameController.setupGame()
 
+  
+  window.songAnalyser = new SongAnalyser
+  songAnalyser.setup()
+
 })
 
