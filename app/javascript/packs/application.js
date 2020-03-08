@@ -16,18 +16,29 @@ require("channels")
 // const images = require.context('../images', true)
 // window.imagePath = (name) => images(name, true)
 
-require("packs/background")
-require("packs/renderGame")
-require("packs/ground")
-require("packs/block")
-require("packs/dino")
-require("packs/score")
-require("packs/gameController")
+// Game Packs
+require("packs/game/background")
+require("packs/game/ground")
+require("packs/game/block")
+require("packs/game/dino")
+require("packs/game/score")
+require("packs/game/renderGame")
+
+
+require("packs/game/gameController")
 require("packs/spotify/spotify")
 require("packs/homepage_interface/songSelector")
 require("packs/homepage_interface/userSession")
 require("packs/homepage_interface/userInterface")
 require("packs/mp3_analysis/mp3_info")
+
+import Background from './game/background.js'
+import Ground from './game/ground.js'
+import Block from './game/block.js'
+import Dino from './game/dino.js'
+import score from './game/score.js'
+import renderGame from './game/renderGame.js'
+
 
 // Load Page => new game
 
