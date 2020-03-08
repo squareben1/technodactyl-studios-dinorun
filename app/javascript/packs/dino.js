@@ -1,13 +1,14 @@
 class Dino {
-  constructor(imageArray) {
+  constructor(runImageArray, deadImageArray) {
     this.x = 100;
     this.y = 100;
     this.xSize = 120;
     this.ySize = 120;
     this.spaceCounter = 0;
     this.jumpCounter = 0;
-    this.imageArray = imageArray;
-    this.numImages = imageArray.length;
+    this.runImageArray = runImageArray;
+    this.deadImageArray = deadImageArray;
+    this.numImages = runImageArray.length;
     this.imageInterval = 10;
     this.animationCounterMax = this.numImages * this.imageInterval;
     this.animationCounter = 0;
@@ -35,14 +36,19 @@ class Dino {
     }
   }
 
-  image() {
+  imageRun() {
     let imageIndex = Math.floor(this.animationCounter / this.imageInterval);
-    let imageToReturn = this.imageArray[imageIndex];
+    let imageToReturn = this.runImageArray[imageIndex];
     this.animationCounter++;
     if (this.animationCounter >= this.animationCounterMax) {
       this.animationCounter = 0;
     }
     return imageToReturn;
+  }
+
+  imageDead(counter) {
+    let imageIndex = Math.floor(counter / 10);
+    return this.deadImageArray[imageIndex]
   }
 
   objectCentre() {

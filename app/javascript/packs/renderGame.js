@@ -1,5 +1,5 @@
 class RenderGame {
-  constructor(canvas, backgroundClass, groundClass, dinoClass, blockClass, scoreClass) {
+  constructor(canvas, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController) {
     this.canvas = canvas
     this.canvasContext = this.canvas.getContext('2d')
     this.backgroundClass = backgroundClass
@@ -10,6 +10,7 @@ class RenderGame {
     this.groundLevel = 100
     this.fps = 59.94
     this.frameInterval = 1000/this.fps
+    this.gameController = gameController
   }
 
   //=================================================================================
@@ -18,7 +19,7 @@ class RenderGame {
 
   setup() {
     this.frameCounter = 0;
-    this.gameOver = false
+    this.gameOver = false;
     this.blocksArray = [];
     this.backgroundArray = [];
     this.groundArray = [];
@@ -39,69 +40,70 @@ class RenderGame {
     this.backgroundArray.push(secondBackground)
     // Draw background
     for (var i = 0; i < this.backgroundArray.length; i++) {
-      this.canvasContext.drawImage(
-        this.backgroundArray[i].image,
-        this.backgroundArray[i].x,
-        this.backgroundArray[i].y,
-        this.backgroundArray[i].xSize,
-        this.backgroundArray[i].ySize
-      );
+      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, this.backgroundArray[i].xSize, this.backgroundArray[i].ySize);
     }
   }
 
   _drawGround() {
     let newGround = new this.groundClass(this.canvas, this.groundLeftImage);
     this.groundArray.push(newGround);
-    this.canvasContext.drawImage(
-      newGround.image,
-      newGround.x,
-      newGround.y,
-      newGround.x,
-      newGround.y
-    );
+    this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, newGround.x, newGround.y);
   }
 
-  _createDinoImageArray() {
-    this.dinoImageArray = [];
-    this.dinoImageArray.push(
-      this.dinoImage1,
-      this.dinoImage2,
-      this.dinoImage3,
-      this.dinoImage4,
-      this.dinoImage5,
-      this.dinoImage6,
-      this.dinoImage7,
-      this.dinoImage8
-    );
+  _createDinoRunImageArray() {
+    return [
+      this.dinoRunImage1,
+      this.dinoRunImage2,
+      this.dinoRunImage3,
+      this.dinoRunImage4,
+      this.dinoRunImage5,
+      this.dinoRunImage6,
+      this.dinoRunImage7,
+      this.dinoRunImage8
+    ]
+  }
+
+  _createDinoDeadImageArray() {
+    return [
+      this.dinoDeadImage1,
+      this.dinoDeadImage2,
+      this.dinoDeadImage3,
+      this.dinoDeadImage4,
+      this.dinoDeadImage5,
+      this.dinoDeadImage6,
+      this.dinoDeadImage7,
+      this.dinoDeadImage8
+    ]
   }
 
   _drawDino() {
-    this._createDinoImageArray();
-    let newDino = new this.dinoClass(this.dinoImageArray);
-    this.canvasContext.drawImage(
-      newDino.image(),
-      newDino.x,
-      newDino.y,
-      newDino.xSize,
-      newDino.ySize
-    );
+    let newDino = new this.dinoClass(this._createDinoRunImageArray(), this._createDinoDeadImageArray());
+    this.canvasContext.drawImage(newDino.imageRun(), newDino.x, newDino.y, newDino.xSize, newDino.ySize);
     this.dino = newDino;
   }
 
   _generateImages() {
     self = this;
     var imageCounter = 0;
-    var numberOfImages = 5;
+    var numberOfImages = 20;
 
     this.backgroundImage = new Image();
-    this.dinoImage1 = new Image();
-    this.dinoImage2 = new Image();
-    this.dinoImage3 = new Image();
-    this.dinoImage4 = new Image();
-    this.dinoImage5 = new Image();
-    this.dinoImage6 = new Image();
-    this.dinoImage7 = new Image();
-    this.dinoImage8 = new Image();
+    this.dinoRunImage1 = new Image();
+    this.dinoRunImage2 = new Image();
+    this.dinoRunImage3 = new Image();
+    this.dinoRunImage4 = new Image();
+    this.dinoRunImage5 = new Image();
+    this.dinoRunImage6 = new Image();
+    this.dinoRunImage7 = new Image();
+    this.dinoRunImage8 = new Image();
+    this.dinoDeadImage1 = new Image();
+    this.dinoDeadImage2 = new Image();
+    this.dinoDeadImage3 = new Image();
+    this.dinoDeadImage4 = new Image();
+    this.dinoDeadImage5 = new Image();
+    this.dinoDeadImage6 = new Image();
+    this.dinoDeadImage7 = new Image();
+    this.dinoDeadImage8 = new Image();
     this.groundCentreImage = new Image();
     this.groundLeftImage = new Image();
     this.stoneBlockImage = new Image();
@@ -116,39 +118,48 @@ class RenderGame {
       }
     };
 
-    this.dinoImage1.onload = onLoadCallback;
-    this.dinoImage2.onload = onLoadCallback;
-    this.dinoImage3.onload = onLoadCallback;
-    this.dinoImage4.onload = onLoadCallback;
-    this.dinoImage5.onload = onLoadCallback;
-    this.dinoImage6.onload = onLoadCallback;
-    this.dinoImage7.onload = onLoadCallback;
-    this.dinoImage8.onload = onLoadCallback;
+    this.dinoRunImage1.onload = onLoadCallback;
+    this.dinoRunImage2.onload = onLoadCallback;
+    this.dinoRunImage3.onload = onLoadCallback;
+    this.dinoRunImage4.onload = onLoadCallback;
+    this.dinoRunImage5.onload = onLoadCallback;
+    this.dinoRunImage6.onload = onLoadCallback;
+    this.dinoRunImage7.onload = onLoadCallback;
+    this.dinoRunImage8.onload = onLoadCallback;
+    this.dinoDeadImage1.onload = onLoadCallback;
+    this.dinoDeadImage2.onload = onLoadCallback;
+    this.dinoDeadImage3.onload = onLoadCallback;
+    this.dinoDeadImage4.onload = onLoadCallback;
+    this.dinoDeadImage5.onload = onLoadCallback;
+    this.dinoDeadImage6.onload = onLoadCallback;
+    this.dinoDeadImage7.onload = onLoadCallback;
+    this.dinoDeadImage8.onload = onLoadCallback;
     this.backgroundImage.onload = onLoadCallback;
     this.groundCentreImage.onload = onLoadCallback;
     this.groundLeftImage.onload = onLoadCallback;
     this.stoneBlockImage.onload = onLoadCallback;
 
     // Create image objects
-    this.dinoImage1.src = "images/dino_png/Run (1).png";
-    this.dinoImage2.src = "images/dino_png/Run (2).png";
-    this.dinoImage3.src = "images/dino_png/Run (3).png";
-    this.dinoImage4.src = "images/dino_png/Run (4).png";
-    this.dinoImage5.src = "images/dino_png/Run (5).png";
-    this.dinoImage6.src = "images/dino_png/Run (6).png";
-    this.dinoImage7.src = "images/dino_png/Run (7).png";
-    this.dinoImage8.src = "images/dino_png/Run (8).png";
+    this.dinoRunImage1.src = "images/dino_png/Run (1).png";
+    this.dinoRunImage2.src = "images/dino_png/Run (2).png";
+    this.dinoRunImage3.src = "images/dino_png/Run (3).png";
+    this.dinoRunImage4.src = "images/dino_png/Run (4).png";
+    this.dinoRunImage5.src = "images/dino_png/Run (5).png";
+    this.dinoRunImage6.src = "images/dino_png/Run (6).png";
+    this.dinoRunImage7.src = "images/dino_png/Run (7).png";
+    this.dinoRunImage8.src = "images/dino_png/Run (8).png";
+    this.dinoDeadImage1.src = "images/dino_png/Dead (1).png";
+    this.dinoDeadImage2.src = "images/dino_png/Dead (2).png";
+    this.dinoDeadImage3.src = "images/dino_png/Dead (3).png";
+    this.dinoDeadImage4.src = "images/dino_png/Dead (4).png";
+    this.dinoDeadImage5.src = "images/dino_png/Dead (5).png";
+    this.dinoDeadImage6.src = "images/dino_png/Dead (6).png";
+    this.dinoDeadImage7.src = "images/dino_png/Dead (7).png";
+    this.dinoDeadImage8.src = "images/dino_png/Dead (8).png";
     this.backgroundImage.src = "images/bg.png";
     this.groundCentreImage.src = "images/deserttileset/png/Tile/2.png";
     this.groundLeftImage.src = "images/deserttileset/png/Tile/1.png";
-    this.stoneBlockImage.src =
-      "images/deserttileset/png/Objects/StoneBlock.png";
-    // this.groundCentreImage = new Image()
-    // this.groundCentreImage.src = 'images/deserttileset/png/2.png'
-    // this.groundLeftImage = new Image()
-    // this.groundLeftImage.src = 'images/deserttileset/png/1.png'
-    // this.groundRightImage = new Image()
-    // this.groundRightImage.src = 'images/deserttileset/png/3.png'
+    this.stoneBlockImage.src = "images/deserttileset/png/Objects/StoneBlock.png";
   }
 
   //=================================================================================
@@ -169,15 +180,11 @@ class RenderGame {
 
   _calculateObjectVelocity(difficulty) {
     let pixelsToDino = this.canvas.width - this.dino.x - this.dino.xSize
-    console.log('pixels to Dino')
-    console.log(pixelsToDino)
     this.objectVelocity = (Math.round((pixelsToDino / this.fpb) / difficulty) / 2) * 2
-    console.log('objectVelocity')
-    console.log(this.objectVelocity)
   }
 
   animateGame() {
-    self = this;
+    var self = this;
     var animationFrameHandle;
     var gameInterval = setInterval(function() {
       cancelAnimationFrame(animationFrameHandle);
@@ -185,10 +192,37 @@ class RenderGame {
         self.frameCounter++
         self.timeStepBackground()
         self.timeStepGround()
-        self.timeStepDino()
         self.timeStepBlocks()
-        self._drawScore();
-        console.log(self.gameOver)
+        self.timeStepDino()
+        if (self.gameOver == true) {
+          clearInterval(gameInterval)
+          self.animateDeath()
+        }
+      })
+    }, self.frameInterval)
+  }
+
+  animateDeath() {
+    var gameOverFrameCounter = 0
+    var velocityDeducter = this.objectVelocity / 9
+    var self = this;
+    var animationFrameHandle;
+    var gameOverInterval = setInterval(function() {
+      cancelAnimationFrame(animationFrameHandle)
+      animationFrameHandle = requestAnimationFrame(function() {
+        if (gameOverFrameCounter % 10 == 0) {
+          self.objectVelocity = Math.floor(self.objectVelocity - velocityDeducter)
+        }
+        self.timeStepBackground()
+        self.timeStepGround()
+        self.timeStepBlocks()
+        self._drawScore()
+        self.timeStepDeadDino(gameOverFrameCounter)
+        gameOverFrameCounter++;
+        if (gameOverFrameCounter == 79) {
+          clearInterval(gameOverInterval)
+          self.gameController.gameComplete()
+        }
       })
     }, self.frameInterval)
   }
@@ -233,7 +267,7 @@ class RenderGame {
       }
       this.dino.applyJump();
     }
-    this.canvasContext.drawImage(this.dino.image(), this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize);
+    this.canvasContext.drawImage(this.dino.imageRun(), this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize);
   }
 
   timeStepBlocks() {
@@ -252,6 +286,10 @@ class RenderGame {
       }
       this.blocksArray[i].move(this.objectVelocity)
     }
+  }
+
+  timeStepDeadDino(counter) {
+    this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize);
   }
 
   deathInteractionBlock(i) {

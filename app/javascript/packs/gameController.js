@@ -1,20 +1,35 @@
 window.addEventListener('load', function(){
-  var canvas;
-  var game;
-  
-  var canvas = document.getElementById('canvas')
 
-  game = new window.RenderGame(canvas, window.Background, window.Ground, window.Dino, window.Block, window.Score)
-  game.setup()
+  class GameController {
+    setupGame() {
+      this.canvas = document.getElementById('canvas')
+      this.game = new window.RenderGame(canvas, window.Background, window.Ground, window.Dino, window.Block, window.Score, this)
+      this.game.setup()
+    }
 
-  document.body.onkeyup = function(e){
-    if(e.keyCode == 32){
-      game.dino.jump()
+    startGame() {
+      this.game.startGame(60, 2) //bpm, difficulty(blocks on screen, lower = faster and fewer)
+      self = this
+      document.body.onkeyup = function(e){
+        if(e.keyCode == 32){
+          self.game.dino.jump()
+        }
+      }
+    }
+
+    gameComplete() {
+      // Ajax score to leaderboard database
+      // Display navbar
+      // Play theme tune
+      console.log('game over in controller')
     }
   }
 
+  var gameController = new GameController
+  gameController.setupGame()
+
   document.getElementById('start_game_btn').addEventListener('click', function() {
-    game.startGame(60, 2) //bpm, difficulty(blocks on screen, lower = faster and fewer)
+    gameController.startGame()
   })
 
 })
