@@ -1,11 +1,12 @@
 class RenderGame {
-  constructor(canvas, backgroundClass, groundClass, dinoClass, blockClass, gameController) {
+  constructor(canvas, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController) {
     this.canvas = canvas
     this.canvasContext = this.canvas.getContext('2d')
     this.backgroundClass = backgroundClass
     this.groundClass = groundClass
     this.dinoClass = dinoClass
     this.blockClass = blockClass
+    this.scoreClass = scoreClass
     this.groundLevel = 100
     this.fps = 59.94
     this.frameInterval = 1000/this.fps
@@ -23,6 +24,13 @@ class RenderGame {
     this.backgroundArray = [];
     this.groundArray = [];
     this._generateImages();
+  }
+
+  _drawScore() {
+    this.newScore = new Score
+    this.newScore.updateScore(this.frameCounter)
+    this.canvasContext.font = "30px Arial";
+    this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50);
   }
 
   _drawNewBackground() {
@@ -106,6 +114,7 @@ class RenderGame {
         self._drawNewBackground();
         self._drawGround();
         self._drawDino();
+        self._drawScore();
       }
     };
 
@@ -207,6 +216,7 @@ class RenderGame {
         self.timeStepBackground()
         self.timeStepGround()
         self.timeStepBlocks()
+        self._drawScore()
         self.timeStepDeadDino(gameOverFrameCounter)
         gameOverFrameCounter++;
         if (gameOverFrameCounter == 79) {
