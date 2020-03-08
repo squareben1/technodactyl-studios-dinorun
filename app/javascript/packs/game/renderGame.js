@@ -34,8 +34,6 @@ class RenderGame {
     let secondBackground = new this.backgroundClass(this.loadedImages['backgroundImage'], this.canvas.width, this.canvas.height)
     secondBackground.x = this.canvas.width
     this.backgroundArray.push(firstBackground, secondBackground)
-    console.log(this.loadedImages['backgroundImage'])
-    console.log(this.backgroundArray[0].image)
     for (var i = 0; i < this.backgroundArray.length; i++) {
       this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, this.backgroundArray[i].xSize, this.backgroundArray[i].ySize)
     }

@@ -1,9 +1,13 @@
 class SongAnalyser{
-
-  setup(){
+  setup() {
     var song = this
     var audio_file = document.getElementById("song_mp3");
     audio_file.onchange = function() {
+      if (audio_file.value == '') {
+        return ''
+      }
+      song.hideCreateSongButton()
+      song.displayProgressBar()
       var file = this.files[0];
       song_title.value = file.name;
       var reader = new FileReader();
@@ -19,47 +23,48 @@ class SongAnalyser{
 
   //// getting both frequency array and bpm of the audio file
   json(buffer) {
-      var offlineContext = new OfflineAudioContext(
-        1,
-        buffer.length,
-        buffer.sampleRate
-      );
-      var source = offlineContext.createBufferSource();
-      source.buffer = buffer;
-      var filter = offlineContext.createBiquadFilter();
-      filter.type = "lowpass";
-      source.connect(filter);
-      filter.connect(offlineContext.destination);
-      source.start(0);
-      self = this
-      offlineContext.startRendering().then(function(lowPassAudioBuffer) {
-        var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        var song = audioCtx.createBufferSource();
-        song.buffer = lowPassAudioBuffer;
-        songLength = song.buffer.duration
-        song.connect(audioCtx.destination);
-        window.lowPassBuffer = song.buffer.getChannelData(0);
+    var offlineContext = new OfflineAudioContext(
+      1,
+      buffer.length,
+      buffer.sampleRate
+    );
+    var source = offlineContext.createBufferSource();
+    source.buffer = buffer;
+    var filter = offlineContext.createBiquadFilter();
+    filter.type = "lowpass";
+    source.connect(filter);
+    filter.connect(offlineContext.destination);
+    source.start(0);
+    self = this
+    offlineContext.startRendering().then(function(lowPassAudioBuffer) {
+      var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var song = audioCtx.createBufferSource();
+      song.buffer = lowPassAudioBuffer;
+      var songLength = song.buffer.duration
+      song.connect(audioCtx.destination);
+      var lowPassBuffer = song.buffer.getChannelData(0);
 
+      /// Tempo
+      var gettingTempo = self.getSampleClip(lowPassBuffer, 400);
+      gettingTempo = self.normalizeArray(gettingTempo);
+      var tempo = self.countFlatLineGroupings(gettingTempo);
+      var finalTempo = tempo * 6;
+      song_bpm.value = finalTempo;
+      console.log("bpm", finalTempo)
 
-        /// Tempo
-        gettingTempo = self.getSampleClip(lowPassBuffer, 400);
-        gettingTempo = self.normalizeArray(gettingTempo);
-        var tempo = self.countFlatLineGroupings(gettingTempo);
-        var finalTempo = tempo * 6;
-        song_bpm.value = finalTempo;
-        console.log("bpm", finalTempo)
-
-
-        /// Frequency Array
-        lowPassBuffer = self.getSampleClip(lowPassBuffer, finalTempo * songLength/60);
-        lowPassBuffer = self.normalizeArray(lowPassBuffer);
-        lowPassBuffer = lowPassBuffer.filter(function(value) {
-          return !Number.isNaN(value);
-        });
-        console.log("buffer array", lowPassBuffer)
-        song_analysed.value = JSON.stringify(lowPassBuffer);
+      /// Frequency Array
+      lowPassBuffer = self.getSampleClip(lowPassBuffer, (finalTempo * songLength/60));
+      lowPassBuffer = self.normalizeArray(lowPassBuffer);
+      lowPassBuffer = lowPassBuffer.filter(function(value) {
+        return !Number.isNaN(value);
       });
-    }
+      console.log("buffer array", lowPassBuffer)
+      song_analysed.value = JSON.stringify(lowPassBuffer);
+
+      // Post completion
+      self.showCreateSongButton()
+    });
+  }
 
   getSampleClip(data, samples) {
     var newArray = [];
@@ -131,6 +136,19 @@ class SongAnalyser{
     }
 
     return count;
+  }
+
+  showCreateSongButton() {
+    document.querySelector('#create_song_progress').innerHTML = ''
+    document.querySelector('#create_song_btn').style.display = "inline-block"
+  }
+
+  hideCreateSongButton() {
+    document.querySelector('#create_song_btn').style.display = "none"
+  }
+
+  displayProgressBar() {
+    document.querySelector('#create_song_progress').innerHTML = 'Song analysis in progress'
   }
 }
 

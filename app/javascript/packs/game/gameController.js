@@ -17,7 +17,7 @@ class GameController {
 
   startGame(data, audioElement) {
     console.log(data)
-    this.game.startGame(60, 2) //bpm, difficulty(blocks on screen, lower = faster and fewer)
+    this.game.startGame(data['bpm'], 2) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     setTimeout(function() {
       audioElement.play()
     }, 5000)

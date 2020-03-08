@@ -1,4 +1,4 @@
-var getSongList = function() {
+function updateSongList() {
   var songSelector = document.querySelector('#song_selection')
   $.ajax({
     url: `/songs.json`,
@@ -13,7 +13,7 @@ var getSongList = function() {
   })
 }
 
-var getSong = function(event) {
+function getSong(callback) {
   var songSelector = document.querySelector('#song_selection')
   var selectedSongId = songSelector.options[songSelector.selectedIndex].value
   if (selectedSongId == '') {
@@ -30,24 +30,10 @@ var getSong = function(event) {
     sound.id = 'audio_player'
     sound.src = data['mp3_url']
     sound.type = 'audio/mpeg'
-    sound.autoplay = 'true'
     audioPlayer.appendChild(sound)
-    window.gameController.startGame(data, sound) 
+    console.log(data)
+    callback.startGame(data, sound)
   })
 }
 
-var updateSongList = function() {
-  document.getElementById("song_mp3").value = ""
-  getSongList()
-}
-
-var onCreateSong = function() {
-  setTimeout(updateSongList, 1500)
-}
-
-
-window.addEventListener('load', function(){
-  getSongList()
-  document.getElementById('start_game_btn').addEventListener('click', getSong)
-  document.getElementById('create-song').addEventListener('click', onCreateSong)
-})
+export { updateSongList, getSong }

@@ -39,11 +39,11 @@ require("packs/mp3_analysis/mp3_info")
 
 import GameController from './game/gameController.js'
 import SongAnalyser from './mp3_analysis/mp3_info.js'
-
+import { updateSongList, getSong } from './homepage_interface/songSelector.js'
 
 // Load Page => new game
 
-window.addEventListener('load', function(){
+window.addEventListener('load', function() {
   var gameController
   var songAnalyser
   
@@ -52,5 +52,34 @@ window.addEventListener('load', function(){
 
   songAnalyser = new SongAnalyser
   songAnalyser.setup()
+
+  updateSongList()
+
+  // Event listner for when form submitted, refactor by changing form to AJAX submit and performing the below in a callback
+  // Option to use ActionCable to automatically push new songs to the songList
+  document.getElementById('create_song_btn').addEventListener('click', function() {
+    document.getElementById("song_mp3").value = ""
+    document.getElementById('create_song_btn').style.display = "none"
+    setTimeout(updateSongList, 1000)
+  })
+
+  document.getElementById('start_game_btn').addEventListener('click', function() {
+    getSong(gameController)
+  })
 })
 
+
+// var updateSongList = function() {
+//   document.getElementById("song_mp3").value = ""
+//   getSongList()
+// }
+
+// var onCreateSong = function() {
+//   setTimeout(updateSongList, 1500)
+// }
+
+
+// window.addEventListener('load', function(){
+  
+ 
+// })
