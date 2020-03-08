@@ -12,4 +12,9 @@ Rails.application.routes.draw do
   get 'songs', to: 'songs#index', constraints: lambda { |req| req.format == :json }
   get 'songs/:id', to: 'songs#show', constraints: lambda { |req| req.format == :json }
   post 'songs', to: 'songs#create'
+
+  # Testing/Development
+  if Rails.env.development? || Rails.env.test?
+    get 'jasmine', to: 'jasmine#index'
+  end
 end

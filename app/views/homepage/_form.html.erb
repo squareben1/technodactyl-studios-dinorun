@@ -1,16 +1,4 @@
 <%= form_with(model: song, remote: true) do |form| %>
-  <% if song.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(song.errors.count, "error") %> prohibited this song from being saved:</h2>
-
-      <ul>
-        <% song.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div class="field">
     <%= form.hidden_field :title %>
   </div>
@@ -28,7 +16,10 @@
     <%= form.file_field :mp3 %>
   </div>
 
+  <div id="create_song_progress">
+  </div>
+
   <div class="actions">
-    <%= form.submit 'Create Song', id: 'create-song'%>
+    <%= form.submit 'Create Song', id: 'create_song_btn'%>
   </div>
 <% end %>

@@ -16,29 +16,62 @@ require("channels")
 // const images = require.context('../images', true)
 // window.imagePath = (name) => images(name, true)
 
-require("packs/background")
-require("packs/renderGame")
-require("packs/ground")
-require("packs/block")
-require("packs/dino")
-require("packs/score")
-require("packs/gameController")
+// Game Packs
+require("packs/game/background")
+require("packs/game/ground")
+require("packs/game/block")
+require("packs/game/dino")
+require("packs/game/score")
+require("packs/game/renderGame")
+require("packs/game/gameController")
+
+// Spotify Packs
 require("packs/spotify/spotify")
+
+// Homepage Interface Packs
 require("packs/homepage_interface/songSelector")
 require("packs/homepage_interface/userSession")
 require("packs/homepage_interface/userInterface")
+
+// mp3 Analysis Packs
 require("packs/mp3_analysis/mp3_info")
 
-// Load Page => new game
 
-window.addEventListener('load', function(){
+import GameController from './game/gameController.js'
+import SongAnalyser from './mp3_analysis/mp3_info.js'
+import { updateSongList, getSong } from './homepage_interface/songSelector.js'
+import { toggleLogInForm, toggleSignUpForm } from './homepage_interface/userInterface.js'
+
+
+// Load Page => new game
+window.addEventListener('load', function() {
+  var gameController
+  var songAnalyser
   
-  window.gameController = new GameController
+  gameController = new GameController
   gameController.setupGame()
 
-  
-  window.songAnalyser = new SongAnalyser
+  songAnalyser = new SongAnalyser
   songAnalyser.setup()
 
-})
+  updateSongList()
 
+  // Event listner for when form submitted, refactor by changing form to AJAX submit and performing the below in a callback
+  // Option to use ActionCable to automatically push new songs to the songList
+  document.querySelector('#create_song_btn').addEventListener('click', function() {
+    document.querySelector("#song_mp3").value = ""
+    document.querySelector('#create_song_btn').style.display = 'none'
+    setTimeout(updateSongList, 1000)
+  })
+
+  document.querySelector('#start_game_btn').addEventListener('click', function() {
+    getSong(function(data, audio) {
+      gameController.startGame(data, audio)
+    })
+    document.querySelector('#logged-in').style.display = 'none'
+  })
+
+  // Signup and Login
+  document.querySelector('#login').addEventListener('click', toggleLogInForm)
+  document.querySelector('#signup').addEventListener('click', toggleSignUpForm)
+})
