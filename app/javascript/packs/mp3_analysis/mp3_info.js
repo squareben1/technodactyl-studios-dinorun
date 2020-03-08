@@ -1,7 +1,7 @@
 class SongAnalyser{
 
   setup(){
-    song = this
+    var song = this
     var audio_file = document.getElementById("song_mp3");
     audio_file.onchange = function() {
       var file = this.files[0];
@@ -133,4 +133,5 @@ class SongAnalyser{
     return count;
   }
 }
-window.SongAnalyser = SongAnalyser
+
+export default SongAnalyser

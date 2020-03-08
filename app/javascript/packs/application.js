@@ -23,33 +23,34 @@ require("packs/game/block")
 require("packs/game/dino")
 require("packs/game/score")
 require("packs/game/renderGame")
-
-
 require("packs/game/gameController")
+
+// Spotify Packs
 require("packs/spotify/spotify")
+
+// Homepage Interface Packs
 require("packs/homepage_interface/songSelector")
 require("packs/homepage_interface/userSession")
 require("packs/homepage_interface/userInterface")
+
+// mp3 Analysis Packs
 require("packs/mp3_analysis/mp3_info")
 
-import Background from './game/background.js'
-import Ground from './game/ground.js'
-import Block from './game/block.js'
-import Dino from './game/dino.js'
-import score from './game/score.js'
-import renderGame from './game/renderGame.js'
+
+import GameController from './game/gameController.js'
+import SongAnalyser from './mp3_analysis/mp3_info.js'
 
 
 // Load Page => new game
 
 window.addEventListener('load', function(){
+  var gameController
+  var songAnalyser
   
-  window.gameController = new GameController
+  gameController = new GameController
   gameController.setupGame()
 
-  
-  window.songAnalyser = new SongAnalyser
+  songAnalyser = new SongAnalyser
   songAnalyser.setup()
-
 })
 

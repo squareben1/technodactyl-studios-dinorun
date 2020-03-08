@@ -1,7 +1,17 @@
+// Import dependencies
+import Score from './score.js'
+import Ground from './ground.js'
+import Dino from './dino.js'
+import Block from './block.js'
+import Background from './background.js'
+import RenderGame from './renderGame.js'
+import loadGameImages from './loadImages.js'
+
 class GameController {
-  setupGame() {
+  async setupGame() {
     this.canvas = document.getElementById('canvas')
-    this.game = new window.RenderGame(canvas, window.Background, window.Ground, window.Dino, window.Block, this)
+    var loadedImages = await loadGameImages()
+    this.game = new RenderGame(canvas, loadedImages, Background, Ground, Dino, Block, Score, this)
     this.game.setup()
   }
 
@@ -27,4 +37,4 @@ class GameController {
   }
 }
 
-window.GameController = GameController
+export default GameController

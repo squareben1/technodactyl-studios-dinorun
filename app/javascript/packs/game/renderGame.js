@@ -1,6 +1,7 @@
 class RenderGame {
-  constructor(canvas, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController) {
+  constructor(canvas, loadedImages, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController) {
     this.canvas = canvas
+    this.loadedImages = loadedImages
     this.canvasContext = this.canvas.getContext('2d')
     this.backgroundClass = backgroundClass
     this.groundClass = groundClass
@@ -18,148 +19,46 @@ class RenderGame {
   //=================================================================================
 
   setup() {
-    this.frameCounter = 0;
-    this.gameOver = false;
-    this.blocksArray = [];
-    this.backgroundArray = [];
-    this.groundArray = [];
-    this._generateImages();
+    this.frameCounter = 0
+    this.gameOver = false
+    this.blocksArray = []
+    this._drawBackground()
+    this._drawGround()
+    this._drawDino()
+    this._drawScore()
+  }
+
+  _drawBackground() {
+    this.backgroundArray = []
+    let firstBackground = new this.backgroundClass(this.loadedImages['backgroundImage'], this.canvas.width, this.canvas.height)
+    let secondBackground = new this.backgroundClass(this.loadedImages['backgroundImage'], this.canvas.width, this.canvas.height)
+    secondBackground.x = this.canvas.width
+    this.backgroundArray.push(firstBackground, secondBackground)
+    console.log(this.loadedImages['backgroundImage'])
+    console.log(this.backgroundArray[0].image)
+    for (var i = 0; i < this.backgroundArray.length; i++) {
+      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, this.backgroundArray[i].xSize, this.backgroundArray[i].ySize)
+    }
+  }
+
+  _drawGround() {
+    this.groundArray = []
+    let newGround = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][0])
+    this.groundArray.push(newGround)
+    this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, newGround.x, newGround.y)
   }
 
   _drawScore() {
     this.newScore = new this.scoreClass
     this.newScore.updateScore(this.frameCounter)
-    this.canvasContext.font = "30px Arial";
-    this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50);
-  }
-
-  _drawNewBackground() {
-    this.backgroundArray.push(new this.backgroundClass(this.backgroundImage, this.canvas.width, this.canvas.height))
-    var secondBackground = new this.backgroundClass(this.backgroundImage, this.canvas.width, this.canvas.height)
-    secondBackground.x = this.canvas.width
-    this.backgroundArray.push(secondBackground)
-    // Draw background
-    for (var i = 0; i < this.backgroundArray.length; i++) {
-      this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, this.backgroundArray[i].xSize, this.backgroundArray[i].ySize);
-    }
-  }
-
-  _drawGround() {
-    let newGround = new this.groundClass(this.canvas, this.groundLeftImage);
-    this.groundArray.push(newGround);
-    this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, newGround.x, newGround.y);
-  }
-
-  _createDinoRunImageArray() {
-    return [
-      this.dinoRunImage1,
-      this.dinoRunImage2,
-      this.dinoRunImage3,
-      this.dinoRunImage4,
-      this.dinoRunImage5,
-      this.dinoRunImage6,
-      this.dinoRunImage7,
-      this.dinoRunImage8
-    ]
-  }
-
-  _createDinoDeadImageArray() {
-    return [
-      this.dinoDeadImage1,
-      this.dinoDeadImage2,
-      this.dinoDeadImage3,
-      this.dinoDeadImage4,
-      this.dinoDeadImage5,
-      this.dinoDeadImage6,
-      this.dinoDeadImage7,
-      this.dinoDeadImage8
-    ]
+    this.canvasContext.font = "30px Arial"
+    this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
   }
 
   _drawDino() {
-    let newDino = new this.dinoClass(this._createDinoRunImageArray(), this._createDinoDeadImageArray());
-    this.canvasContext.drawImage(newDino.imageRun(), newDino.x, newDino.y, newDino.xSize, newDino.ySize);
-    this.dino = newDino;
-  }
-
-  _generateImages() {
-    self = this;
-    var imageCounter = 0;
-    var numberOfImages = 20;
-
-    this.backgroundImage = new Image();
-    this.dinoRunImage1 = new Image();
-    this.dinoRunImage2 = new Image();
-    this.dinoRunImage3 = new Image();
-    this.dinoRunImage4 = new Image();
-    this.dinoRunImage5 = new Image();
-    this.dinoRunImage6 = new Image();
-    this.dinoRunImage7 = new Image();
-    this.dinoRunImage8 = new Image();
-    this.dinoDeadImage1 = new Image();
-    this.dinoDeadImage2 = new Image();
-    this.dinoDeadImage3 = new Image();
-    this.dinoDeadImage4 = new Image();
-    this.dinoDeadImage5 = new Image();
-    this.dinoDeadImage6 = new Image();
-    this.dinoDeadImage7 = new Image();
-    this.dinoDeadImage8 = new Image();
-    this.groundCentreImage = new Image();
-    this.groundLeftImage = new Image();
-    this.stoneBlockImage = new Image();
-
-    var onLoadCallback = function() {
-      imageCounter++;
-      if (imageCounter == numberOfImages) {
-        self._drawNewBackground();
-        self._drawGround();
-        self._drawDino();
-        self._drawScore();
-      }
-    };
-
-    this.dinoRunImage1.onload = onLoadCallback;
-    this.dinoRunImage2.onload = onLoadCallback;
-    this.dinoRunImage3.onload = onLoadCallback;
-    this.dinoRunImage4.onload = onLoadCallback;
-    this.dinoRunImage5.onload = onLoadCallback;
-    this.dinoRunImage6.onload = onLoadCallback;
-    this.dinoRunImage7.onload = onLoadCallback;
-    this.dinoRunImage8.onload = onLoadCallback;
-    this.dinoDeadImage1.onload = onLoadCallback;
-    this.dinoDeadImage2.onload = onLoadCallback;
-    this.dinoDeadImage3.onload = onLoadCallback;
-    this.dinoDeadImage4.onload = onLoadCallback;
-    this.dinoDeadImage5.onload = onLoadCallback;
-    this.dinoDeadImage6.onload = onLoadCallback;
-    this.dinoDeadImage7.onload = onLoadCallback;
-    this.dinoDeadImage8.onload = onLoadCallback;
-    this.backgroundImage.onload = onLoadCallback;
-    this.groundCentreImage.onload = onLoadCallback;
-    this.groundLeftImage.onload = onLoadCallback;
-    this.stoneBlockImage.onload = onLoadCallback;
-
-    // Create image objects
-    this.dinoRunImage1.src = "images/dino_png/Run (1).png";
-    this.dinoRunImage2.src = "images/dino_png/Run (2).png";
-    this.dinoRunImage3.src = "images/dino_png/Run (3).png";
-    this.dinoRunImage4.src = "images/dino_png/Run (4).png";
-    this.dinoRunImage5.src = "images/dino_png/Run (5).png";
-    this.dinoRunImage6.src = "images/dino_png/Run (6).png";
-    this.dinoRunImage7.src = "images/dino_png/Run (7).png";
-    this.dinoRunImage8.src = "images/dino_png/Run (8).png";
-    this.dinoDeadImage1.src = "images/dino_png/Dead (1).png";
-    this.dinoDeadImage2.src = "images/dino_png/Dead (2).png";
-    this.dinoDeadImage3.src = "images/dino_png/Dead (3).png";
-    this.dinoDeadImage4.src = "images/dino_png/Dead (4).png";
-    this.dinoDeadImage5.src = "images/dino_png/Dead (5).png";
-    this.dinoDeadImage6.src = "images/dino_png/Dead (6).png";
-    this.dinoDeadImage7.src = "images/dino_png/Dead (7).png";
-    this.dinoDeadImage8.src = "images/dino_png/Dead (8).png";
-    this.backgroundImage.src = "images/bg.png";
-    this.groundCentreImage.src = "images/deserttileset/png/Tile/2.png";
-    this.groundLeftImage.src = "images/deserttileset/png/Tile/1.png";
-    this.stoneBlockImage.src = "images/deserttileset/png/Objects/StoneBlock.png";
+    let newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'])
+    this.canvasContext.drawImage(newDino.imageRun(), newDino.x, newDino.y, newDino.xSize, newDino.ySize)
+    this.dino = newDino
   }
 
   //=================================================================================
@@ -167,7 +66,7 @@ class RenderGame {
   //=================================================================================
 
   startGame(bpm, difficulty) { //frequencyArray, 
-    this.blockGeneratorArray = [1,1,1,1,1,1,1,1,1,1,0,1,0,1,0,1,0,0,0,1,1,0,1,0,0,1,1,1,1,1]
+    this.blockGeneratorArray = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     this._generateFramesPerBeat(bpm)
     this._calculateObjectVelocity(difficulty)
     this.animateGame()
@@ -247,7 +146,7 @@ class RenderGame {
     // Check for new ground
     let newGroundLoc = this.groundArray[(this.groundArray.length-1)].isNewGroundNeeded(this.objectVelocity)
     if (newGroundLoc) {
-      let newGround = new this.groundClass(this.canvas, this.groundCentreImage)
+      let newGround = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][1])
       newGround.x = newGroundLoc
       this.groundArray.push(newGround)
     }
@@ -275,7 +174,7 @@ class RenderGame {
       let newBlockValue = this.blockGeneratorArray.shift()
       if (newBlockValue == 1) {
         this.blocksArray.push(
-          new this.blockClass(this.canvas, this.stoneBlockImage)
+          new this.blockClass(this.canvas, this.loadedImages['stoneBlockImage'])
         );
       }
     }
