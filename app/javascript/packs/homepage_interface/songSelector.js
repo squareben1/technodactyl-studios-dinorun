@@ -32,6 +32,7 @@ var getSong = function(event) {
     sound.type = 'audio/mpeg'
     sound.autoplay = 'true'
     audioPlayer.appendChild(sound)
+    window.gameController.startGame(data, sound) 
   })
 }
 
