@@ -3,7 +3,7 @@ window.addEventListener('load', function(){
   class GameController {
     setupGame() {
       this.canvas = document.getElementById('canvas')
-      this.game = new window.RenderGame(canvas, window.Background, window.Ground, window.Dino, window.Block, this)
+      this.game = new window.RenderGame(canvas, window.Background, window.Ground, window.Dino, window.Block, window.Score, this)
       this.game.setup()
     }
 
