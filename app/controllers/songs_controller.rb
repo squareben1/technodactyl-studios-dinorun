@@ -17,7 +17,7 @@ class SongsController < ApplicationController
   # POST /songs.json
   def create
     @song = Song.new(song_params)
-    p params['song']['mp3']
+    p params['song']
     p @song.save
     p @song.errors
 
