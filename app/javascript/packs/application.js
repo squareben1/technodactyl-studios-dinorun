@@ -40,9 +40,10 @@ require("packs/mp3_analysis/mp3_info")
 import GameController from './game/gameController.js'
 import SongAnalyser from './mp3_analysis/mp3_info.js'
 import { updateSongList, getSong } from './homepage_interface/songSelector.js'
+import { toggleLogInForm, toggleSignUpForm } from './homepage_interface/userInterface.js'
+
 
 // Load Page => new game
-
 window.addEventListener('load', function() {
   var gameController
   var songAnalyser
@@ -57,29 +58,20 @@ window.addEventListener('load', function() {
 
   // Event listner for when form submitted, refactor by changing form to AJAX submit and performing the below in a callback
   // Option to use ActionCable to automatically push new songs to the songList
-  document.getElementById('create_song_btn').addEventListener('click', function() {
-    document.getElementById("song_mp3").value = ""
-    document.getElementById('create_song_btn').style.display = "none"
+  document.querySelector('#create_song_btn').addEventListener('click', function() {
+    document.querySelector("#song_mp3").value = ""
+    document.querySelector('#create_song_btn').style.display = 'none'
     setTimeout(updateSongList, 1000)
   })
 
-  document.getElementById('start_game_btn').addEventListener('click', function() {
-    getSong(gameController)
+  document.querySelector('#start_game_btn').addEventListener('click', function() {
+    getSong(function(data, audio) {
+      gameController.startGame(data, audio)
+    })
+    document.querySelector('#logged-in').style.display = 'none'
   })
+
+  // Signup and Login
+  document.querySelector('#login').addEventListener('click', toggleLogInForm)
+  document.querySelector('#signup').addEventListener('click', toggleSignUpForm)
 })
-
-
-// var updateSongList = function() {
-//   document.getElementById("song_mp3").value = ""
-//   getSongList()
-// }
-
-// var onCreateSong = function() {
-//   setTimeout(updateSongList, 1500)
-// }
-
-
-// window.addEventListener('load', function(){
-  
- 
-// })

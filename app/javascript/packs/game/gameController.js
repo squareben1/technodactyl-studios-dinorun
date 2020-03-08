@@ -6,6 +6,7 @@ import Block from './block.js'
 import Background from './background.js'
 import RenderGame from './renderGame.js'
 import loadGameImages from './loadImages.js'
+import { toggleLogInForm } from '../homepage_interface/userInterface.js'
 
 class GameController {
   async setupGame() {
@@ -17,7 +18,7 @@ class GameController {
 
   startGame(data, audioElement) {
     console.log(data)
-    this.game.startGame(data['bpm'], 2) //bpm, difficulty(blocks on screen, lower = faster and fewer)
+    this.game.startGame(data['bpm'], 1.5) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     setTimeout(function() {
       audioElement.play()
     }, 5000)
@@ -34,6 +35,7 @@ class GameController {
     // Display navbar
     // Play theme tune
     console.log('game over in controller')
+    document.querySelector('#logged-in').style.display = 'block'
   }
 }
 

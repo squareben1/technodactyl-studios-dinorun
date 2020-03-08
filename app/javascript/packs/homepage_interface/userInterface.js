@@ -1,12 +1,9 @@
-var toggleLogInForm = function(){
+function toggleLogInForm(){
   $("#login-form").toggle()
 }
 
-var toggleSignUpForm = function(){
+function toggleSignUpForm() {
   $("#register-form").toggle()
 }
 
-window.addEventListener('load', function(){
-  $('#login').click(toggleLogInForm)
-  $('#signup').click(toggleSignUpForm)
-})
+export { toggleLogInForm, toggleSignUpForm } 

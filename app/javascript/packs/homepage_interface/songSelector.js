@@ -32,7 +32,7 @@ function getSong(callback) {
     sound.type = 'audio/mpeg'
     audioPlayer.appendChild(sound)
     console.log(data)
-    callback.startGame(data, sound)
+    callback(data, sound)
   })
 }
 
