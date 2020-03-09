@@ -8,3 +8,5 @@ POSTGRES_DEVELOPMENT_DB: dinorun_development
 POSTGRES_TEST_DB: dinorun_test
 POSTGRES_DB: dinorun
 RAILS_SERVE_STATIC_FILES: true
+SPOTIFY_ID: <your-spotify-app-id>
+SPOTIFY_SECRET: <your-spotify-app-secret>

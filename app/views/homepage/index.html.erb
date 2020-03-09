@@ -2,19 +2,24 @@
 <br>
 <div id="logged-out" style='display: none;'>
   <button id='signup'>Signup</button>
+
   <form id="register-form" style='display: none;'>
     <input type='text' id="register[username]" name="register[username]" placeholder="Username" required>
     <input type='email' id="register[email]" name='register[email]' placeholder="Email" required>
-    <input type='password' id="register[password]" name='register[password]' placeholder="Password" required>
+    <input type='password' id="register[password]" name='register[password]' placeholder="Password" required><br>
+    Register with Spotify? <input type="checkbox" id="register[spotify]" name="register[spotify]" value="true"><br>
     <input type="submit" id="register[button]" value="Register">
   </form>
+
   <br>
+
   <button id='login'>Login</button>
   <form id='login-form' style="display: none;">
     <input type='text' id='login[email]' name='login[email]' placeholder='Email'>
     <input type='password' id='login[password]' name ='login[password]' placeholder='Password'>
     <input type='submit' id='login[button]' value='Sign in'>
   </form>
+
 </div>
 <div id="logged-in" style='display: none;'>
   <button id='logout'>Logout</button>

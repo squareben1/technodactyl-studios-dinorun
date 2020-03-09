@@ -61,3 +61,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Use figaro for managing environment variables
 gem 'figaro'
+
+gem 'faraday'
