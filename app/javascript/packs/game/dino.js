@@ -1,5 +1,5 @@
 class Dino {
-  constructor(runImageArray, deadImageArray) {
+  constructor(runImageArray, deadImageArray, jumpImageArray) {
     this.x = 100;
     this.y = 100;
     this.xSize = 120;
@@ -8,6 +8,8 @@ class Dino {
     this.jumpCounter = 0;
     this.runImageArray = runImageArray;
     this.deadImageArray = deadImageArray;
+    this.jumpImageArray = jumpImageArray;
+    this.jumpImageCounter = 0;
     this.numImages = runImageArray.length;
     this.imageInterval = 10;
     this.animationCounterMax = this.numImages * this.imageInterval;
@@ -27,23 +29,54 @@ class Dino {
 
   resetJump() {
     this.spaceCounter = 0;
+    this.jumpImageCounter = 0;
   }
 
   jump() {
-    if (this.spaceCounter < 1) {
+    if (this.spaceCounter < 2) {
       this.spaceCounter += 1;
       this.jumpCounter = 30;
     }
   }
 
   imageRun() {
-    let imageIndex = Math.floor(this.animationCounter / this.imageInterval);
-    let imageToReturn = this.runImageArray[imageIndex];
-    this.animationCounter++;
-    if (this.animationCounter >= this.animationCounterMax) {
-      this.animationCounter = 0;
+    var imageToReturn
+    var imageIndex
+    // console.log("space counter", this.spaceCounter);
+    // console.log("jump counter", this.jumpCounter);
+    // console.log(this.jumpImageCounter);
+    if (this.spaceCounter > 0) {      
+      if (this.jumpImageCounter < this.imageInterval * 2) {
+        imageIndex = Math.floor(this.jumpImageCounter / (this.imageInterval));    
+        console.log("image index", imageIndex)
+      } else if(this.y > 269 && this.jumpCounter < 10){
+        imageIndex = Math.floor((this.y - 270)/ 71) + 7;
+      } else{
+        imageIndex = Math.floor(((this.jumpImageCounter - (this.imageInterval * 2))/ (this.imageInterval / 2)) % 5) + 2
+      console.log("image Index xxxxxxxxxxxxxxxxxx", imageIndex )
+      }
+      imageToReturn = this.jumpImageArray[imageIndex];
+      this.jumpImageCounter++;
+    } 
+    else {
+      imageIndex = Math.floor(this.animationCounter / this.imageInterval);
+      imageToReturn = this.runImageArray[imageIndex];
+      this.animationCounter++;
+      if (this.animationCounter >= this.animationCounterMax) {
+        this.animationCounter = 0;
+      }
     }
     return imageToReturn;
+  }
+
+  _imageJump() {
+      let imageIndex = Math.floor(this.animationCounter / this.imageInterval);
+      let imageToReturn = this.jumpImageArray[imageIndex];
+      this.animationCounter++;
+      if (this.animationCounter >= this.animationCounterMax) {
+        this.animationCounter = 0;
+      }
+      return imageToReturn;
   }
 
   imageDead(counter) {
