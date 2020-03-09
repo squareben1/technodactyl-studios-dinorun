@@ -55,7 +55,7 @@ class RenderGame {
 
   _drawDino() {
     let newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'], this.loadedImages['dinoJumpImageArray'])
-    this.canvasContext.drawImage(newDino.imageRun(), newDino.x, newDino.y, newDino.xSize, newDino.ySize)
+    this.canvasContext.drawImage(newDino.returnCurrentImage(), newDino.x, newDino.y, newDino.xSize, newDino.ySize)
     this.dino = newDino
   }
 
