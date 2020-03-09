@@ -204,7 +204,7 @@ class RenderGame {
   }
 
   timeStepDeadDino(counter) {
-    this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize);
+    this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, this.canvas.height - 230, this.dino.xSize, this.dino.ySize); // remove dino.y
   }
 
   deathInteractionBlock(i) {
