@@ -42,18 +42,13 @@ class Dino {
   imageRun() {
     var imageToReturn
     var imageIndex
-    // console.log("space counter", this.spaceCounter);
-    // console.log("jump counter", this.jumpCounter);
-    // console.log(this.jumpImageCounter);
     if (this.spaceCounter > 0) {      
       if (this.jumpImageCounter < this.imageInterval * 2) {
         imageIndex = Math.floor(this.jumpImageCounter / (this.imageInterval));    
-        console.log("image index", imageIndex)
       } else if(this.y > 269 && this.jumpCounter < 10){
         imageIndex = Math.floor((this.y - 270)/ 71) + 7;
       } else{
         imageIndex = Math.floor(((this.jumpImageCounter - (this.imageInterval * 2))/ (this.imageInterval / 2)) % 5) + 2
-      console.log("image Index xxxxxxxxxxxxxxxxxx", imageIndex )
       }
       imageToReturn = this.jumpImageArray[imageIndex];
       this.jumpImageCounter++;
