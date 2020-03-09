@@ -54,7 +54,7 @@ class RenderGame {
   }
 
   _drawDino() {
-    let newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'])
+    let newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'], this.loadedImages['dinoJumpImageArray'])
     this.canvasContext.drawImage(newDino.imageRun(), newDino.x, newDino.y, newDino.xSize, newDino.ySize)
     this.dino = newDino
   }
@@ -119,7 +119,7 @@ class RenderGame {
         gameOverFrameCounter++;
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
-          self.gameController.gameComplete()
+          self.gameController.gameComplete(self.newScore)
         }
       })
     }, self.frameInterval)
@@ -156,7 +156,7 @@ class RenderGame {
       let filteredGround = this.groundArray.filter(function(item) {
         return item.x >= -20 && item.x <= 220;
       });
-      if (filteredGround.length > 0 && this.dino.y <= this.canvas.height - 240 && this.dino.y >= this.canvas.height - 259) {
+      if (filteredGround.length > 0 && this.dino.y <= this.canvas.height - 240 && this.dino.y >= this.canvas.height - 259 && this.dino.jumpCounter < 1) {
         this.dino.resetJump();
         this.dino.y = this.canvas.height - 240;
       } 
@@ -164,6 +164,8 @@ class RenderGame {
         this.dino.applyGravity();
       }
       this.dino.applyJump();
+      console.log("this.y", this.dino.y)
+
     }
     this.canvasContext.drawImage(this.dino.imageRun(), this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize);
   }

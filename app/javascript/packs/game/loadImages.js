@@ -55,6 +55,19 @@ var dinoDeadImageUrlArray = [
   "images/dino_png/Dead (8).png"
 ]
 
+var dinoJumpImageUrlArray = [
+  "images/dino_png/Jump (3).png",
+  "images/dino_png/Jump (4).png",
+  "images/dino_png/Jump (5).png",
+  "images/dino_png/Jump (6).png",
+  "images/dino_png/Jump (7).png",
+  "images/dino_png/Jump (8).png",
+  "images/dino_png/Jump (9).png",
+  "images/dino_png/Jump (10).png",
+  "images/dino_png/Jump (11).png",
+  "images/dino_png/Jump (12).png"
+]
+
 var groundImageUrlArray = [
   "images/deserttileset/png/Tile/1.png",
   "images/deserttileset/png/Tile/2.png",
@@ -70,6 +83,7 @@ var stoneBlockImageUrl = "images/deserttileset/png/Objects/StoneBlock.png"
 export default async function loadGameImages(){
   var dinoRunImageArray = await loadImages(dinoRunImageUrlArray)
   var dinoDeadImageArray = await loadImages(dinoDeadImageUrlArray)
+  var dinoJumpImageArray = await loadImages(dinoJumpImageUrlArray)
   var groundImageArray = await loadImages(groundImageUrlArray)
   var backgroundImage = await loadImage(backgroundImageUrl)
   var stoneBlockImage = await loadImage(stoneBlockImageUrl)
@@ -77,6 +91,7 @@ export default async function loadGameImages(){
   return {
     dinoRunImageArray: dinoRunImageArray,
     dinoDeadImageArray: dinoDeadImageArray,
+    dinoJumpImageArray: dinoJumpImageArray,
     groundImageArray: groundImageArray,
     backgroundImage: backgroundImage,
     stoneBlockImage: stoneBlockImage

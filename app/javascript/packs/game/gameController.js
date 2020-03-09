@@ -18,7 +18,7 @@ class GameController {
 
   startGame(data, audioElement) {
     console.log(data)
-    this.game.startGame(data['bpm'], 1.5) //bpm, difficulty(blocks on screen, lower = faster and fewer)
+    this.game.startGame(30, 1.5) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     setTimeout(function() {
       audioElement.play()
     }, 5000)
@@ -30,10 +30,11 @@ class GameController {
     }
   }
 
-  gameComplete() {
+  gameComplete(score) {
     // Ajax score to leaderboard database
     // Display navbar
     // Play theme tune
+    console.log(score)
     console.log('game over in controller')
     document.querySelector('#logged-in').style.display = 'block'
   }
