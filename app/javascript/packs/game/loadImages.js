@@ -76,6 +76,7 @@ var groundImageUrlArray = [
 
 var backgroundImageUrl = "images/bg.png"
 var stoneBlockImageUrl = "images/deserttileset/png/Objects/StoneBlock.png"
+var endSignImageUrl = "images/endsign.png"
 
 // Export function
 // ===============================
@@ -87,6 +88,7 @@ export default async function loadGameImages(){
   var groundImageArray = await loadImages(groundImageUrlArray)
   var backgroundImage = await loadImage(backgroundImageUrl)
   var stoneBlockImage = await loadImage(stoneBlockImageUrl)
+  var endSignImage = await loadImage(endSignImageUrl)
 
   return {
     dinoRunImageArray: dinoRunImageArray,
@@ -94,6 +96,7 @@ export default async function loadGameImages(){
     dinoJumpImageArray: dinoJumpImageArray,
     groundImageArray: groundImageArray,
     backgroundImage: backgroundImage,
-    stoneBlockImage: stoneBlockImage
+    stoneBlockImage: stoneBlockImage,
+    endSignImage: endSignImage
   }
 }

@@ -92,7 +92,7 @@ class RenderGame {
         self.timeStepBlocks()
         self.timeStepDino()
         self._drawScore()
-        self._gameOverScreen()
+        self._drawGameOverScreen(self.newScore.currentScore)
         if (self.gameOver == true) {
           clearInterval(gameInterval)
           self.animateDeath()
@@ -101,14 +101,12 @@ class RenderGame {
     }, self.frameInterval)
   }
 
-  _gameOverScreen() {
-    this.canvasContext.fillStyle = 'rgba(140, 91, 0, 0.5)'
-    
-    this.canvasContext.fillRect(240, 50, 800, 350)
+  _drawGameOverScreen(finalScore) {
+    this.canvasContext.drawImage(this.loadedImages['endSignImage'], 250, 0)
     this.canvasContext.textAlign = 'center'
-    this.canvasContext.font = '50px serif'
+    this.canvasContext.font = '40px serif'
     this.canvasContext.fillStyle = 'black'
-    this.canvasContext.fillText(`Your Final Score: ${this.newScore.currentScore}`, 640, 225)
+    this.canvasContext.fillText(`Your Final Score: ${finalScore}`, 640, 290)
   }
 
   animateDeath() {
@@ -131,7 +129,7 @@ class RenderGame {
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
           self.gameController.gameComplete(self.newScore)
-          self._gameOverScreen()
+          self._drawGameOverScreen(self.newScore.currentScore)
         }
       })
     }, self.frameInterval)
