@@ -92,11 +92,10 @@ class RenderGame {
         self.timeStepBlocks()
         self.timeStepDino()
         self._drawScore()
-        // self._drawGameOverScreen(self.newScore.currentScore)
         if (self.gameOver == true) {
           clearInterval(gameInterval)
           self.animateDeath()
-          self.gameController.gameSoundDeath()
+          self.gameController.playDeathSound()
         }
       })
     }, self.frameInterval)
@@ -110,7 +109,6 @@ class RenderGame {
     this.canvasContext.fillText(`Your Final Score: ${finalScore}`, 640, 290)
     this.canvasContext.drawImage(this.loadedImages['replayImage'], 600, 300, 100, 100)
     this.canvas.addEventListener('click', (event) => {
-      console.log('X', event.x, 'Y', event.y)
       if ( event.x > 650 && event.x < 720 && event.y > 460 && event.y < 530) {
         this.setup()
       }
