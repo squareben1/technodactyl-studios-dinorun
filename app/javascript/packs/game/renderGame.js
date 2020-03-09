@@ -48,7 +48,7 @@ class RenderGame {
   }
 
   _drawScore() {
-    this.newScore.updateScore(100)
+    this.newScore.updateScore(this.frameCounter)
     this.canvasContext.font = "30px Arial"
     this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
   }
@@ -92,12 +92,28 @@ class RenderGame {
         self.timeStepBlocks()
         self.timeStepDino()
         self._drawScore()
+        // self._drawGameOverScreen(self.newScore.currentScore)
         if (self.gameOver == true) {
           clearInterval(gameInterval)
           self.animateDeath()
         }
       })
     }, self.frameInterval)
+  }
+
+  _drawGameOverScreen(finalScore) {
+    this.canvasContext.drawImage(this.loadedImages['endSignImage'], 270, 0)
+    this.canvasContext.textAlign = 'center'
+    this.canvasContext.font = '40px serif'
+    this.canvasContext.fillStyle = 'black'
+    this.canvasContext.fillText(`Your Final Score: ${finalScore}`, 640, 290)
+    this.canvasContext.drawImage(this.loadedImages['replayImage'], 600, 300, 100, 100)
+    this.canvas.addEventListener('click', (event) => {
+      console.log('X', event.x, 'Y', event.y)
+      if ( event.x > 650 && event.x < 720 && event.y > 460 && event.y < 530) {
+        this.setup()
+      }
+    })
   }
 
   animateDeath() {
@@ -120,6 +136,7 @@ class RenderGame {
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
           self.gameController.gameComplete(self.newScore)
+          self._drawGameOverScreen(self.newScore.currentScore)
         }
       })
     }, self.frameInterval)
@@ -164,10 +181,8 @@ class RenderGame {
         this.dino.applyGravity();
       }
       this.dino.applyJump();
-      console.log("this.y", this.dino.y)
-
     }
-    this.canvasContext.drawImage(this.dino.returnCurrentImage(), this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize);
+    this.canvasContext.drawImage(this.dino.imageRun(), this.dino.x, this.dino.y + 10, this.dino.xSize, this.dino.ySize);
   }
 
   timeStepBlocks() {
@@ -189,7 +204,7 @@ class RenderGame {
   }
 
   timeStepDeadDino(counter) {
-    this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize);
+    this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, this.canvas.height - 230, this.dino.xSize, this.dino.ySize); // remove dino.y
   }
 
   deathInteractionBlock(i) {
