@@ -39,39 +39,40 @@ class Dino {
     }
   }
 
-  imageRun() {
+  returnCurrentImage(){
     var imageToReturn
-    var imageIndex
     if (this.spaceCounter > 0) {      
-      if (this.jumpImageCounter < this.imageInterval * 2) {
-        imageIndex = Math.floor(this.jumpImageCounter / (this.imageInterval));    
-      } else if(this.y > 269 && this.jumpCounter < 10){
-        imageIndex = Math.floor((this.y - 270)/ 71) + 7;
-      } else{
-        imageIndex = Math.floor(((this.jumpImageCounter - (this.imageInterval * 2))/ (this.imageInterval / 2)) % 5) + 2
-      }
-      imageToReturn = this.jumpImageArray[imageIndex];
-      this.jumpImageCounter++;
+      imageToReturn = this.imageJump()
     } 
     else {
-      imageIndex = Math.floor(this.animationCounter / this.imageInterval);
-      imageToReturn = this.runImageArray[imageIndex];
-      this.animationCounter++;
-      if (this.animationCounter >= this.animationCounterMax) {
-        this.animationCounter = 0;
-      }
+      imageToReturn = this.imageRun();
     }
     return imageToReturn;
   }
 
-  _imageJump() {
-      let imageIndex = Math.floor(this.animationCounter / this.imageInterval);
-      let imageToReturn = this.jumpImageArray[imageIndex];
-      this.animationCounter++;
-      if (this.animationCounter >= this.animationCounterMax) {
-        this.animationCounter = 0;
-      }
-      return imageToReturn;
+  imageRun() {
+    var imageIndex = Math.floor(this.animationCounter / this.imageInterval);
+    var imageToReturn = this.runImageArray[imageIndex];
+    this.animationCounter++;
+    if (this.animationCounter >= this.animationCounterMax) {
+      this.animationCounter = 0;
+    }
+    return imageToReturn
+  }
+
+  imageJump() {
+    var imageIndex
+    var imageToReturn
+    if (this.jumpImageCounter < this.imageInterval * 2) {
+      imageIndex = Math.floor(this.jumpImageCounter / (this.imageInterval));    
+    } else if(this.y > 269 && this.jumpCounter < 10){
+      imageIndex = Math.floor((this.y - 270)/ 71) + 7;
+    } else{
+      imageIndex = Math.floor(((this.jumpImageCounter - (this.imageInterval * 2))/ (this.imageInterval / 2)) % 5) + 2
+    }
+    imageToReturn = this.jumpImageArray[imageIndex];
+    this.jumpImageCounter++;
+    return imageToReturn
   }
 
   imageDead(counter) {
