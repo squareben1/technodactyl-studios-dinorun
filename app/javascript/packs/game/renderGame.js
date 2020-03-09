@@ -48,7 +48,7 @@ class RenderGame {
   }
 
   _drawScore() {
-    this.newScore.updateScore(100)
+    this.newScore.updateScore(this.frameCounter)
     this.canvasContext.font = "30px Arial"
     this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
   }
@@ -92,12 +92,23 @@ class RenderGame {
         self.timeStepBlocks()
         self.timeStepDino()
         self._drawScore()
+        self._gameOverScreen()
         if (self.gameOver == true) {
           clearInterval(gameInterval)
           self.animateDeath()
         }
       })
     }, self.frameInterval)
+  }
+
+  _gameOverScreen() {
+    this.canvasContext.fillStyle = 'rgba(140, 91, 0, 0.5)'
+    
+    this.canvasContext.fillRect(240, 50, 800, 350)
+    this.canvasContext.textAlign = 'center'
+    this.canvasContext.font = '50px serif'
+    this.canvasContext.fillStyle = 'black'
+    this.canvasContext.fillText(`Your Final Score: ${this.newScore.currentScore}`, 640, 225)
   }
 
   animateDeath() {
@@ -120,6 +131,7 @@ class RenderGame {
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
           self.gameController.gameComplete(self.newScore)
+          self._gameOverScreen()
         }
       })
     }, self.frameInterval)
