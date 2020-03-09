@@ -30,10 +30,22 @@ class GameController {
     }
   }
 
+  gameSoundDeath(){
+    var audioPlayer = document.querySelector('#song_player')
+    audioPlayer.innerHTML = ""
+    var sound = document.createElement('audio')
+    sound.src = 'dinodie.mp3'
+    sound.type = 'audio/mpeg'
+    sound.autoplay = true
+    audioPlayer.appendChild(sound)
+  }
+
   gameComplete(score) {
     // Ajax score to leaderboard database
     // Display navbar
     // Play theme tune
+
+    console.log(sound)
     console.log(score)
     console.log('game over in controller')
     document.querySelector('#logged-in').style.display = 'block'

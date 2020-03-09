@@ -63,7 +63,7 @@ class RenderGame {
   //                           Animate Game
   //=================================================================================
 
-  startGame(bpm, difficulty) { //frequencyArray, 
+  startGame(bpm, difficulty) { //frequencyArray,
     this.blockGeneratorArray = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     this._generateFramesPerBeat(bpm)
     this._calculateObjectVelocity(difficulty)
@@ -96,6 +96,7 @@ class RenderGame {
         if (self.gameOver == true) {
           clearInterval(gameInterval)
           self.animateDeath()
+          self.gameController.gameSoundDeath()
         }
       })
     }, self.frameInterval)
@@ -158,7 +159,7 @@ class RenderGame {
     // Delete first if off screen
     if (this.groundArray[0].x <= -this.groundArray[0].xSize) {
       this.groundArray.shift()
-    } 
+    }
     // Check for new ground
     let newGroundLoc = this.groundArray[(this.groundArray.length-1)].isNewGroundNeeded(this.objectVelocity)
     if (newGroundLoc) {
@@ -176,7 +177,7 @@ class RenderGame {
       if (filteredGround.length > 0 && this.dino.y <= this.canvas.height - 240 && this.dino.y >= this.canvas.height - 259 && this.dino.jumpCounter < 1) {
         this.dino.resetJump();
         this.dino.y = this.canvas.height - 240;
-      } 
+      }
       else {
         this.dino.applyGravity();
       }

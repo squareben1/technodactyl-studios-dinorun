@@ -31,7 +31,6 @@ function getSong(callback) {
     sound.src = data['mp3_url']
     sound.type = 'audio/mpeg'
     audioPlayer.appendChild(sound)
-    console.log(data)
     callback(data, sound)
   })
 }
