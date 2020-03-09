@@ -2,7 +2,7 @@ require 'active_support/all'
 require 'net/http'
 require 'json'
 
-class SpotifyController < ApplicationController
+class SpotifyTokenController < ApplicationController
   skip_before_action :require_login
   def authorise
     state = SecureRandom.base64(16).gsub("/","_").gsub(/=+$/,"")
@@ -18,7 +18,7 @@ class SpotifyController < ApplicationController
     if session[:state] == params['state']
       token_hash = token_request(params['code'])
       # create new spotify token object and return ID for assignment with user upon registration
-      
+
     else 
       raise ActionController::RoutingError.new('Not Found')
     end

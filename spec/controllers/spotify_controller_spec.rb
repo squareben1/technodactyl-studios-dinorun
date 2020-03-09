@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-RSpec.describe SpotifyController, type: :controller do
+RSpec.describe SpotifyTokenController, type: :controller do
 
 end
