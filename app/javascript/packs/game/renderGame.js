@@ -119,7 +119,7 @@ class RenderGame {
         gameOverFrameCounter++;
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
-          self.gameController.gameComplete()
+          self.gameController.gameComplete(self.newScore)
         }
       })
     }, self.frameInterval)

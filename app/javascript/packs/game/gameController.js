@@ -30,10 +30,11 @@ class GameController {
     }
   }
 
-  gameComplete() {
+  gameComplete(score) {
     // Ajax score to leaderboard database
     // Display navbar
     // Play theme tune
+    console.log(score)
     console.log('game over in controller')
     document.querySelector('#logged-in').style.display = 'block'
   }
