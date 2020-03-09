@@ -112,4 +112,5 @@ Rails.application.configure do
 
   # Stop wifi hijacking
   # config.force_ssl = true
+  config.logger = Logger.new(STDOUT)
 end
