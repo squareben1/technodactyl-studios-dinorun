@@ -9,7 +9,7 @@ const receiveMessage = event => {
   }
   // if we trust the sender and the source is our popup
   console.log(event)
-  registerUser()
+  logUserIn(data)
 }
 
 const openSignInWindow = (url, name) => {
@@ -38,7 +38,26 @@ const openSignInWindow = (url, name) => {
   previousUrl = url;
 }
 
-function registerUser() {
+function logUserIn(data) {
+  username.value = ""
+  email.value = ""
+  password.value = ""
+  userMessage = document.getElementById("user-message")
+  if (data['username']) {
+    userMessage.innerHTML = data['username'] + ' welcome to DinoRun!'
+    $("#logged-out").hide()
+    $("#logged-in").show()
+  } else {
+    userMessage.innerHTML = ''
+    for (const message in data.error_message) {
+      userMessage.innerHTML += data.error_message[message][0] + '<br>'
+    }
+  }
+}
+
+function signup(event) {
+  event.preventDefault()
+  var register_with_spotify = document.getElementById("register[spotify]").checked
   var isValid = document.getElementById("register-form").checkValidity()
   var username = document.getElementById("register[username]")
   var email = document.getElementById("register[email]")
@@ -50,38 +69,15 @@ function registerUser() {
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       data: {user: {username: username.value, password: password.value, email: email.value}}
     }).done(function( data ) {
-      username.value = ""
-      email.value = ""
-      password.value = ""
-      userMessage = document.getElementById("user-message")
-      if (data['username']) {
-        userMessage.innerHTML = data['username'] + ' welcome to DinoRun!'
-        $("#logged-out").hide()
-        $("#logged-in").show()
-      } else {
-        userMessage.innerHTML = ''
-        for (const message in data.error_message) {
-          userMessage.innerHTML += data.error_message[message][0] + '<br>'
-        }
+      if (register_with_spotify == true && data['logged_in'] == true) {
+        openSignInWindow('/connect_with_spotify', 'Spotify')
+      }
+      else {
+        logUserIn(data)
       }
     })
   }
 }
-
-function signup(event) {
-  event.preventDefault()
-  var register_with_spotify = document.getElementById("register[spotify]").checked
-  if (register_with_spotify == true) {
-    openSignInWindow('/connect_with_spotify', 'Spotify')
-  }
-  else {
-    registerUser()
-  }
-}
-
-
-
-
 
 
 var login = function(event) {

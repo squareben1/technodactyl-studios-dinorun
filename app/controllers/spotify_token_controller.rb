@@ -17,7 +17,7 @@ class SpotifyTokenController < ApplicationController
   def spotify_callback
     if session[:state] == params['state']
       token_hash = token_request(params['code'])
-      # create new spotify token object and return ID for assignment with user upon registration
+      # create new spotify token object and assign to user_id of session_cookie
 
     else 
       raise ActionController::RoutingError.new('Not Found')
