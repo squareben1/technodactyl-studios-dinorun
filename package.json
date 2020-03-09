@@ -8,11 +8,11 @@
     "@rails/webpacker": "4.2.2",
     "jquery": "^3.4.1",
     "node-gyp": "^6.1.0",
-    "turbolinks": "^5.2.0"
+    "turbolinks": "^5.2.0",
+    "jasmine-core": "^3.5.0"
   },
   "version": "0.1.0",
   "devDependencies": {
-    "jasmine-core": "^3.5.0",
     "webpack-dev-server": "^3.10.3"
   }
 }
