@@ -4,14 +4,16 @@ import Ground from '../packs/game/ground.js'
 import Dino from '../packs/game/dino.js'
 import Block from '../packs/game/block.js'
 import Background from '../packs/game/background.js'
+import loadGameImages from '../packs/game/loadImages.js'
 
 // Import module to be tested
 import RenderGame from '../packs/game/renderGame.js'
 
-describe("RenderGame", function() {
+describe("RenderGame", async function() {
   var renderGame
   var spy
   var imageDouble = {}
+  var loadedImages = await loadGameImages()
 
   var canvasContextDouble = {
     drawImage: function() {
@@ -30,12 +32,11 @@ describe("RenderGame", function() {
     }
   }
 
-  beforeEach(function(done) {
-    renderGame = new RenderGame(canvasDouble, Background, Ground, Dino, Block, Score) //Background/Ground double
+  beforeEach(function() {
+    renderGame = new RenderGame(canvasDouble, loadedImages, Background, Ground, Dino, Block, Score) //Background/Ground double
     spy = spyOn(canvasContextDouble, "drawImage")
     renderGame.setup()
     renderGame.objectVelocity = 10
-    setTimeout(done, 500)
   })
 
   describe("#setup", function() {
