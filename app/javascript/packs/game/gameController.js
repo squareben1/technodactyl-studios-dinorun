@@ -6,7 +6,7 @@ import Block from './block.js'
 import Background from './background.js'
 import RenderGame from './renderGame.js'
 import loadGameImages from './loadImages.js'
-import { toggleLogInForm } from '../homepage_interface/userInterface.js'
+import { generateBlocksFromFrequencyArray } from '../game/mapGenerator.js'
 
 class GameController {
   async setupGame() {
@@ -18,7 +18,11 @@ class GameController {
 
   startGame(data, audioElement) {
     console.log(data)
-    this.game.startGame(data["bpm"], 1.5) //bpm, difficulty(blocks on screen, lower = faster and fewer)
+    var frequencyArray = JSON.parse(data['analysed'])
+    console.log(frequencyArray)
+    var generatedBlockArray = generateBlocksFromFrequencyArray(frequencyArray)
+    console.log(generatedBlockArray)
+    this.game.startGame(data["bpm"], 1.8, generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     setTimeout(function() {
       audioElement.play()
     }, 5000)

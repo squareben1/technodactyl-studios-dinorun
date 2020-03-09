@@ -63,8 +63,8 @@ class RenderGame {
   //                           Animate Game
   //=================================================================================
 
-  startGame(bpm, difficulty) { //frequencyArray, 
-    this.blockGeneratorArray = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+  startGame(bpm, difficulty, generatedBlockArray) { //frequencyArray, 
+    this.generatedBlockArray = generatedBlockArray
     this._generateFramesPerBeat(bpm)
     this._calculateObjectVelocity(difficulty)
     this.animateGame()
@@ -172,7 +172,7 @@ class RenderGame {
 
   timeStepBlocks() {
     if (this.frameCounter >= 300 && ((this.frameCounter - 300 + this.fpb) % this.fpb == 0)) { //always start with first block on inital 300th frame
-      let newBlockValue = this.blockGeneratorArray.shift()
+      let newBlockValue = this.generatedBlockArray.shift()
       if (newBlockValue == 1) {
         this.blocksArray.push(
           new this.blockClass(this.canvas, this.loadedImages['stoneBlockImage'])
