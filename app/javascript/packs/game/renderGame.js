@@ -9,8 +9,8 @@ class RenderGame {
     this.blockClass = blockClass
     this.scoreClass = scoreClass
     this.groundLevel = 100
-    this.fps = 59.94
-    this.frameInterval = 1000/this.fps
+    this.frameInterval = 20
+    this.fps = 50
     this.gameController = gameController
   }
 
@@ -164,19 +164,17 @@ class RenderGame {
         this.dino.applyGravity();
       }
       this.dino.applyJump();
-      console.log("this.y", this.dino.y)
-
     }
     this.canvasContext.drawImage(this.dino.returnCurrentImage(), this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize);
   }
 
   timeStepBlocks() {
-    if (this.frameCounter >= 300 && ((this.frameCounter - 300 + this.fpb) % this.fpb == 0)) { //always start with first block on inital 300th frame
+    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 300th frame
       let newBlockValue = this.generatedBlockArray.shift()
       if (newBlockValue == 1) {
         this.blocksArray.push(
           new this.blockClass(this.canvas, this.loadedImages['stoneBlockImage'])
-        );
+        )
       }
     }
     for (var i = 0; i < this.blocksArray.length; i++) {

@@ -1,6 +1,6 @@
 function generateBlocksFromFrequencyArray(frequencyArray) {
   return frequencyArray.map(function(frequency) {
-    if (frequency >= 250) {
+    if (frequency >= 0) {
       return 1
     }
     else {

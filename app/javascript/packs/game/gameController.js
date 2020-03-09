@@ -17,15 +17,12 @@ class GameController {
   }
 
   startGame(data, audioElement) {
-    console.log(data)
     var frequencyArray = JSON.parse(data['analysed'])
-    console.log(frequencyArray)
     var generatedBlockArray = generateBlocksFromFrequencyArray(frequencyArray)
-    console.log(generatedBlockArray)
-    this.game.startGame(data["bpm"], 1.8, generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
+    this.game.startGame(data["bpm"], 1.5, generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     setTimeout(function() {
       audioElement.play()
-    }, 5000)
+    }, 3900)
     self = this
     document.body.onkeyup = function(e){
       if(e.keyCode == 32){
