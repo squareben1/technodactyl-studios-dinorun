@@ -182,7 +182,7 @@ class RenderGame {
       }
       this.dino.applyJump();
     }
-    this.canvasContext.drawImage(this.dino.imageRun(), this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize);
+    this.canvasContext.drawImage(this.dino.imageRun(), this.dino.x, this.dino.y + 10, this.dino.xSize, this.dino.ySize);
   }
 
   timeStepBlocks() {
