@@ -22,7 +22,7 @@ class GameController {
     var amplitudeArray = JSON.parse(data['analysed'])
     var generatedBlockArray = generateMapFromAmplitudeArray(amplitudeArray)
     console.log(data["bpm"])
-    this.game.startGame(data["bpm"], ((data['bpm']/200)*4), generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
+    this.game.startGame(data["bpm"], ((data['bpm']/220)*4), generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     self = this
     setTimeout(function() {
       self.audioElement.play()
@@ -30,6 +30,9 @@ class GameController {
     document.body.onkeyup = function(e){
       if(e.keyCode == 32){
         self.game.dino.jump()
+      }
+      if(e.keyCode == 68) {
+        self.game.crateAttack()
       }
     }
   }

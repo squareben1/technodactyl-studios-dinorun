@@ -164,6 +164,40 @@ class RenderGame {
     }
   }
 
+  // =========================
+  // Dino
+  // =========================
+
+  timeStepDino() {
+    if (this.groundArray[0].x <= 300) {
+      let filteredGround = this.groundArray.filter(function(item) {
+        return item.x >= -20 && item.x <= 220;
+      });
+      if (filteredGround.length > 0 && this.dino.y <= this.canvas.height - 240 && this.dino.y >= this.canvas.height - 259 && this.dino.jumpCounter < 1) {
+        this.dino.resetJump();
+        this.dino.y = this.canvas.height - 240;
+      }
+      else {
+        this.dino.applyGravity();
+      }
+      this.dino.applyJump();
+    }
+    this.canvasContext.drawImage(this.dino.returnCurrentImage(), this.dino.x, this.dino.y + 10, this.dino.xSize, this.dino.ySize);
+  }
+
+  timeStepDeadDino(counter) {
+    if (this.dinoOffScreen == true) {
+      var dinoXLoc = this.dino.y
+    } else {
+      var dinoXLoc = this.canvas.height - 230
+    }
+    this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, dinoXLoc, this.dino.xSize, this.dino.ySize);
+  }
+
+  // =========================
+  // Ground
+  // =========================
+
   timeStepGround() {
     // Move array of blocks and draw
     for (var i = 0; i < this.groundArray.length; i++) {
@@ -192,22 +226,26 @@ class RenderGame {
     }
   }
 
-  timeStepDino() {
-    if (this.groundArray[0].x <= 300) {
-      let filteredGround = this.groundArray.filter(function(item) {
-        return item.x >= -20 && item.x <= 220;
-      });
-      if (filteredGround.length > 0 && this.dino.y <= this.canvas.height - 240 && this.dino.y >= this.canvas.height - 259 && this.dino.jumpCounter < 1) {
-        this.dino.resetJump();
-        this.dino.y = this.canvas.height - 240;
-      }
-      else {
-        this.dino.applyGravity();
-      }
-      this.dino.applyJump();
+  deathInteractionGround() {
+    if (this.dino.y >= this.canvas.height) {
+      this.gameOver = true
+      this.dinoOffScreen = true
     }
-    this.canvasContext.drawImage(this.dino.returnCurrentImage(), this.dino.x, this.dino.y + 10, this.dino.xSize, this.dino.ySize);
   }
+
+  _createGroundFeature() {
+    var lastGroundItem = this.groundArray[this.groundArray.length - 1]
+    var lastGroundXLoc = lastGroundItem.x + lastGroundItem.xSize
+    var leftGroundFeatureBlock = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][2])
+    var rightGroundFeatureBlock = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][0])
+    leftGroundFeatureBlock.x = lastGroundXLoc
+    rightGroundFeatureBlock.x = lastGroundXLoc + leftGroundFeatureBlock.xSize + 250
+    return [leftGroundFeatureBlock, rightGroundFeatureBlock]
+  }
+
+  // =========================
+  // Blocks 
+  // =========================
 
   timeStepBlocks() {
     if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
@@ -233,6 +271,18 @@ class RenderGame {
     }
   }
 
+  deathInteractionBlock(i) {
+    let dinoCentre = this.dino.objectCentre()
+    let blockCentre = this.blocksArray[i].objectCentre()
+    let circlesDifference = Math.sqrt(((dinoCentre[0] - blockCentre[0])**2) + ((dinoCentre[1] - blockCentre[1])**2))
+    let radiusSum = this.dino.objectRadius() + this.blocksArray[i].objectRadius()
+    return circlesDifference < radiusSum
+  }
+
+  // =========================
+  // Crates 
+  // =========================
+
   timeStepCrates(){
     if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
       let newCrateValue = this.generatedCrateArray.shift()
@@ -255,38 +305,17 @@ class RenderGame {
     }
   }
 
-  timeStepDeadDino(counter) {
-    if (this.dinoOffScreen == true) {
-      var dinoXLoc = this.dino.y
-    } else {
-      var dinoXLoc = this.canvas.height - 230
+  attackCrate() {
+    var filteredCrates = this.cratesArray.filter(function(crate) {
+      var frontDinoLocX = this.dino.x + this.dino.xSize
+      var topDinoLocY = this.dino.y
+      var bottomDinoLocY = this.dino.y + this.dino.ySize
+      var punchDistance = 100
+      return (crate.x >= frontDinoLocX) && (crate.x <= frontDinoLocX + punchDistance) && (crate.y >= topDinoLocY - (punchDistance / 2)) && (crate.y <= bottomDinoLocY + (punchDistance / 2))
+    });
+    for (var i = 0; i < filteredCrates.length; i++) {
+      filteredCrates[i].exploded = true
     }
-    this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, dinoXLoc, this.dino.xSize, this.dino.ySize);
-  }
-
-  deathInteractionBlock(i) {
-    let dinoCentre = this.dino.objectCentre()
-    let blockCentre = this.blocksArray[i].objectCentre()
-    let circlesDifference = Math.sqrt(((dinoCentre[0] - blockCentre[0])**2) + ((dinoCentre[1] - blockCentre[1])**2))
-    let radiusSum = this.dino.objectRadius() + this.blocksArray[i].objectRadius()
-    return circlesDifference < radiusSum
-  }
-
-  deathInteractionGround() {
-    if (this.dino.y >= this.canvas.height) {
-      this.gameOver = true
-      this.dinoOffScreen = true
-    }
-  }
-
-  _createGroundFeature() {
-    var lastGroundItem = this.groundArray[this.groundArray.length - 1]
-    var lastGroundXLoc = lastGroundItem.x + lastGroundItem.xSize
-    var leftGroundFeatureBlock = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][2])
-    var rightGroundFeatureBlock = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][0])
-    leftGroundFeatureBlock.x = lastGroundXLoc
-    rightGroundFeatureBlock.x = lastGroundXLoc + leftGroundFeatureBlock.xSize + 250
-    return [leftGroundFeatureBlock, rightGroundFeatureBlock]
   }
 }
 
