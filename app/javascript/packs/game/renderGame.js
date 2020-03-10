@@ -203,6 +203,12 @@ class RenderGame {
       }
       this.blocksArray[i].move(this.objectVelocity)
     }
+    if (this.blocksArray.length > 0) {
+      if (this.blocksArray[0].x <= -this.blocksArray[0].x) {
+        this.blocksArray.shift()
+        // Add your score addition here ben!! :)
+      }
+    }
   }
 
   timeStepDeadDino(counter) {
