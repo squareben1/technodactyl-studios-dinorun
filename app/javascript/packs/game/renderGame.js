@@ -1,5 +1,5 @@
 class RenderGame {
-  constructor(canvas, loadedImages, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController) {
+  constructor(canvas, loadedImages, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController, crateClass) {
     this.canvas = canvas
     this.loadedImages = loadedImages
     this.canvasContext = this.canvas.getContext('2d')
@@ -12,6 +12,7 @@ class RenderGame {
     this.frameInterval = 20
     this.fps = 50
     this.gameController = gameController
+    this.crateClass = crateClass
   }
 
   //=================================================================================
@@ -23,6 +24,7 @@ class RenderGame {
     this.gameOver = false
     this.dinoOffScreen = false
     this.blocksArray = []
+    this.cratesArray = []
     this._drawBackground()
     this._drawGround()
     this._drawDino()
@@ -49,7 +51,9 @@ class RenderGame {
   }
 
   _drawScore() {
-    this.newScore.updateScore(this.frameCounter)
+    if (this.gameOver == false) {
+      this.newScore.updateScore(100)
+    }
     this.canvasContext.font = "30px Arial"
     this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
   }
@@ -67,6 +71,7 @@ class RenderGame {
   startGame(bpm, difficulty, generatedMapArray) { //frequencyArray, 
     this.generatedBlockArray = [...generatedMapArray]
     this.generatedGroundArray = [...generatedMapArray]
+    this.generatedCrateArray = [...generatedMapArray]
     this._generateFramesPerBeat(bpm)
     this._calculateObjectVelocity(difficulty)
     this.animateGame()
@@ -92,6 +97,7 @@ class RenderGame {
         self.timeStepBackground()
         self.timeStepGround()
         self.timeStepBlocks()
+        self.timeStepCrates()
         self.timeStepDino()
         self._drawScore()
         self.deathInteractionGround()
@@ -113,9 +119,12 @@ class RenderGame {
     this.canvasContext.drawImage(this.loadedImages['replayImage'], 600, 300, 100, 100)
     var self = this
     var resetGame = function(event) {
-      if ( event.x > 650 && event.x < 720 && event.y > 460 && event.y < 530) {
+      console.log(event.x)
+      console.log(event.y)
+      if ( event.x > 650 && event.x < 720 && event.y > 320 && event.y < 450) {
         self.setup()
         self.canvas.removeEventListener('click', resetGame)
+        document.querySelector('#logged-in').style.display = 'block'
       }
     }
     this.canvas.addEventListener('click', resetGame)
@@ -140,6 +149,7 @@ class RenderGame {
         self.timeStepBackground()
         self.timeStepGround()
         self.timeStepBlocks()
+        self.timeStepCrates()
         self._drawScore()
         self.timeStepDeadDino(gameOverFrameCounter)
         gameOverFrameCounter++;
@@ -158,6 +168,40 @@ class RenderGame {
       this.canvasContext.drawImage(this.backgroundArray[i].image, this.backgroundArray[i].x, this.backgroundArray[i].y, this.backgroundArray[i].xSize, this.backgroundArray[i].ySize)
     }
   }
+
+  // =========================
+  // Dino
+  // =========================
+
+  timeStepDino() {
+    if (this.groundArray[0].x <= 300) {
+      let filteredGround = this.groundArray.filter(function(item) {
+        return item.x >= -20 && item.x <= 220;
+      });
+      if (filteredGround.length > 0 && this.dino.y <= this.canvas.height - 240 && this.dino.y >= this.canvas.height - 259 && this.dino.jumpCounter < 1) {
+        this.dino.resetJump();
+        this.dino.y = this.canvas.height - 240;
+      }
+      else {
+        this.dino.applyGravity();
+      }
+      this.dino.applyJump();
+    }
+    this.canvasContext.drawImage(this.dino.returnCurrentImage(), this.dino.x, this.dino.y + 10, this.dino.xSize, this.dino.ySize);
+  }
+
+  timeStepDeadDino(counter) {
+    if (this.dinoOffScreen == true) {
+      var dinoXLoc = this.dino.y
+    } else {
+      var dinoXLoc = this.canvas.height - 230
+    }
+    this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, dinoXLoc, this.dino.xSize, this.dino.ySize);
+  }
+
+  // =========================
+  // Ground
+  // =========================
 
   timeStepGround() {
     // Move array of blocks and draw
@@ -187,22 +231,26 @@ class RenderGame {
     }
   }
 
-  timeStepDino() {
-    if (this.groundArray[0].x <= 300) {
-      let filteredGround = this.groundArray.filter(function(item) {
-        return item.x >= -20 && item.x <= 220;
-      });
-      if (filteredGround.length > 0 && this.dino.y <= this.canvas.height - 240 && this.dino.y >= this.canvas.height - 259 && this.dino.jumpCounter < 1) {
-        this.dino.resetJump();
-        this.dino.y = this.canvas.height - 240;
-      }
-      else {
-        this.dino.applyGravity();
-      }
-      this.dino.applyJump();
+  deathInteractionGround() {
+    if (this.dino.y >= this.canvas.height) {
+      this.gameOver = true
+      this.dinoOffScreen = true
     }
-    this.canvasContext.drawImage(this.dino.returnCurrentImage(), this.dino.x, this.dino.y + 10, this.dino.xSize, this.dino.ySize);
   }
+
+  _createGroundFeature() {
+    var lastGroundItem = this.groundArray[this.groundArray.length - 1]
+    var lastGroundXLoc = lastGroundItem.x + lastGroundItem.xSize
+    var leftGroundFeatureBlock = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][2])
+    var rightGroundFeatureBlock = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][0])
+    leftGroundFeatureBlock.x = lastGroundXLoc
+    rightGroundFeatureBlock.x = lastGroundXLoc + leftGroundFeatureBlock.xSize + 250
+    return [leftGroundFeatureBlock, rightGroundFeatureBlock]
+  }
+
+  // =========================
+  // Blocks 
+  // =========================
 
   timeStepBlocks() {
     if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
@@ -223,18 +271,9 @@ class RenderGame {
     if (this.blocksArray.length > 0) {
       if (this.blocksArray[0].x <= -this.blocksArray[0].xSize) {
         this.blocksArray.shift()
-        // Add your score addition here ben!! :)
+        this.newScore.jumpScore()
       }
     }
-  }
-
-  timeStepDeadDino(counter) {
-    if (this.dinoOffScreen == true) {
-      var dinoXLoc = this.dino.y
-    } else {
-      var dinoXLoc = this.canvas.height - 230
-    }
-    this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, dinoXLoc, this.dino.xSize, this.dino.ySize);
   }
 
   deathInteractionBlock(i) {
@@ -245,21 +284,55 @@ class RenderGame {
     return circlesDifference < radiusSum
   }
 
-  deathInteractionGround() {
-    if (this.dino.y >= this.canvas.height) {
-      this.gameOver = true
-      this.dinoOffScreen = true
+  // =========================
+  // Crates 
+  // =========================
+
+  timeStepCrates(){
+    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
+      let newCrateValue = this.generatedCrateArray.shift()
+      if (newCrateValue == 3) {
+        this.cratesArray.push(
+          new this.crateClass(this.canvas, this.loadedImages['crateImageArray'])
+        )
+      }
+    }
+    for (var i = 0; i < this.cratesArray.length; i++) {
+      this.canvasContext.drawImage(this.cratesArray[i].returnImage(), this.cratesArray[i].x, this.cratesArray[i].y, this.cratesArray[i].xSize, this.cratesArray[i].ySize)
+      if (this.deathInteractionCrate(i) && this.cratesArray[i].exploded == false) {
+        this.gameOver = true
+      }
+      this.cratesArray[i].move(this.objectVelocity)
+    }
+    // delete crates when off canvas
+    if (this.cratesArray.length > 0) {
+      if (this.cratesArray[0].x <= -this.cratesArray[0].xSize) {
+        this.cratesArray.shift()
+      }
     }
   }
 
-  _createGroundFeature() {
-    var lastGroundItem = this.groundArray[this.groundArray.length - 1]
-    var lastGroundXLoc = lastGroundItem.x + lastGroundItem.xSize
-    var leftGroundFeatureBlock = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][2])
-    var rightGroundFeatureBlock = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][0])
-    leftGroundFeatureBlock.x = lastGroundXLoc
-    rightGroundFeatureBlock.x = lastGroundXLoc + leftGroundFeatureBlock.xSize + 250
-    return [leftGroundFeatureBlock, rightGroundFeatureBlock]
+  deathInteractionCrate(i) {
+    let dinoCentre = this.dino.objectCentre()
+    let crateCentre = this.cratesArray[i].objectCentre()
+    let circlesDifference = Math.sqrt(((dinoCentre[0] - crateCentre[0])**2) + ((dinoCentre[1] - crateCentre[1])**2))
+    let radiusSum = this.dino.objectRadius() + this.cratesArray[i].objectRadius()
+    return circlesDifference < radiusSum
+  }
+
+  crateAttack() {
+    var gRender = this
+    let filteredCrates = this.cratesArray.filter( function(crate) {
+      var frontDinoLocX = gRender.dino.x + gRender.dino.xSize
+      var topDinoLocY = gRender.dino.y
+      var bottomDinoLocY = gRender.dino.y + gRender.dino.ySize
+      var punchDistance = 100
+      return (crate.x >= frontDinoLocX - 70) && (crate.x <= frontDinoLocX + punchDistance) && (crate.y >= topDinoLocY - (punchDistance)) && (crate.y <= bottomDinoLocY + (punchDistance))
+    });
+    for (var i = 0; i < filteredCrates.length; i++) {
+      filteredCrates[i].exploded = true
+      this.newScore.explodedCrate()
+    }
   }
 }
 

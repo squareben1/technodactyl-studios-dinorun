@@ -9,10 +9,13 @@ function generateMapFromAmplitudeArray(amplitudeArray) {
     } else if (amplitudeArray[i] >= max - ((2*range)/5) && i % 2 == 0) {
       result.push(2)
     }
-    else {
+    else if(Math.random() > 0.5){
+      result.push(3)
+    } else{
       result.push(0)
     }
   }
+  console.log("result", result)
   return result
 }
   
