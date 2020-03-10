@@ -5,7 +5,6 @@ class ScoresController < ApplicationController
 
     if score.valid?
       score.save
-      # p score.as_json(include: :user)
       render json: {score: "saved"}
     else
       render json: {score: "not saved"}
@@ -14,12 +13,7 @@ class ScoresController < ApplicationController
 
   def show
     top_three = Score.where(song_id: params[:id]).order(score: :desc).first(3)
-    render json: {
-      first: {score: top_three[0].score, username: top_three[0].user.username},
-      second: {score: top_three[1].score, username: top_three[1].user.username},
-      third: {score: top_three[2].score, username: top_three[2].user.username}
-    }
-    render js: {}
+    render json: top_three.map{ |score| {score: score.score, username: score.user.username}}
   end
 
   private

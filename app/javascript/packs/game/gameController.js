@@ -56,13 +56,14 @@ class GameController {
       type: 'GET',
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
     }).done(function(data) {
-      self.first = data.first
-      self.second = data.second
-      self.third = data.third
+      self.first = data[0]
+      self.second = data[1]
+      self.third = data[2]
     })
   }
 
   uploadScore(score, songId){
+    var self = this
     $.ajax({
       url: '/scores.json',
       type: "POST",
@@ -70,7 +71,7 @@ class GameController {
       data: {score: {score: score, song_id: songId}}
     })
     .done(function(data){
-      console.log(data)
+      self.getScores()
     })
   }
 
@@ -79,7 +80,6 @@ class GameController {
     // Display navbar
     // Play theme tune
     this.uploadScore(score.currentScore, this.songData['id'])
-    this.getScores()
   }
 }
 
