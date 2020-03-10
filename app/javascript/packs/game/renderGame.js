@@ -164,8 +164,6 @@ class RenderGame {
         this.dino.applyGravity();
       }
       this.dino.applyJump();
-      console.log("this.y", this.dino.y)
-
     }
     this.canvasContext.drawImage(this.dino.returnCurrentImage(), this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize);
   }

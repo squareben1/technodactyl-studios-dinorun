@@ -57,7 +57,7 @@ class SongAnalyser{
 
       /// Volume Amplitude Array
       var pcmData = source.buffer.getChannelData(0)
-      var songAmplitude = self.splitAndReduceArray(pcmData, 112 * 4) // finalTempo * 4
+      var songAmplitude = self.splitAndReduceArray(pcmData, (finalTempo * songLength/60))
       console.log("amplitude array", songAmplitude)
       console.log("what is going on", self.slice(buffer, finalTempo, audioCtx));
 
@@ -98,11 +98,9 @@ class SongAnalyser{
       samples = Math.round(sampleRate * (60/bpm)),
       output = [],
       amplitude,
-      values,
-      i = 0;
-    console.log("sample", samples)
+      values;
     // loop by chunks of `t` seconds
-    for ( ; i < len; i += samples ) {
+    for (let i = 0; i < len; i += samples ) {
       values = [];
       // loop through each sample in the chunk
       for (let j = 0; j < samples && j + i < len; ++j ) {
@@ -125,7 +123,7 @@ class SongAnalyser{
     }
     rms = Math.sqrt( total / len );
     db = 20 * ( Math.log(rms) / Math.LN10 );
-    return db;
+    return Math.abs(Math.round(db));
   }
 
   splitAndReduceArray(data, samples) {
@@ -137,22 +135,24 @@ class SongAnalyser{
 
     for (var i = 0; i < data.length; i++) {
       if (i / section_size > sectionCounter) {
-        newArray.push(sectionSum)
+        newArray.push(Math.round(sectionSum))
         sectionSum = 0
         sectionCounter++
       }
       sectionSum += Math.abs(data[i])
     }
 
-    var reducedArray = [];
+    return newArray
 
-    for (var i = 0; i < newArray.length; i++) {
-      if (i % 4 == 0) {
-        reducedArray.push(Math.round(newArray[i]));
-      }
-    }
+    // var reducedArray = [];
 
-    return reducedArray;
+    // for (var i = 0; i < newArray.length; i++) {
+    //   if (i % 4 == 0) {
+    //     reducedArray.push(Math.round(newArray[i]));
+    //   }
+    // }
+
+    // return reducedArray;
   }
 
   normalizeArray(data) {
