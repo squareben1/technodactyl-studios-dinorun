@@ -305,13 +305,14 @@ class RenderGame {
     }
   }
 
-  attackCrate() {
-    var filteredCrates = this.cratesArray.filter(function(crate) {
-      var frontDinoLocX = this.dino.x + this.dino.xSize
-      var topDinoLocY = this.dino.y
-      var bottomDinoLocY = this.dino.y + this.dino.ySize
+  crateAttack() {
+    var gRender = this
+    let filteredCrates = this.cratesArray.filter( function(crate) {
+      var frontDinoLocX = gRender.dino.x + gRender.dino.xSize
+      var topDinoLocY = gRender.dino.y
+      var bottomDinoLocY = gRender.dino.y + gRender.dino.ySize
       var punchDistance = 100
-      return (crate.x >= frontDinoLocX) && (crate.x <= frontDinoLocX + punchDistance) && (crate.y >= topDinoLocY - (punchDistance / 2)) && (crate.y <= bottomDinoLocY + (punchDistance / 2))
+      return (crate.x >= frontDinoLocX - 70) && (crate.x <= frontDinoLocX + punchDistance) && (crate.y >= topDinoLocY - (punchDistance)) && (crate.y <= bottomDinoLocY + (punchDistance))
     });
     for (var i = 0; i < filteredCrates.length; i++) {
       filteredCrates[i].exploded = true
