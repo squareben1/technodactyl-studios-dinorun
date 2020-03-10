@@ -202,7 +202,7 @@ class RenderGame {
       }
       this.dino.applyJump();
     }
-    this.canvasContext.drawImage(this.dino.imageRun(), this.dino.x, this.dino.y + 10, this.dino.xSize, this.dino.ySize);
+    this.canvasContext.drawImage(this.dino.returnCurrentImage(), this.dino.x, this.dino.y + 10, this.dino.xSize, this.dino.ySize);
   }
 
   timeStepBlocks() {
@@ -222,7 +222,7 @@ class RenderGame {
       this.blocksArray[i].move(this.objectVelocity)
     }
     if (this.blocksArray.length > 0) {
-      if (this.blocksArray[0].x <= -(this.blocksArray[0].x * 2)) {
+      if (this.blocksArray[0].x <= -this.blocksArray[0].xSize) {
         this.blocksArray.shift()
         // Add your score addition here ben!! :)
       }
