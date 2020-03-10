@@ -17,7 +17,6 @@ class GameController {
   }
 
   startGame(data, audioElement) {
-    console.log(data)
     this.game.startGame(data["bpm"], 1.5) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     setTimeout(function() {
       audioElement.play()
@@ -30,7 +29,7 @@ class GameController {
     }
   }
 
-  gameSoundDeath(){
+  playDeathSound(){
     var audioPlayer = document.querySelector('#song_player')
     audioPlayer.innerHTML = ""
     var sound = document.createElement('audio')
@@ -44,10 +43,6 @@ class GameController {
     // Ajax score to leaderboard database
     // Display navbar
     // Play theme tune
-
-    console.log(sound)
-    console.log(score)
-    console.log('game over in controller')
     document.querySelector('#logged-in').style.display = 'block'
   }
 }
