@@ -8,7 +8,7 @@ function generateMapFromAmplitudeArray(amplitudeArray) {
   for (var i = 0; i < amplitudeArray.length; i++){ 
     if (amplitudeArray[i] >= max - (range/4) && i % 2 == 0) {
       result.push(1)
-    } else if (amplitudeArray[i] <= min + ((2*range)/3) && i % 2 == 0) {
+    } else if (amplitudeArray[i] >= max - ((2*range)/4) && i % 2 == 0) {
       result.push(2)
     }
     else {
