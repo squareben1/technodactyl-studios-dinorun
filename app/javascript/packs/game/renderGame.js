@@ -121,7 +121,7 @@ class RenderGame {
     var resetGame = function(event) {
       console.log(event.x)
       console.log(event.y)
-      if ( event.x > 650 && event.x < 720 && event.y > 260 && event.y < 330) {
+      if ( event.x > 650 && event.x < 720 && event.y > 320 && event.y < 450) {
         self.setup()
         self.canvas.removeEventListener('click', resetGame)
         document.querySelector('#logged-in').style.display = 'block'
@@ -299,7 +299,7 @@ class RenderGame {
     }
     for (var i = 0; i < this.cratesArray.length; i++) {
       this.canvasContext.drawImage(this.cratesArray[i].returnImage(), this.cratesArray[i].x, this.cratesArray[i].y, this.cratesArray[i].xSize, this.cratesArray[i].ySize)
-      if (this.deathInteractionCrate(i)) {
+      if (this.deathInteractionCrate(i) && this.cratesArray[i].exploded == false) {
         this.gameOver = true
       }
       this.cratesArray[i].move(this.objectVelocity)
