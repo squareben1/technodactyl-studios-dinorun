@@ -74,6 +74,20 @@ var groundImageUrlArray = [
   "images/deserttileset/png/Tile/3.png"
 ]
 
+var crateImageArray = [
+  "images/deserttileset/png/Objects/Crate.png",
+  "images/explosion/tile000.png",
+  "images/explosion/tile001.png",
+  "images/explosion/tile002.png",
+  "images/explosion/tile003.png",
+  "images/explosion/tile004.png",
+  "images/explosion/tile005.png",
+  "images/explosion/tile006.png",
+  "images/explosion/tile007.png",
+  "images/explosion/tile008.png",
+  "images/explosion/tile009.png"
+]
+
 var backgroundImageUrl = "images/bg.png"
 var stoneBlockImageUrl = "images/deserttileset/png/Objects/StoneBlock.png"
 var endSignImageUrl = "images/endsign.png"
@@ -91,6 +105,7 @@ export default async function loadGameImages(){
   var stoneBlockImage = await loadImage(stoneBlockImageUrl)
   var endSignImage = await loadImage(endSignImageUrl)
   var replayImage = await loadImage(replayImageUrl)
+  var crateImageArray = await loadImage(crateImageArray)
 
   return {
     dinoRunImageArray: dinoRunImageArray,
@@ -100,6 +115,7 @@ export default async function loadGameImages(){
     backgroundImage: backgroundImage,
     stoneBlockImage: stoneBlockImage,
     endSignImage: endSignImage,
-    replayImage: replayImage
+    replayImage: replayImage,
+    crateImageArray: crateImageArray
   }
 }
