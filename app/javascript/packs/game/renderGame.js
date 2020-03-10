@@ -108,11 +108,14 @@ class RenderGame {
     this.canvasContext.fillStyle = 'black'
     this.canvasContext.fillText(`Your Final Score: ${finalScore}`, 640, 290)
     this.canvasContext.drawImage(this.loadedImages['replayImage'], 600, 300, 100, 100)
-    this.canvas.addEventListener('click', (event) => {
+    var self = this
+    var resetGame = function(event) {
       if ( event.x > 650 && event.x < 720 && event.y > 460 && event.y < 530) {
-        this.setup()
+        self.setup()
+        self.canvas.removeEventListener('click', resetGame)
       }
-    })
+    }
+    this.canvas.addEventListener('click', resetGame)
   }
 
   animateDeath() {
