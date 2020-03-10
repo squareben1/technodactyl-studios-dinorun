@@ -299,6 +299,9 @@ class RenderGame {
     }
     for (var i = 0; i < this.cratesArray.length; i++) {
       this.canvasContext.drawImage(this.cratesArray[i].returnImage(), this.cratesArray[i].x, this.cratesArray[i].y, this.cratesArray[i].xSize, this.cratesArray[i].ySize)
+      if (this.deathInteractionCrate(i)) {
+        this.gameOver = true
+      }
       this.cratesArray[i].move(this.objectVelocity)
     }
     // delete crates when off canvas
@@ -307,6 +310,14 @@ class RenderGame {
         this.cratesArray.shift()
       }
     }
+  }
+
+  deathInteractionCrate(i) {
+    let dinoCentre = this.dino.objectCentre()
+    let crateCentre = this.cratesArray[i].objectCentre()
+    let circlesDifference = Math.sqrt(((dinoCentre[0] - crateCentre[0])**2) + ((dinoCentre[1] - crateCentre[1])**2))
+    let radiusSum = this.dino.objectRadius() + this.cratesArray[i].objectRadius()
+    return circlesDifference < radiusSum
   }
 
   crateAttack() {

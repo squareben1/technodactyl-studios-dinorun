@@ -24,8 +24,8 @@ describe("Crate", function() {
   })
 
   describe('#objectRadius', function() {
-    it('returns radius of object circle', function() {
-      expect(crate.objectRadius()).toEqual(40)
+    it('returns radius of object circle, halfed for gameplay', function() {
+      expect(crate.objectRadius()).toEqual(20)
     })
   })
 })

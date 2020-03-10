@@ -30,7 +30,7 @@ class Crate {
   }
 
   objectRadius() {
-    return this.xSize / 2
+    return this.xSize / 4
   }
 }
 

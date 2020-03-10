@@ -55,6 +55,7 @@ class GameController {
     // Ajax score to leaderboard database
     // Display navbar
     // Play theme tune
+    console.log('gameComplete')
   }
 }
 
