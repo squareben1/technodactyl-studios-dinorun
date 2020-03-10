@@ -21,7 +21,7 @@ class GameController {
     var amplitudeArray = JSON.parse(data['analysed'])
     var generatedBlockArray = generateMapFromAmplitudeArray(amplitudeArray)
     console.log(data["bpm"])
-    this.game.startGame(data["bpm"], 3, generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
+    this.game.startGame(data["bpm"], ((data['bpm']/200)*4), generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     self = this
     setTimeout(function() {
       self.audioElement.play()
