@@ -63,8 +63,9 @@ class RenderGame {
   //                           Animate Game
   //=================================================================================
 
-  startGame(bpm, difficulty, generatedBlockArray) { //frequencyArray, 
-    this.generatedBlockArray = generatedBlockArray
+  startGame(bpm, difficulty, generatedMapArray) { //frequencyArray, 
+    this.generatedBlockArray = [...generatedMapArray]
+    this.generatedGroundArray = [...generatedMapArray]
     this._generateFramesPerBeat(bpm)
     this._calculateObjectVelocity(difficulty)
     this.animateGame()
@@ -166,6 +167,18 @@ class RenderGame {
     if (this.groundArray[0].x <= -this.groundArray[0].xSize) {
       this.groundArray.shift()
     }
+    
+    // Check for ground feature
+    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
+      let groundFeatureValue = this.generatedGroundArray.shift()
+      if (groundFeatureValue == 2) {
+        
+        this.groundArray = this.groundArray.concat(this._createGroundFeature())
+        console.log(this.groundArray)
+        console.log('new ground feature added')
+      }
+    }
+
     // Check for new ground
     let newGroundLoc = this.groundArray[(this.groundArray.length-1)].isNewGroundNeeded(this.objectVelocity)
     if (newGroundLoc) {
@@ -193,7 +206,7 @@ class RenderGame {
   }
 
   timeStepBlocks() {
-    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 300th frame
+    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
       let newBlockValue = this.generatedBlockArray.shift()
       if (newBlockValue == 1) {
         this.blocksArray.push(
@@ -209,7 +222,7 @@ class RenderGame {
       this.blocksArray[i].move(this.objectVelocity)
     }
     if (this.blocksArray.length > 0) {
-      if (this.blocksArray[0].x <= -this.blocksArray[0].x) {
+      if (this.blocksArray[0].x <= -(this.blocksArray[0].x * 2)) {
         this.blocksArray.shift()
         // Add your score addition here ben!! :)
       }
@@ -226,6 +239,16 @@ class RenderGame {
     let circlesDifference = Math.sqrt(((dinoCentre[0] - blockCentre[0])**2) + ((dinoCentre[1] - blockCentre[1])**2))
     let radiusSum = this.dino.objectRadius() + this.blocksArray[i].objectRadius()
     return circlesDifference < radiusSum
+  }
+
+  _createGroundFeature() {
+    var lastGroundItem = this.groundArray[this.groundArray.length - 1]
+    var lastGroundXLoc = lastGroundItem.x + lastGroundItem.xSize
+    var leftGroundFeatureBlock = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][2])
+    var rightGroundFeatureBlock = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][0])
+    leftGroundFeatureBlock.x = lastGroundXLoc
+    rightGroundFeatureBlock.x = lastGroundXLoc + leftGroundFeatureBlock.xSize + 250
+    return [leftGroundFeatureBlock, rightGroundFeatureBlock]
   }
 }
 
