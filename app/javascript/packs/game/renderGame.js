@@ -51,7 +51,9 @@ class RenderGame {
   }
 
   _drawScore() {
-    this.newScore.updateScore(this.frameCounter)
+    if (this.gameOver == false) {
+      this.newScore.updateScore(100)
+    }
     this.canvasContext.font = "30px Arial"
     this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
   }
@@ -117,9 +119,12 @@ class RenderGame {
     this.canvasContext.drawImage(this.loadedImages['replayImage'], 600, 300, 100, 100)
     var self = this
     var resetGame = function(event) {
-      if ( event.x > 650 && event.x < 720 && event.y > 460 && event.y < 530) {
+      console.log(event.x)
+      console.log(event.y)
+      if ( event.x > 650 && event.x < 720 && event.y > 260 && event.y < 330) {
         self.setup()
         self.canvas.removeEventListener('click', resetGame)
+        document.querySelector('#logged-in').style.display = 'block'
       }
     }
     this.canvas.addEventListener('click', resetGame)
@@ -266,7 +271,7 @@ class RenderGame {
     if (this.blocksArray.length > 0) {
       if (this.blocksArray[0].x <= -this.blocksArray[0].xSize) {
         this.blocksArray.shift()
-        // Add your score addition here ben!! :)
+        this.newScore.jumpScore()
       }
     }
   }
@@ -300,7 +305,6 @@ class RenderGame {
     if (this.cratesArray.length > 0) {
       if (this.cratesArray[0].x <= -this.cratesArray[0].xSize) {
         this.cratesArray.shift()
-        // Add your score addition here ben!! :)
       }
     }
   }
@@ -316,6 +320,7 @@ class RenderGame {
     });
     for (var i = 0; i < filteredCrates.length; i++) {
       filteredCrates[i].exploded = true
+      this.newScore.explodedCrate()
     }
   }
 }

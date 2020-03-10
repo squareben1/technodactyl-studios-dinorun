@@ -23,10 +23,12 @@ class GameController {
     var generatedBlockArray = generateMapFromAmplitudeArray(amplitudeArray)
     console.log(data["bpm"])
     this.game.startGame(data["bpm"], ((data['bpm']/220)*4), generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
+    
     self = this
     setTimeout(function() {
       self.audioElement.play()
     }, 3500)
+
     document.body.onkeyup = function(e){
       if(e.keyCode == 32){
         self.game.dino.jump()
@@ -53,7 +55,6 @@ class GameController {
     // Ajax score to leaderboard database
     // Display navbar
     // Play theme tune
-    document.querySelector('#logged-in').style.display = 'block'
   }
 }
 
