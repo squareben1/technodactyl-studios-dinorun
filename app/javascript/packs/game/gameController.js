@@ -41,11 +41,25 @@ class GameController {
     audioPlayer.appendChild(sound)
   }
 
+  uploadScore(score){
+    $.ajax({
+      url: '/scores.json',
+      type: "POST",
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      data: {score: {score: score, user_id: 1, song_id: 2}}
+    })
+    .done(function(data){
+      console.log(data)
+    })
+  }
+
   gameComplete(score) {
     // Ajax score to leaderboard database
     // Display navbar
     // Play theme tune
     document.querySelector('#logged-in').style.display = 'block'
+    this.uploadScore(score.currentScore)
+
   }
 }
 
