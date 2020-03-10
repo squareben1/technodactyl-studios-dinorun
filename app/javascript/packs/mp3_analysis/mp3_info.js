@@ -14,7 +14,7 @@ class SongAnalyser{
       var context = new (window.AudioContext || window.webkitAudioContext)();
       reader.onload = function() {
         context.decodeAudioData(reader.result, function(buffer) {
-          song.json(buffer); 
+        song.json(buffer); 
         });
       };
       reader.readAsArrayBuffer(file);
@@ -32,7 +32,6 @@ class SongAnalyser{
     source.buffer = buffer;
     console.log("source buffer",source.buffer)
     
-
     /////////////////
     var filter = offlineContext.createBiquadFilter();
     filter.type = "lowpass";
@@ -43,19 +42,10 @@ class SongAnalyser{
     offlineContext.startRendering().then(function(lowPassAudioBuffer) {
       var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       var song = audioCtx.createBufferSource();
-      console.log("song", song)
       song.buffer = lowPassAudioBuffer;
-      console.log("song buffer", song.buffer)
       var songLength = song.buffer.duration
       song.connect(audioCtx.destination);
       var lowPassBuffer = song.buffer.getChannelData(0);
-      console.log("lowpassbuffer", lowPassBuffer)
-
-      ////////////
-      var analyser = offlineContext.createAnalyser();
-      var dataArray = new Float32Array(analyser.fftSize); // Float32Array needs to be the same length as the fftSize
-      console.log("analyser array", dataArray)
-      analyser.getFloatTimeDomainData(dataArray); // fill the Float32Array with data returned from getFloatTimeDomainData() 
 
       /// Tempo
       var gettingTempo = self.getSampleClip(lowPassBuffer, 400);
@@ -66,17 +56,17 @@ class SongAnalyser{
       console.log("bpm", finalTempo)
 
       /// Volume Amplitude Array
-      var songAmplitude = self.splitAndReduceArray(source.buffer.getChannelData(0), finalTempo * 4)
-      console.log("channel buffer", songAmplitude)
+      var pcmData = source.buffer.getChannelData(0)
+      var songAmplitude = self.splitAndReduceArray(pcmData, 112 * 4) // finalTempo * 4
+      console.log("amplitude array", songAmplitude)
+      console.log("what is going on", self.slice(buffer, finalTempo, audioCtx));
 
       /// Frequency Array
       lowPassBuffer = self.getSampleClip(lowPassBuffer, (finalTempo * songLength/60));
-      console.log("first buffer", lowPassBuffer)
       lowPassBuffer = self.normalizeArray(lowPassBuffer);
       lowPassBuffer = lowPassBuffer.filter(function(value) {
         return !Number.isNaN(value);
       });
-      console.log("buffer array", lowPassBuffer)
       song_analysed.value = JSON.stringify(lowPassBuffer);
 
       // Post completion
@@ -94,6 +84,48 @@ class SongAnalyser{
       }
     }
     return newArray;
+  }
+
+
+  // return an array of amplitudes for the supplied `audioBuffer`
+  //
+  // each item in the array will represent the average amplitude (in dB)
+  // for a chunk of audio `t` seconds long
+  slice(audioBuffer, bpm, context) {
+    var channels = audioBuffer.numberOfChannels,
+      sampleRate = context.sampleRate,
+      len = audioBuffer.length,
+      samples = Math.round(sampleRate * (60/bpm)),
+      output = [],
+      amplitude,
+      values,
+      i = 0;
+    console.log("sample", samples)
+    // loop by chunks of `t` seconds
+    for ( ; i < len; i += samples ) {
+      values = [];
+      // loop through each sample in the chunk
+      for (let j = 0; j < samples && j + i < len; ++j ) {
+        amplitude = 0;
+        // sum the samples across all channels
+        for (let k = 0; k < channels; ++k ) {
+          amplitude += audioBuffer.getChannelData(k)[i + j];
+        }
+        values.push(amplitude);
+      }
+      output.push(this.dB(values));
+    }
+    return output;
+  }
+
+  dB( buffer ) {
+    var len = buffer.length, total = 0, i = 0, rms, db;
+    while ( i < len ) {
+      total += ( buffer[i] * buffer[i++] );
+    }
+    rms = Math.sqrt( total / len );
+    db = 20 * ( Math.log(rms) / Math.LN10 );
+    return db;
   }
 
   splitAndReduceArray(data, samples) {
