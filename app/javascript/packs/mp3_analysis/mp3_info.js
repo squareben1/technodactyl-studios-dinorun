@@ -108,7 +108,18 @@ class SongAnalyser{
       }
       output.push(this.dB(values));
     }
-    return output;
+    console.log("max number", this.normaliseAmplitude(output))
+    return this.normaliseAmplitude(output);
+  }
+
+  normaliseAmplitude(array){
+    var max = array.reduce(function(a, b) {
+      return Math.max(a, b);
+    });
+    console.log("max", max)
+    return array.map(function(amplitude) {
+      return amplitude + Math.abs(max)
+    })
   }
 
   dB( buffer ) {
