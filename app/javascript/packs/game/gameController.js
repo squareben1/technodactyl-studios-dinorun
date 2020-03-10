@@ -9,6 +9,10 @@ import loadGameImages from './loadImages.js'
 import { generateBlocksFromAmplitudeArray } from '../game/mapGenerator.js'
 
 class GameController {
+  constructor() {
+    this.songData = ''
+  }
+
   async setupGame() {
     this.canvas = document.getElementById('canvas')
     var loadedImages = await loadGameImages()
@@ -17,6 +21,7 @@ class GameController {
   }
 
   startGame(data, audioElement) {
+    this.songData = data
     var amplitudeArray = JSON.parse(data['analysed'])
     var generatedBlockArray = generateBlocksFromAmplitudeArray(amplitudeArray)
     this.game.startGame(data["bpm"], 1.5, generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
@@ -41,12 +46,12 @@ class GameController {
     audioPlayer.appendChild(sound)
   }
 
-  uploadScore(score){
+  uploadScore(score, songId){
     $.ajax({
       url: '/scores.json',
       type: "POST",
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-      data: {score: {score: score, user_id: 1, song_id: 2}}
+      data: {score: {score: score, user_id: 1, song_id: songId}}
     })
     .done(function(data){
       console.log(data)
@@ -57,9 +62,7 @@ class GameController {
     // Ajax score to leaderboard database
     // Display navbar
     // Play theme tune
-    document.querySelector('#logged-in').style.display = 'block'
-    this.uploadScore(score.currentScore)
-
+    this.uploadScore(score.currentScore, this.songData['id'])
   }
 }
 

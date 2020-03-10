@@ -110,9 +110,10 @@ class RenderGame {
     this.canvasContext.drawImage(this.loadedImages['replayImage'], 600, 300, 100, 100)
     var self = this
     var resetGame = function(event) {
-      if ( event.x > 650 && event.x < 720 && event.y > 460 && event.y < 530) {
+      if ( event.x > 650 && event.x < 720 && event.y > 360 && event.y < 440) {
         self.setup()
         self.canvas.removeEventListener('click', resetGame)
+        document.querySelector('#logged-in').style.display = 'block'
       }
     }
     this.canvas.addEventListener('click', resetGame)
