@@ -5,6 +5,7 @@ class UserController < ApplicationController
     user = User.new(user_params)
     if user.valid?
       user.save
+      reset_session
       session[:user_id] = user.id
       render json: {logged_in: true, username: user.username}
     else

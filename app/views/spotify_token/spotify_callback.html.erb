@@ -1,0 +1,20 @@
+You have been authorised with spotify, redirecting back to site...
+
+<% data = { logged_in: 'true', username: @username } %>
+
+<%= javascript_tag do %>
+  
+  window.addEventListener('load', function() {
+    var data = <%= data.to_json.html_safe %>
+    const params = window.location.search
+    console.log(data)
+
+    if (window.opener) {
+      // send them to the opening window
+      window.opener.postMessage(data)
+      // close the popup
+    }
+    setTimeout(window.close, 250)
+  })
+
+<% end %>

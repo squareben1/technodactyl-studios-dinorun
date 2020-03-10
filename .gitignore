@@ -31,6 +31,7 @@ yarn-debug.log*
 .yarn-integrity
 
 .DS_Store
+
 # Ignore application configuration
 /config/application.yml
 /coverage

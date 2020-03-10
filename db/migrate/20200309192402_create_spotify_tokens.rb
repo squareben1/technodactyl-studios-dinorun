@@ -3,7 +3,7 @@ class CreateSpotifyTokens < ActiveRecord::Migration[6.0]
     create_table :spotify_tokens do |t|
       t.string :access_token
       t.string :refresh_token
-      t.date :expires
+      t.datetime :expires
       t.string :scope
       t.timestamps
     end

@@ -18,11 +18,12 @@ class SpotifyTokenController < ApplicationController
     if session[:state] == params['state']
       token_hash = token_request(params['code'])
       # create new spotify token object and assign to user_id of session_cookie
-
+      SpotifyToken.create(access_token: token_hash['access_token'], refresh_token: token_hash['refresh_token'], expires: Time.now + token_hash['expires_in'], scope: token_hash['scope'], user_id:  session[:user_id])
+      user = User.find_by(id: session[:user_id])
+      @username = user.username
     else 
       raise ActionController::RoutingError.new('Not Found')
     end
-    
   end
 
   private

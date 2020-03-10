@@ -3,13 +3,11 @@ let previousUrl = null;
 
 const receiveMessage = event => {
   console.log('in receive event')
-  // check origin
+  // check origin to see if source is popup
   if (event.origin !== window.location.origin) {
     return;
   }
-  // if we trust the sender and the source is our popup
-  console.log(event)
-  logUserIn(data)
+  logUserIn(event.data)
 }
 
 const openSignInWindow = (url, name) => {
@@ -33,21 +31,23 @@ const openSignInWindow = (url, name) => {
 
   // add the listener for receiving a message from the popup
   window.addEventListener('message', event => receiveMessage(event), false);
-
-  // assign the previous URL
   previousUrl = url;
 }
 
 function logUserIn(data) {
+  var username = document.getElementById("register[username]")
+  var email = document.getElementById("register[email]")
+  var password = document.getElementById("register[password]")
+  var userMessage = document.getElementById("user-message")
   username.value = ""
   email.value = ""
   password.value = ""
-  userMessage = document.getElementById("user-message")
   if (data['username']) {
     userMessage.innerHTML = data['username'] + ' welcome to DinoRun!'
     $("#logged-out").hide()
     $("#logged-in").show()
-  } else {
+  } 
+  else {
     userMessage.innerHTML = ''
     for (const message in data.error_message) {
       userMessage.innerHTML += data.error_message[message][0] + '<br>'
@@ -67,7 +67,7 @@ function signup(event) {
       url: '/user.json',
       type: "POST",
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-      data: {user: {username: username.value, password: password.value, email: email.value}}
+      data: {user: {username: username.value, password: password.value, email: email.value, spotify: register_with_spotify}}
     }).done(function( data ) {
       if (register_with_spotify == true && data['logged_in'] == true) {
         openSignInWindow('/connect_with_spotify', 'Spotify')

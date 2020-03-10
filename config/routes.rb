@@ -13,8 +13,8 @@ Rails.application.routes.draw do
   get 'songs/:id', to: 'songs#show', constraints: lambda { |req| req.format == :json }
   post 'songs', to: 'songs#create'
 
-  get 'connect_with_spotify', to: 'spotifytoken#authorise'
-  get 'spotify_callback', to: 'spotifytoken#spotify_callback'
+  get 'connect_with_spotify', to: 'spotify_token#authorise'
+  get 'spotify_callback', to: 'spotify_token#spotify_callback'
 
   # Testing/Development
   if Rails.env.development? || Rails.env.test?

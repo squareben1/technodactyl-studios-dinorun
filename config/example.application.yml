@@ -10,3 +10,4 @@ POSTGRES_DB: dinorun
 RAILS_SERVE_STATIC_FILES: true
 SPOTIFY_ID: <your-spotify-app-id>
 SPOTIFY_SECRET: <your-spotify-app-secret>
+RAILS_MASTER_KEY: <your-rails-master-key>

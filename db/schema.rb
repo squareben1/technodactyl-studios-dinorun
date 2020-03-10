@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_09_192402) do
+ActiveRecord::Schema.define(version: 2020_03_10_091936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,19 +47,22 @@ ActiveRecord::Schema.define(version: 2020_03_09_192402) do
   create_table "spotify_tokens", force: :cascade do |t|
     t.string "access_token"
     t.string "refresh_token"
-    t.date "expires"
+    t.datetime "expires"
     t.string "scope"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_spotify_tokens_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.text "username"
     t.text "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "password_digest"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "spotify_tokens", "users"
 end
