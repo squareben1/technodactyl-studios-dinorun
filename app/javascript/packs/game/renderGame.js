@@ -48,7 +48,7 @@ class RenderGame {
   }
 
   _drawScore() {
-    this.newScore.updateScore(100)
+    this.newScore.updateScore(this.frameCounter)
     this.canvasContext.font = "30px Arial"
     this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
   }
@@ -95,9 +95,27 @@ class RenderGame {
         if (self.gameOver == true) {
           clearInterval(gameInterval)
           self.animateDeath()
+          self.gameController.playDeathSound()
         }
       })
     }, self.frameInterval)
+  }
+
+  _drawGameOverScreen(finalScore) {
+    this.canvasContext.drawImage(this.loadedImages['endSignImage'], 270, 0)
+    this.canvasContext.textAlign = 'center'
+    this.canvasContext.font = '40px serif'
+    this.canvasContext.fillStyle = 'black'
+    this.canvasContext.fillText(`Your Final Score: ${finalScore}`, 640, 290)
+    this.canvasContext.drawImage(this.loadedImages['replayImage'], 600, 300, 100, 100)
+    var self = this
+    var resetGame = function(event) {
+      if ( event.x > 650 && event.x < 720 && event.y > 460 && event.y < 530) {
+        self.setup()
+        self.canvas.removeEventListener('click', resetGame)
+      }
+    }
+    this.canvas.addEventListener('click', resetGame)
   }
 
   animateDeath() {
@@ -120,6 +138,7 @@ class RenderGame {
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
           self.gameController.gameComplete(self.newScore)
+          self._drawGameOverScreen(self.newScore.currentScore)
         }
       })
     }, self.frameInterval)
@@ -141,7 +160,7 @@ class RenderGame {
     // Delete first if off screen
     if (this.groundArray[0].x <= -this.groundArray[0].xSize) {
       this.groundArray.shift()
-    } 
+    }
     // Check for new ground
     let newGroundLoc = this.groundArray[(this.groundArray.length-1)].isNewGroundNeeded(this.objectVelocity)
     if (newGroundLoc) {
@@ -159,13 +178,13 @@ class RenderGame {
       if (filteredGround.length > 0 && this.dino.y <= this.canvas.height - 240 && this.dino.y >= this.canvas.height - 259 && this.dino.jumpCounter < 1) {
         this.dino.resetJump();
         this.dino.y = this.canvas.height - 240;
-      } 
+      }
       else {
         this.dino.applyGravity();
       }
       this.dino.applyJump();
     }
-    this.canvasContext.drawImage(this.dino.returnCurrentImage(), this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize);
+    this.canvasContext.drawImage(this.dino.imageRun(), this.dino.x, this.dino.y + 10, this.dino.xSize, this.dino.ySize);
   }
 
   timeStepBlocks() {
@@ -187,7 +206,7 @@ class RenderGame {
   }
 
   timeStepDeadDino(counter) {
-    this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, this.dino.y, this.dino.xSize, this.dino.ySize);
+    this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, this.canvas.height - 230, this.dino.xSize, this.dino.ySize); // remove dino.y
   }
 
   deathInteractionBlock(i) {
