@@ -46,6 +46,17 @@ class GameController {
     audioPlayer.appendChild(sound)
   }
 
+  getScores() {
+    $.ajax({
+      url: `/scores/${this.songData['id']}.json`,
+      type: 'GET',
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
+    }).done(function(data) {
+      console.log('data')
+      console.log(data)
+    })
+  }
+
   uploadScore(score, songId){
     $.ajax({
       url: '/scores.json',
@@ -63,6 +74,7 @@ class GameController {
     // Display navbar
     // Play theme tune
     this.uploadScore(score.currentScore, this.songData['id'])
+    this.getScores()
   }
 }
 

@@ -6,15 +6,15 @@ class ScoresController < ApplicationController
 
     if score.valid?
       score.save
-      p 'score'
-      p score
       render json: {score: "score saved" }
     else
       render json: {score: "not saved"}
     end
   end
 
-  def index
+  def show
+    top_three = Score.where(song_id: params[:id]).order(score: :desc)[0..2]
+    render json: top_three
   end
 
   private
