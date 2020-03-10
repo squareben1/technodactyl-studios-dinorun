@@ -1,6 +1,6 @@
-function generateBlocksFromFrequencyArray(frequencyArray) {
-  return frequencyArray.map(function(frequency) {
-    if (frequency >= 0) {
+function generateBlocksFromAmplitudeArray(amplitudeArray) {
+  return amplitudeArray.map(function(amplitude) {
+    if (amplitude >= -15) {
       return 1
     }
     else {
@@ -9,4 +9,4 @@ function generateBlocksFromFrequencyArray(frequencyArray) {
   })
 }
 
-export { generateBlocksFromFrequencyArray }
+export { generateBlocksFromAmplitudeArray }
