@@ -21,7 +21,7 @@ class SongAnalyser{
     };
   }
 
-  //// getting both frequency array and bpm of the audio file
+  //// getting both amplitude array and bpm of the audio file
   json(buffer) {
     var offlineContext = new OfflineAudioContext(
       1,
@@ -30,15 +30,13 @@ class SongAnalyser{
     );
     var source = offlineContext.createBufferSource();
     source.buffer = buffer;
-    console.log("source buffer",source.buffer)
-    
-    /////////////////
     var filter = offlineContext.createBiquadFilter();
     filter.type = "lowpass";
     source.connect(filter);
     filter.connect(offlineContext.destination);
     source.start(0);
-    self = this
+    self = this;
+
     offlineContext.startRendering().then(function(lowPassAudioBuffer) {
       var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       var song = audioCtx.createBufferSource();
@@ -57,9 +55,8 @@ class SongAnalyser{
 
       /// Volume Amplitude Array
       var pcmData = source.buffer.getChannelData(0)
-      var songAmplitude = self.splitAndReduceArray(pcmData, (finalTempo * songLength/60))
-      console.log("amplitude array", songAmplitude)
-      console.log("what is going on", self.slice(buffer, finalTempo, audioCtx));
+      var amplitudeArray = self.slice(buffer, finalTempo, audioCtx);
+      console.log("amplitudeArray", amplitudeArray)
 
       /// Frequency Array
       lowPassBuffer = self.getSampleClip(lowPassBuffer, (finalTempo * songLength/60));
@@ -67,7 +64,7 @@ class SongAnalyser{
       lowPassBuffer = lowPassBuffer.filter(function(value) {
         return !Number.isNaN(value);
       });
-      song_analysed.value = JSON.stringify(lowPassBuffer);
+      song_analysed.value = JSON.stringify(amplitudeArray);
 
       // Post completion
       self.showCreateSongButton()
@@ -86,11 +83,9 @@ class SongAnalyser{
     return newArray;
   }
 
-
   // return an array of amplitudes for the supplied `audioBuffer`
-  //
   // each item in the array will represent the average amplitude (in dB)
-  // for a chunk of audio `t` seconds long
+  // for a chunk of audio `bpm` seconds long
   slice(audioBuffer, bpm, context) {
     var channels = audioBuffer.numberOfChannels,
       sampleRate = context.sampleRate,
@@ -123,36 +118,7 @@ class SongAnalyser{
     }
     rms = Math.sqrt( total / len );
     db = 20 * ( Math.log(rms) / Math.LN10 );
-    return Math.abs(Math.round(db));
-  }
-
-  splitAndReduceArray(data, samples) {
-    var newArray = [];
-    var section_size = Math.round(data.length / samples);
-
-    var sectionCounter = 0
-    var sectionSum = 0
-
-    for (var i = 0; i < data.length; i++) {
-      if (i / section_size > sectionCounter) {
-        newArray.push(Math.round(sectionSum))
-        sectionSum = 0
-        sectionCounter++
-      }
-      sectionSum += Math.abs(data[i])
-    }
-
-    return newArray
-
-    // var reducedArray = [];
-
-    // for (var i = 0; i < newArray.length; i++) {
-    //   if (i % 4 == 0) {
-    //     reducedArray.push(Math.round(newArray[i]));
-    //   }
-    // }
-
-    // return reducedArray;
+    return db;
   }
 
   normalizeArray(data) {
