@@ -17,13 +17,15 @@ class GameController {
   }
 
   startGame(data, audioElement) {
+    this.audioElement = audioElement
     var amplitudeArray = JSON.parse(data['analysed'])
     var generatedBlockArray = generateMapFromAmplitudeArray(amplitudeArray)
-    this.game.startGame(data["bpm"], 1.5, generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
-    setTimeout(function() {
-      audioElement.play()
-    }, 3900)
+    console.log(data["bpm"])
+    this.game.startGame(data["bpm"], ((data['bpm']/200)*4), generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     self = this
+    setTimeout(function() {
+      self.audioElement.play()
+    }, 3500)
     document.body.onkeyup = function(e){
       if(e.keyCode == 32){
         self.game.dino.jump()
@@ -32,6 +34,8 @@ class GameController {
   }
 
   playDeathSound(){
+    this.audioElement.pause()
+    this.audioElement = {play: function(){}}
     var audioPlayer = document.querySelector('#song_player')
     audioPlayer.innerHTML = ""
     var sound = document.createElement('audio')
