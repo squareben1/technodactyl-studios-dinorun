@@ -21,6 +21,7 @@ class RenderGame {
   setup() {
     this.frameCounter = 0
     this.gameOver = false
+    this.dinoOffScreen = false
     this.blocksArray = []
     this._drawBackground()
     this._drawGround()
@@ -93,6 +94,7 @@ class RenderGame {
         self.timeStepBlocks()
         self.timeStepDino()
         self._drawScore()
+        self.deathInteractionGround()
         if (self.gameOver == true) {
           clearInterval(gameInterval)
           self.animateDeath()
@@ -172,10 +174,7 @@ class RenderGame {
     if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
       let groundFeatureValue = this.generatedGroundArray.shift()
       if (groundFeatureValue == 2) {
-        
         this.groundArray = this.groundArray.concat(this._createGroundFeature())
-        console.log(this.groundArray)
-        console.log('new ground feature added')
       }
     }
 
@@ -230,7 +229,12 @@ class RenderGame {
   }
 
   timeStepDeadDino(counter) {
-    this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, this.canvas.height - 230, this.dino.xSize, this.dino.ySize); // remove dino.y
+    if (this.dinoOffScreen == true) {
+      var dinoXLoc = this.dino.y
+    } else {
+      var dinoXLoc = this.canvas.height - 230
+    }
+    this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, dinoXLoc, this.dino.xSize, this.dino.ySize);
   }
 
   deathInteractionBlock(i) {
@@ -239,6 +243,13 @@ class RenderGame {
     let circlesDifference = Math.sqrt(((dinoCentre[0] - blockCentre[0])**2) + ((dinoCentre[1] - blockCentre[1])**2))
     let radiusSum = this.dino.objectRadius() + this.blocksArray[i].objectRadius()
     return circlesDifference < radiusSum
+  }
+
+  deathInteractionGround() {
+    if (this.dino.y >= this.canvas.height) {
+      this.gameOver = true
+      this.dinoOffScreen = true
+    }
   }
 
   _createGroundFeature() {

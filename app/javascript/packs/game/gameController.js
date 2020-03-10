@@ -22,7 +22,7 @@ class GameController {
     this.game.startGame(data["bpm"], 1.5, generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     setTimeout(function() {
       audioElement.play()
-    }, 3900)
+    }, 3500)
     self = this
     document.body.onkeyup = function(e){
       if(e.keyCode == 32){
