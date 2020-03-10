@@ -101,6 +101,10 @@ class RenderGame {
     }, self.frameInterval)
   }
 
+  _drawTopThree() {
+    this.canvasContext.fillText()
+  }
+
   _drawGameOverScreen(finalScore) {
     this.canvasContext.drawImage(this.loadedImages['endSignImage'], 270, 0)
     this.canvasContext.textAlign = 'center'

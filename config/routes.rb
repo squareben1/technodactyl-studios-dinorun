@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   # JSON only for single page app
   post 'user', to: 'user#create', constraints: lambda { |req| req.format == :json }
+  get 'user/:id', to: 'user#show', constraints: lambda { |req| req.format == :json }
 
   get 'session', to: 'session#index', constraints: lambda { |req| req.format == :json }
   post 'session', to: 'session#create', constraints: lambda { |req| req.format == :json }

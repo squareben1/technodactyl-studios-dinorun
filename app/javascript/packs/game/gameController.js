@@ -11,6 +11,9 @@ import { generateBlocksFromAmplitudeArray } from '../game/mapGenerator.js'
 class GameController {
   constructor() {
     this.songData = ''
+    this.first = ''
+    this.second = ''
+    this.third = ''
   }
 
   async setupGame() {
@@ -47,13 +50,15 @@ class GameController {
   }
 
   getScores() {
+    var self = this
     $.ajax({
       url: `/scores/${this.songData['id']}.json`,
       type: 'GET',
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
     }).done(function(data) {
-      console.log('data')
-      console.log(data)
+      self.first = data.first
+      self.second = data.second
+      self.third = data.third
     })
   }
 
