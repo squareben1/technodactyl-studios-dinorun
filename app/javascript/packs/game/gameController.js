@@ -51,7 +51,7 @@ class GameController {
       url: '/scores.json',
       type: "POST",
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-      data: {score: {score: score, user_id: 1, song_id: songId}}
+      data: {score: {score: score, song_id: songId}}
     })
     .done(function(data){
       console.log(data)
