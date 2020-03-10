@@ -11,20 +11,9 @@ feature 'user can upload song', js: true do
     attach_file("song[mp3]", Rails.root + "spec/fixtures/test_music.mp3")
     sleep(2)
     click_button "Create Song"
-    sleep(2)
     find('#song_selection').find(:xpath, 'option[2]').select_option
     click_button 'Play'
-    sleep(20)
-    # p Score.all
-    # expect(Score).to have(1).record
+    sleep(8)
     expect(Score.all).not_to be_empty
-
-
-    # using_wait_time 12 do
-    #   expect do
-    #     click_button 'Play'
-    #   end.to change(User, :count).by(1)
-    # end
-
   end
 end
