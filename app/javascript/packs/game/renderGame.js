@@ -127,7 +127,12 @@ class RenderGame {
       cancelAnimationFrame(animationFrameHandle)
       animationFrameHandle = requestAnimationFrame(function() {
         if (gameOverFrameCounter % 10 == 0) {
-          self.objectVelocity = Math.floor(self.objectVelocity - velocityDeducter)
+          var newVelocity = Math.floor(self.objectVelocity - velocityDeducter)
+          if (newVelocity > 0){
+            self.objectVelocity = newVelocity
+          } else {
+            self.objectVelocity = 0
+          }
         }
         self.timeStepBackground()
         self.timeStepGround()
