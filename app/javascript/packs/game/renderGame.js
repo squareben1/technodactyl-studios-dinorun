@@ -1,5 +1,5 @@
 class RenderGame {
-  constructor(canvas, loadedImages, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController) {
+  constructor(canvas, loadedImages, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController, crateClass) {
     this.canvas = canvas
     this.loadedImages = loadedImages
     this.canvasContext = this.canvas.getContext('2d')
@@ -12,6 +12,7 @@ class RenderGame {
     this.frameInterval = 20
     this.fps = 50
     this.gameController = gameController
+    this.crateClass = crateClass
   }
 
   //=================================================================================
@@ -23,6 +24,7 @@ class RenderGame {
     this.gameOver = false
     this.dinoOffScreen = false
     this.blocksArray = []
+    this.cratesArray = []
     this._drawBackground()
     this._drawGround()
     this._drawDino()
@@ -67,6 +69,7 @@ class RenderGame {
   startGame(bpm, difficulty, generatedMapArray) { //frequencyArray, 
     this.generatedBlockArray = [...generatedMapArray]
     this.generatedGroundArray = [...generatedMapArray]
+    this.generatedCrateArray = [...generatedMapArray]
     this._generateFramesPerBeat(bpm)
     this._calculateObjectVelocity(difficulty)
     this.animateGame()
@@ -92,6 +95,7 @@ class RenderGame {
         self.timeStepBackground()
         self.timeStepGround()
         self.timeStepBlocks()
+        self.timeStepCrates()
         self.timeStepDino()
         self._drawScore()
         self.deathInteractionGround()
@@ -140,6 +144,7 @@ class RenderGame {
         self.timeStepBackground()
         self.timeStepGround()
         self.timeStepBlocks()
+        self.timeStepCrates()
         self._drawScore()
         self.timeStepDeadDino(gameOverFrameCounter)
         gameOverFrameCounter++;
@@ -223,6 +228,28 @@ class RenderGame {
     if (this.blocksArray.length > 0) {
       if (this.blocksArray[0].x <= -this.blocksArray[0].xSize) {
         this.blocksArray.shift()
+        // Add your score addition here ben!! :)
+      }
+    }
+  }
+
+  timeStepCrates(){
+    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
+      let newCrateValue = this.generatedCrateArray.shift()
+      if (newCrateValue == 3) {
+        this.cratesArray.push(
+          new this.crateClass(this.canvas, this.loadedImages['crateImageArray'])
+        )
+      }
+    }
+    for (var i = 0; i < this.cratesArray.length; i++) {
+      this.canvasContext.drawImage(this.cratesArray[i].returnImage(), this.cratesArray[i].x, this.cratesArray[i].y, this.cratesArray[i].xSize, this.cratesArray[i].ySize)
+      this.cratesArray[i].move(this.objectVelocity)
+    }
+    // delete crates when off canvas
+    if (this.cratesArray.length > 0) {
+      if (this.cratesArray[0].x <= -this.cratesArray[0].xSize) {
+        this.cratesArray.shift()
         // Add your score addition here ben!! :)
       }
     }

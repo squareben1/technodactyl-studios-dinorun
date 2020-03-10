@@ -3,6 +3,7 @@ import Score from './score.js'
 import Ground from './ground.js'
 import Dino from './dino.js'
 import Block from './block.js'
+import Crate from './crate.js'
 import Background from './background.js'
 import RenderGame from './renderGame.js'
 import loadGameImages from './loadImages.js'
@@ -12,7 +13,7 @@ class GameController {
   async setupGame() {
     this.canvas = document.getElementById('canvas')
     var loadedImages = await loadGameImages()
-    this.game = new RenderGame(canvas, loadedImages, Background, Ground, Dino, Block, Score, this)
+    this.game = new RenderGame(canvas, loadedImages, Background, Ground, Dino, Block, Score, this, Crate)
     this.game.setup()
   }
 
