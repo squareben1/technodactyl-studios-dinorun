@@ -343,6 +343,7 @@ class RenderGame {
 
   timeStepFireEffect() {
     if (this.fireEffect.animationCounter > 0) {
+      this.fireEffect.fireEffectSound.play()
       let fireEffectLocationHash = this.fireEffect.fireLocation(this.dino)
       this.fireEffect.killCrates(this.cratesArray, fireEffectLocationHash, this.newScore)
       this.canvasContext.drawImage(this.fireEffect.returnImage(), fireEffectLocationHash['xLoc'], fireEffectLocationHash['yLoc'], fireEffectLocationHash['xSize'], fireEffectLocationHash['ySize'])
