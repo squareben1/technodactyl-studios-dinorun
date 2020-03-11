@@ -14,7 +14,7 @@ class SongAnalyser{
       var context = new (window.AudioContext || window.webkitAudioContext)();
       reader.onload = function() {
         context.decodeAudioData(reader.result, function(buffer) {
-        song.json(buffer); 
+          song.json(buffer); 
         });
       };
       reader.readAsArrayBuffer(file);
@@ -56,7 +56,6 @@ class SongAnalyser{
       /// Volume Amplitude Array
       var pcmData = source.buffer.getChannelData(0)
       var amplitudeArray = self.slice(buffer, finalTempo, audioCtx);
-      console.log("amplitudeArray", amplitudeArray)
 
       /// Frequency Array
       lowPassBuffer = self.getSampleClip(lowPassBuffer, (finalTempo * songLength/60));
@@ -108,7 +107,6 @@ class SongAnalyser{
       }
       output.push(this.dB(values));
     }
-    console.log("max number", output)
     return output;
   }
 

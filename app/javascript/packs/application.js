@@ -77,4 +77,12 @@ window.addEventListener('load', function() {
   // Signup and Login
   document.querySelector('#login').addEventListener('click', toggleLogInForm)
   document.querySelector('#signup').addEventListener('click', toggleSignUpForm)
+
+  var userMessageDiv = document.querySelector('#user-message')
+  document.body.addEventListener("ajax:success", function(event) {
+    userMessageDiv.innerHTML = "The Song is successfully analysed. Enjoy the game"
+  })
+  document.body.addEventListener("ajax:error", function(event) {  
+    userMessageDiv.innerHTML = "Song exists mate. Pick the song from the list below"
+  })
 })
