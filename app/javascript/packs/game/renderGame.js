@@ -13,6 +13,7 @@ class RenderGame {
     this.fps = 50
     this.gameController = gameController
     this.crateClass = crateClass
+    this.gameWon = false
   }
 
   //=================================================================================
@@ -56,6 +57,7 @@ class RenderGame {
     }
     this.canvasContext.font = "30px Arial"
     this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
+
   }
 
   _drawDino() {
@@ -101,6 +103,10 @@ class RenderGame {
         self.timeStepDino()
         self._drawScore()
         self.deathInteractionGround()
+        if (self.gameController.audioElement.ended) {
+          clearInterval(gameInterval)
+          self.animateVictory()
+        }
         if (self.gameOver == true) {
           clearInterval(gameInterval)
           self.animateDeath()
@@ -135,6 +141,17 @@ class RenderGame {
       }
     }
     this.canvas.addEventListener('click', resetGame)
+  }
+
+  animateVictory() {
+    var self = this
+    if (self.gameWon == false) {
+      self.gameWon = true
+      setTimeout(function() {
+        self.gameController.gameComplete(self.newScore)
+        self._drawGameOverScreen(self.newScore.currentScore)
+      }, 1000)
+    }
   }
 
   animateDeath() {
