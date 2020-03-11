@@ -20,4 +20,11 @@ describe('Score', function() {
       expect(score.currentScore).toEqual(10)
     })
   })
+
+  describe("#explodedCrate", function() {
+    it('adds 1000 to score', function() {
+      score.explodedCrate()
+      expect(score.currentScore).toEqual(1000)
+    })
+  })
 })

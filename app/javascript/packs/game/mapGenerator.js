@@ -1,12 +1,22 @@
-function generateBlocksFromAmplitudeArray(amplitudeArray) {
-  return amplitudeArray.map(function(amplitude) {
-    if (amplitude >= -15) {
-      return 1
+function generateMapFromAmplitudeArray(amplitudeArray) {
+  var result = []
+  var max = Math.max(...amplitudeArray)
+  var min = Math.min(...amplitudeArray)
+  var range = max - min
+  for (var i = 0; i < amplitudeArray.length; i++){ 
+    if (amplitudeArray[i] >= max - (range/4) && i % 4 == 0) {
+      result.push(1)
+    } else if (amplitudeArray[i] >= max - ((2*range)/5) && i % 2 == 0) {
+      result.push(2)
     }
-    else {
-      return 0
+    else if(Math.random() > 0.5){
+      result.push(3)
+    } else{
+      result.push(0)
     }
-  })
+  }
+  console.log("result", result)
+  return result
 }
-
-export { generateBlocksFromAmplitudeArray }
+  
+export { generateMapFromAmplitudeArray }
