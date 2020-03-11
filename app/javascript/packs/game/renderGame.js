@@ -51,7 +51,7 @@ class RenderGame {
     this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, newGround.x, newGround.y)
   }
 
-  _drawScore(score) {
+  _drawScore(score = 0) {
     if (this.gameOver == false) {
       this.newScore.updateScore(score)
     }
@@ -180,7 +180,7 @@ class RenderGame {
         self.timeStepGround()
         self.timeStepBlocks()
         self.timeStepCrates()
-        self._drawScore(0)
+        self._drawScore()
         self.gameOver ? self.timeStepDeadDino(gameOverFrameCounter) : self.timeStepDino()
         gameOverFrameCounter++;
         if (gameOverFrameCounter == 47 && self.gameOver == false) {
@@ -188,6 +188,7 @@ class RenderGame {
           self.gameController.gameComplete(self.newScore.currentScore)
           self._drawGameOverScreen(self.newScore.currentScore)
           self._drawSign('winSignImage')
+          self.gameOver = true
         }
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
