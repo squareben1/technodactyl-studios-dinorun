@@ -1,5 +1,5 @@
 class RenderGame {
-  constructor(canvas, loadedImages, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController, crateClass) {
+  constructor(canvas, loadedImages, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController, crateClass, fireEffectClass) {
     this.canvas = canvas
     this.loadedImages = loadedImages
     this.canvasContext = this.canvas.getContext('2d')
@@ -8,6 +8,7 @@ class RenderGame {
     this.dinoClass = dinoClass
     this.blockClass = blockClass
     this.scoreClass = scoreClass
+    this.fireEffectClass = fireEffectClass
     this.groundLevel = 100
     this.frameInterval = 20
     this.fps = 50
@@ -29,7 +30,7 @@ class RenderGame {
     this._drawGround()
     this._drawDino()
     this.newScore = new this.scoreClass()
-    this._drawScore()
+    this._drawScore(0)
   }
 
   _drawBackground() {
@@ -50,9 +51,9 @@ class RenderGame {
     this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, newGround.x, newGround.y)
   }
 
-  _drawScore() {
+  _drawScore(score) {
     if (this.gameOver == false) {
-      this.newScore.updateScore(100)
+      this.newScore.updateScore(score)
     }
     this.canvasContext.font = "30px Arial"
     this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
@@ -61,7 +62,12 @@ class RenderGame {
   _drawDino() {
     let newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'], this.loadedImages['dinoJumpImageArray'])
     this.canvasContext.drawImage(newDino.returnCurrentImage(), newDino.x, newDino.y, newDino.xSize, newDino.ySize)
+    this._initializeFire(newDino)
     this.dino = newDino
+  }
+
+  _initializeFire(dino) {
+    this.fireEffect = new this.fireEffectClass(this.loadedImages['fireEffectImageArray'], dino)
   }
 
   //=================================================================================
@@ -98,8 +104,9 @@ class RenderGame {
         self.timeStepGround()
         self.timeStepBlocks()
         self.timeStepCrates()
+        self.timeStepFireEffect()
         self.timeStepDino()
-        self._drawScore()
+        self._drawScore(100)
         self.deathInteractionGround()
         if (self.gameOver == true) {
           clearInterval(gameInterval)
@@ -110,18 +117,28 @@ class RenderGame {
     }, self.frameInterval)
   }
 
+  _drawTopThree(data) {
+    this.canvasContext.textAlign = 'left'
+    this.canvasContext.font = '20px serif'
+    var lineHeight = 320
+    this.canvasContext.fillText('High scores:', 510, lineHeight)
+    self = this
+    data.forEach( function(user) {
+      lineHeight += 20
+      self.canvasContext.fillText(user['username'] + ' ' + user['score'], 520, lineHeight)
+    })
+  }
+
   _drawGameOverScreen(finalScore) {
     this.canvasContext.drawImage(this.loadedImages['endSignImage'], 270, 0)
     this.canvasContext.textAlign = 'center'
     this.canvasContext.font = '40px serif'
     this.canvasContext.fillStyle = 'black'
     this.canvasContext.fillText(`Your Final Score: ${finalScore}`, 640, 290)
-    this.canvasContext.drawImage(this.loadedImages['replayImage'], 600, 300, 100, 100)
+    this.canvasContext.drawImage(this.loadedImages['replayImage'], 680, 300, 100, 100)
     var self = this
     var resetGame = function(event) {
-      console.log(event.x)
-      console.log(event.y)
-      if ( event.x > 650 && event.x < 720 && event.y > 320 && event.y < 450) {
+      if ( event.x > 720 && event.x < 800 && event.y > 360 && event.y < 440) {
         self.setup()
         self.canvas.removeEventListener('click', resetGame)
         document.querySelector('#logged-in').style.display = 'block'
@@ -320,18 +337,21 @@ class RenderGame {
     return circlesDifference < radiusSum
   }
 
+  // =========================
+  // Fire Effect/Attack
+  // =========================
+
+  timeStepFireEffect() {
+    if (this.fireEffect.animationCounter > 0) {
+      let fireEffectLocationHash = this.fireEffect.fireLocation(this.dino)
+      this.fireEffect.killCrates(this.cratesArray, fireEffectLocationHash, this.newScore)
+      this.canvasContext.drawImage(this.fireEffect.returnImage(), fireEffectLocationHash['xLoc'], fireEffectLocationHash['yLoc'], fireEffectLocationHash['xSize'], fireEffectLocationHash['ySize'])
+    }
+  }
+
   crateAttack() {
-    var gRender = this
-    let filteredCrates = this.cratesArray.filter( function(crate) {
-      var frontDinoLocX = gRender.dino.x + gRender.dino.xSize
-      var topDinoLocY = gRender.dino.y
-      var bottomDinoLocY = gRender.dino.y + gRender.dino.ySize
-      var punchDistance = 100
-      return (crate.x >= frontDinoLocX - 70) && (crate.x <= frontDinoLocX + punchDistance) && (crate.y >= topDinoLocY - (punchDistance)) && (crate.y <= bottomDinoLocY + (punchDistance))
-    });
-    for (var i = 0; i < filteredCrates.length; i++) {
-      filteredCrates[i].exploded = true
-      this.newScore.explodedCrate()
+    if (this.fireEffect.animationCounter < 1) {
+      this.fireEffect.activateFire()
     }
   }
 }

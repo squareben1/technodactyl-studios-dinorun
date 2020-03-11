@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_04_112353) do
+ActiveRecord::Schema.define(version: 2020_03_10_101203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,14 @@ ActiveRecord::Schema.define(version: 2020_03_04_112353) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "scores", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "song_id"
+    t.integer "score"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "songs", force: :cascade do |t|
     t.string "title"
     t.string "bpm"
@@ -44,13 +52,25 @@ ActiveRecord::Schema.define(version: 2020_03_04_112353) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "spotify_tokens", force: :cascade do |t|
+    t.string "access_token"
+    t.string "refresh_token"
+    t.datetime "expires"
+    t.string "scope"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_spotify_tokens_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.text "username"
     t.text "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "password_digest"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "spotify_tokens", "users"
 end
