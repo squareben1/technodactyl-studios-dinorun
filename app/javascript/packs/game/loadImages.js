@@ -74,7 +74,7 @@ var groundImageUrlArray = [
   "images/deserttileset/png/Tile/3.png"
 ]
 
-var crateImageArray = [
+var crateImageUrlArray = [
   "images/deserttileset/png/Objects/Crate.png",
   "images/explosion/tile002.png",
   "images/explosion/tile003.png",
@@ -84,6 +84,32 @@ var crateImageArray = [
   "images/explosion/tile007.png",
   "images/explosion/tile008.png",
   "images/explosion/tile009.png"
+]
+
+var fireEffectImageUrlArray = [
+  'public/images/fire/tile002.png',
+  'public/images/fire/tile003.png',
+  'public/images/fire/tile004.png',
+  'public/images/fire/tile006.png',
+  'public/images/fire/tile007.png',
+  'public/images/fire/tile008.png',
+  'public/images/fire/tile009.png',
+  'public/images/fire/tile010.png',
+  'public/images/fire/tile012.png',
+  'public/images/fire/tile013.png',
+  'public/images/fire/tile014.png',
+  'public/images/fire/tile015.png',
+  'public/images/fire/tile016.png',
+  'public/images/fire/tile018.png',
+  'public/images/fire/tile019.png',
+  'public/images/fire/tile020.png',
+  'public/images/fire/tile021.png',
+  'public/images/fire/tile022.png',
+  'public/images/fire/tile024.png',
+  'public/images/fire/tile025.png',
+  'public/images/fire/tile026.png',
+  'public/images/fire/tile027.png',
+  'public/images/fire/tile028.png'
 ]
 
 var backgroundImageUrl = "images/bg.png"
@@ -103,7 +129,8 @@ export default async function loadGameImages(){
   var stoneBlockImage = await loadImage(stoneBlockImageUrl)
   var endSignImage = await loadImage(endSignImageUrl)
   var replayImage = await loadImage(replayImageUrl)
-  var crateImageArrayComplete = await loadImages(crateImageArray)
+  var crateImageArray = await loadImages(crateImageUrlArray)
+  var fireEffectImageArray = await loadImages(fireEffectImageUrlArray)
 
   return {
     dinoRunImageArray: dinoRunImageArray,
@@ -114,6 +141,7 @@ export default async function loadGameImages(){
     stoneBlockImage: stoneBlockImage,
     endSignImage: endSignImage,
     replayImage: replayImage,
-    crateImageArray: crateImageArrayComplete
+    crateImageArray: crateImageArray,
+    fireEffectImageArray: fireEffectImageArray
   }
 }
