@@ -13,18 +13,11 @@ class SongsController < ApplicationController
     render json: {id: @song.id, title: @song.title, bpm: @song.bpm, analysed: @song.analysed, mp3_url: rails_blob_path(@song.mp3_attachment)}
   end
 
-  # POST /songs
   # POST /songs.json
   def create
     @song = Song.new(song_params)
-    @song.save
-    @song.errors
-
-    respond_to do |format|
-      format.html { redirect_to @song, notice: 'Song was successfully created.' }
-      format.json { render :show, status: :created, location: @song }
-      format.js { }
-    end
+    @song.save!
+    render json: { status: 200 }
   end
 
   private

@@ -23,23 +23,32 @@ class GameController {
   }
 
   startGame(data, audioElement) {
+    document.querySelector('#logged-in').style.display = 'none'
     this.songData = data
     this.audioElement = audioElement
     var amplitudeArray = JSON.parse(data['analysed'])
     var generatedBlockArray = generateMapFromAmplitudeArray(amplitudeArray)
     this.game.startGame(data["bpm"], ((data['bpm']/220)*4), generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     
-    self = this
+    var gController = this
+
     setTimeout(function() {
-      self.audioElement.play()
+      gController.audioElement.play()
     }, 3500)
 
     document.body.onkeyup = function(e){
-      if(e.keyCode == 32){
-        self.game.dino.jump()
+      if (e.keyCode == 32) {
+        gController.game.dino.jump()
       }
-      if(e.keyCode == 68) {
-        self.game.crateAttack()
+      else if (e.keyCode == 68) {
+        gController.game.crateAttack()
+      }
+      else if ((e.keyCode == 82) && (gController.game.gameOver == true)) {
+        gController.game.resetGame()
+      }
+      else if ((e.keyCode == 71) && (gController.game.gameOver == true)) {
+        gController.game.resetGame()
+        gController.startGame(data, audioElement)
       }
     }
   }
@@ -84,7 +93,7 @@ class GameController {
     // Ajax score to leaderboard database
     // Display navbar
     // Play theme tune
-    this.uploadScore(score.currentScore, this.songData['id'])
+    this.uploadScore(score, this.songData['id'])
   }
 }
 

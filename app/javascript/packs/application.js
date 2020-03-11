@@ -48,6 +48,7 @@ import { toggleLogInForm, toggleSignUpForm } from './homepage_interface/userInte
 window.addEventListener('load', function() {
   var gameController
   var songAnalyser
+  var userMessageDiv = document.querySelector('#user-message')
   
   gameController = new GameController
   gameController.setupGame()
@@ -69,12 +70,20 @@ window.addEventListener('load', function() {
 
   document.querySelector('#start_game_btn').addEventListener('click', function() {
     getSong(function(data, audio) {
+      userMessageDiv.innerHTML = ''
       gameController.startGame(data, audio)
     })
-    document.querySelector('#logged-in').style.display = 'none'
   })
 
   // Signup and Login
   document.querySelector('#login').addEventListener('click', toggleLogInForm)
   document.querySelector('#signup').addEventListener('click', toggleSignUpForm)
+
+  
+  document.body.addEventListener("ajax:success", function(event) {
+    userMessageDiv.innerHTML = "The Song is successfully analysed. Enjoy the game"
+  })
+  document.body.addEventListener("ajax:error", function(event) {  
+    userMessageDiv.innerHTML = "Song exists mate. Pick the song from the list below"
+  })
 })

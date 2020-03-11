@@ -17,7 +17,7 @@ describe('Score', function() {
   describe("#jumpScore", function() {
     it('adds 10 to score', function() {
       score.jumpScore()
-      expect(score.currentScore).toEqual(10)
+      expect(score.currentScore).toEqual(100)
     })
   })
 

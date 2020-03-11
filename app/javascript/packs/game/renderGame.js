@@ -55,8 +55,9 @@ class RenderGame {
     if (this.gameOver == false) {
       this.newScore.updateScore(score)
     }
-    this.canvasContext.font = "30px Arial"
+    this.canvasContext.font = "30px Caesar Dressing"
     this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
+
   }
 
   _drawDino() {
@@ -74,10 +75,8 @@ class RenderGame {
   //                           Animate Game
   //=================================================================================
 
-  startGame(bpm, difficulty, generatedMapArray) { //frequencyArray, 
-    this.generatedBlockArray = [...generatedMapArray]
-    this.generatedGroundArray = [...generatedMapArray]
-    this.generatedCrateArray = [...generatedMapArray]
+  startGame(bpm, difficulty, generatedMapArray) { //frequencyArray,
+    this.mapArray = generatedMapArray
     this._generateFramesPerBeat(bpm)
     this._calculateObjectVelocity(difficulty)
     this.animateGame()
@@ -100,6 +99,7 @@ class RenderGame {
       cancelAnimationFrame(animationFrameHandle);
       animationFrameHandle = requestAnimationFrame(function() {
         self.frameCounter++
+        self.mapNewItems()
         self.timeStepBackground()
         self.timeStepGround()
         self.timeStepBlocks()
@@ -108,9 +108,13 @@ class RenderGame {
         self.timeStepDino()
         self._drawScore(100)
         self.deathInteractionGround()
+        if (self.gameController.audioElement.ended) {
+          clearInterval(gameInterval)
+          self.animateEnding()
+        }
         if (self.gameOver == true) {
           clearInterval(gameInterval)
-          self.animateDeath()
+          self.animateEnding()
           self.gameController.playDeathSound()
         }
       })
@@ -119,7 +123,7 @@ class RenderGame {
 
   _drawTopThree(data) {
     this.canvasContext.textAlign = 'left'
-    this.canvasContext.font = '20px serif'
+    this.canvasContext.font = '20px Caesar Dressing'
     var lineHeight = 320
     this.canvasContext.fillText('High scores:', 510, lineHeight)
     self = this
@@ -132,26 +136,35 @@ class RenderGame {
   _drawGameOverScreen(finalScore) {
     this.canvasContext.drawImage(this.loadedImages['endSignImage'], 270, 0)
     this.canvasContext.textAlign = 'center'
-    this.canvasContext.font = '40px serif'
+    this.canvasContext.font = '40px Caesar Dressing'
     this.canvasContext.fillStyle = 'black'
     this.canvasContext.fillText(`Your Final Score: ${finalScore}`, 640, 290)
     this.canvasContext.drawImage(this.loadedImages['replayImage'], 680, 300, 100, 100)
     var self = this
-    var resetGame = function(event) {
+    this.resetGameClick = function(event) {
       if ( event.x > 720 && event.x < 800 && event.y > 360 && event.y < 440) {
-        self.setup()
-        self.canvas.removeEventListener('click', resetGame)
-        document.querySelector('#logged-in').style.display = 'block'
+        self.resetGame()
       }
     }
-    this.canvas.addEventListener('click', resetGame)
+    this.canvas.addEventListener('click', this.resetGameClick)
   }
 
-  animateDeath() {
+  resetGame() {
+    self.setup()
+    self.canvas.removeEventListener('click', self.resetGameClick)
+    document.querySelector('#logged-in').style.display = 'block'
+  }
+
+  _drawSign(image) {
+    this.canvasContext.drawImage(this.loadedImages[image], 800, 450)
+  }
+
+  animateEnding() {
     var gameOverFrameCounter = 0
     var velocityDeducter = this.objectVelocity / 9
     var self = this;
     var animationFrameHandle;
+    if (self.gameOver == false) { self.dino.jump() }
     var gameOverInterval = setInterval(function() {
       cancelAnimationFrame(animationFrameHandle)
       animationFrameHandle = requestAnimationFrame(function() {
@@ -167,13 +180,20 @@ class RenderGame {
         self.timeStepGround()
         self.timeStepBlocks()
         self.timeStepCrates()
-        self._drawScore()
-        self.timeStepDeadDino(gameOverFrameCounter)
+        self._drawScore(0)
+        self.gameOver ? self.timeStepDeadDino(gameOverFrameCounter) : self.timeStepDino()
         gameOverFrameCounter++;
+        if (gameOverFrameCounter == 47 && self.gameOver == false) {
+          clearInterval(gameOverInterval)
+          self.gameController.gameComplete(self.newScore.currentScore)
+          self._drawGameOverScreen(self.newScore.currentScore)
+          self._drawSign('winSignImage')
+        }
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
-          self.gameController.gameComplete(self.newScore)
+          self.gameController.gameComplete(self.newScore.currentScore)
           self._drawGameOverScreen(self.newScore.currentScore)
+          self._drawSign('loseSignImage') 
         }
       })
     }, self.frameInterval)
@@ -186,6 +206,27 @@ class RenderGame {
     }
   }
 
+  // =========================
+  // Map new items
+  // =========================
+
+  mapNewItems() {
+    let adjustedFrame = this.frameCounter - 150
+    if ((adjustedFrame >= 0) && (adjustedFrame % this.fpb == 0)) { //always start with first block on inital 150th frame
+      let mapIndex = adjustedFrame / this.fpb
+      let newItemValue = this.mapArray[mapIndex]
+      if (newItemValue == 1) {
+        this.blocksArray.push( new this.blockClass(this.canvas, this.loadedImages['stoneBlockImage']) )
+      } 
+      else if (newItemValue == 2) {
+        this.groundArray = this.groundArray.concat(this._createGroundFeature())
+      }
+      else if (newItemValue == 3) {
+        this.cratesArray.push( new this.crateClass(this.canvas, this.loadedImages['crateImageArray']) )
+      }
+    }
+  }
+  
   // =========================
   // Dino
   // =========================
@@ -230,14 +271,6 @@ class RenderGame {
     if (this.groundArray[0].x <= -this.groundArray[0].xSize) {
       this.groundArray.shift()
     }
-    
-    // Check for ground feature
-    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
-      let groundFeatureValue = this.generatedGroundArray.shift()
-      if (groundFeatureValue == 2) {
-        this.groundArray = this.groundArray.concat(this._createGroundFeature())
-      }
-    }
 
     // Check for new ground
     let newGroundLoc = this.groundArray[(this.groundArray.length-1)].isNewGroundNeeded(this.objectVelocity)
@@ -270,14 +303,6 @@ class RenderGame {
   // =========================
 
   timeStepBlocks() {
-    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
-      let newBlockValue = this.generatedBlockArray.shift()
-      if (newBlockValue == 1) {
-        this.blocksArray.push(
-          new this.blockClass(this.canvas, this.loadedImages['stoneBlockImage'])
-        )
-      }
-    }
     for (var i = 0; i < this.blocksArray.length; i++) {
       this.canvasContext.drawImage(this.blocksArray[i].image, this.blocksArray[i].x, this.blocksArray[i].y, this.blocksArray[i].xSize, this.blocksArray[i].ySize)
       if (this.deathInteractionBlock(i)) {
@@ -305,15 +330,7 @@ class RenderGame {
   // Crates 
   // =========================
 
-  timeStepCrates(){
-    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
-      let newCrateValue = this.generatedCrateArray.shift()
-      if (newCrateValue == 3) {
-        this.cratesArray.push(
-          new this.crateClass(this.canvas, this.loadedImages['crateImageArray'])
-        )
-      }
-    }
+  timeStepCrates() {
     for (var i = 0; i < this.cratesArray.length; i++) {
       this.canvasContext.drawImage(this.cratesArray[i].returnImage(), this.cratesArray[i].x, this.cratesArray[i].y, this.cratesArray[i].xSize, this.cratesArray[i].ySize)
       if (this.deathInteractionCrate(i) && this.cratesArray[i].exploded == false) {
@@ -343,6 +360,7 @@ class RenderGame {
 
   timeStepFireEffect() {
     if (this.fireEffect.animationCounter > 0) {
+      this.fireEffect.fireEffectSound.play()
       let fireEffectLocationHash = this.fireEffect.fireLocation(this.dino)
       this.fireEffect.killCrates(this.cratesArray, fireEffectLocationHash, this.newScore)
       this.canvasContext.drawImage(this.fireEffect.returnImage(), fireEffectLocationHash['xLoc'], fireEffectLocationHash['yLoc'], fireEffectLocationHash['xSize'], fireEffectLocationHash['ySize'])
