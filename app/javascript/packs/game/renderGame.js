@@ -101,8 +101,13 @@ class RenderGame {
     }, self.frameInterval)
   }
 
-  _drawTopThree() {
-    this.canvasContext.fillText()
+  _drawTopThree(data) {
+    this.canvasContext.textAlign = 'left'
+    this.canvasContext.font = '20px serif'
+    this.canvasContext.fillText('High scores:', 510, 320)
+    this.canvasContext.fillText(data[0]['username'] + ' ' + data[0]['score'], 520, 340)
+    this.canvasContext.fillText(data[1]['username'] + ' ' + data[1]['score'], 520, 360)
+    this.canvasContext.fillText(data[2]['username'] + ' ' + data[2]['score'], 520, 380)
   }
 
   _drawGameOverScreen(finalScore) {
@@ -111,10 +116,10 @@ class RenderGame {
     this.canvasContext.font = '40px serif'
     this.canvasContext.fillStyle = 'black'
     this.canvasContext.fillText(`Your Final Score: ${finalScore}`, 640, 290)
-    this.canvasContext.drawImage(this.loadedImages['replayImage'], 600, 300, 100, 100)
+    this.canvasContext.drawImage(this.loadedImages['replayImage'], 680, 300, 100, 100)
     var self = this
     var resetGame = function(event) {
-      if ( event.x > 650 && event.x < 720 && event.y > 360 && event.y < 440) {
+      if ( event.x > 720 && event.x < 800 && event.y > 360 && event.y < 440) {
         self.setup()
         self.canvas.removeEventListener('click', resetGame)
         document.querySelector('#logged-in').style.display = 'block'
