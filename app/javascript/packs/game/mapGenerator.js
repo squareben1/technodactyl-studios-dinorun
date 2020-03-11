@@ -15,7 +15,6 @@ function generateMapFromAmplitudeArray(amplitudeArray) {
       result.push(0)
     }
   }
-  console.log("result", result)
   return result
 }
   

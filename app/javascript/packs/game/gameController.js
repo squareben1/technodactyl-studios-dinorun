@@ -5,6 +5,7 @@ import Dino from './dino.js'
 import Block from './block.js'
 import Crate from './crate.js'
 import Background from './background.js'
+import FireEffect from './fireEffect.js'
 import RenderGame from './renderGame.js'
 import loadGameImages from './loadImages.js'
 import { generateMapFromAmplitudeArray } from '../game/mapGenerator.js'
@@ -17,7 +18,7 @@ class GameController {
   async setupGame() {
     this.canvas = document.getElementById('canvas')
     var loadedImages = await loadGameImages()
-    this.game = new RenderGame(canvas, loadedImages, Background, Ground, Dino, Block, Score, this, Crate)
+    this.game = new RenderGame(canvas, loadedImages, Background, Ground, Dino, Block, Score, this, Crate, FireEffect)
     this.game.setup()
   }
 
@@ -26,7 +27,6 @@ class GameController {
     this.audioElement = audioElement
     var amplitudeArray = JSON.parse(data['analysed'])
     var generatedBlockArray = generateMapFromAmplitudeArray(amplitudeArray)
-    console.log(data["bpm"])
     this.game.startGame(data["bpm"], ((data['bpm']/220)*4), generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     
     self = this

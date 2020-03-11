@@ -74,7 +74,7 @@ var groundImageUrlArray = [
   "images/deserttileset/png/Tile/3.png"
 ]
 
-var crateImageArray = [
+var crateImageUrlArray = [
   "images/deserttileset/png/Objects/Crate.png",
   "images/explosion/tile002.png",
   "images/explosion/tile003.png",
@@ -84,6 +84,32 @@ var crateImageArray = [
   "images/explosion/tile007.png",
   "images/explosion/tile008.png",
   "images/explosion/tile009.png"
+]
+
+var fireEffectImageUrlArray = [
+  'images/fire/tile002.png',
+  'images/fire/tile003.png',
+  'images/fire/tile004.png',
+  'images/fire/tile006.png',
+  'images/fire/tile007.png',
+  'images/fire/tile008.png',
+  'images/fire/tile009.png',
+  'images/fire/tile010.png',
+  'images/fire/tile012.png',
+  'images/fire/tile013.png',
+  'images/fire/tile014.png',
+  'images/fire/tile015.png',
+  'images/fire/tile016.png',
+  'images/fire/tile018.png',
+  'images/fire/tile019.png',
+  'images/fire/tile020.png',
+  'images/fire/tile021.png',
+  'images/fire/tile022.png',
+  'images/fire/tile024.png',
+  'images/fire/tile025.png',
+  'images/fire/tile026.png',
+  'images/fire/tile027.png',
+  'images/fire/tile028.png'
 ]
 
 var backgroundImageUrl = "images/bg.png"
@@ -105,9 +131,10 @@ export default async function loadGameImages(){
   var stoneBlockImage = await loadImage(stoneBlockImageUrl)
   var endSignImage = await loadImage(endSignImageUrl)
   var replayImage = await loadImage(replayImageUrl)
-  var crateImageArrayComplete = await loadImages(crateImageArray)
   var winSignImage = await loadImage(winSignImageUrl)
   var loseSignImage = await loadImage(loseSignImageUrl)
+  var crateImageArray = await loadImages(crateImageUrlArray)
+  var fireEffectImageArray = await loadImages(fireEffectImageUrlArray)
 
   return {
     dinoRunImageArray: dinoRunImageArray,
@@ -118,8 +145,9 @@ export default async function loadGameImages(){
     stoneBlockImage: stoneBlockImage,
     endSignImage: endSignImage,
     replayImage: replayImage,
-    crateImageArray: crateImageArrayComplete,
     winSignImage : winSignImage, 
-    loseSignImage : loseSignImage
+    loseSignImage : loseSignImage,
+    crateImageArray: crateImageArray,
+    fireEffectImageArray: fireEffectImageArray
   }
 }

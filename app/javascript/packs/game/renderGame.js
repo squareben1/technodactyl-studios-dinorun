@@ -1,5 +1,5 @@
 class RenderGame {
-  constructor(canvas, loadedImages, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController, crateClass) {
+  constructor(canvas, loadedImages, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController, crateClass, fireEffectClass) {
     this.canvas = canvas
     this.loadedImages = loadedImages
     this.canvasContext = this.canvas.getContext('2d')
@@ -8,6 +8,7 @@ class RenderGame {
     this.dinoClass = dinoClass
     this.blockClass = blockClass
     this.scoreClass = scoreClass
+    this.fireEffectClass = fireEffectClass
     this.groundLevel = 100
     this.frameInterval = 20
     this.fps = 50
@@ -29,7 +30,7 @@ class RenderGame {
     this._drawGround()
     this._drawDino()
     this.newScore = new this.scoreClass()
-    this._drawScore()
+    this._drawScore(0)
   }
 
   _drawBackground() {
@@ -50,9 +51,9 @@ class RenderGame {
     this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, newGround.x, newGround.y)
   }
 
-  _drawScore() {
+  _drawScore(score) {
     if (this.gameOver == false) {
-      this.newScore.updateScore(100)
+      this.newScore.updateScore(score)
     }
     this.canvasContext.font = "30px Caesar Dressing"
     this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
@@ -62,17 +63,20 @@ class RenderGame {
   _drawDino() {
     let newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'], this.loadedImages['dinoJumpImageArray'])
     this.canvasContext.drawImage(newDino.returnCurrentImage(), newDino.x, newDino.y, newDino.xSize, newDino.ySize)
+    this._initializeFire(newDino)
     this.dino = newDino
+  }
+
+  _initializeFire(dino) {
+    this.fireEffect = new this.fireEffectClass(this.loadedImages['fireEffectImageArray'], dino)
   }
 
   //=================================================================================
   //                           Animate Game
   //=================================================================================
 
-  startGame(bpm, difficulty, generatedMapArray) { //frequencyArray, 
-    this.generatedBlockArray = [...generatedMapArray]
-    this.generatedGroundArray = [...generatedMapArray]
-    this.generatedCrateArray = [...generatedMapArray]
+  startGame(bpm, difficulty, generatedMapArray) { //frequencyArray,
+    this.mapArray = generatedMapArray
     this._generateFramesPerBeat(bpm)
     this._calculateObjectVelocity(difficulty)
     this.animateGame()
@@ -95,12 +99,14 @@ class RenderGame {
       cancelAnimationFrame(animationFrameHandle);
       animationFrameHandle = requestAnimationFrame(function() {
         self.frameCounter++
+        self.mapNewItems()
         self.timeStepBackground()
         self.timeStepGround()
         self.timeStepBlocks()
         self.timeStepCrates()
+        self.timeStepFireEffect()
         self.timeStepDino()
-        self._drawScore()
+        self._drawScore(100)
         self.deathInteractionGround()
         if (self.gameController.audioElement.ended) {
           clearInterval(gameInterval)
@@ -118,10 +124,13 @@ class RenderGame {
   _drawTopThree(data) {
     this.canvasContext.textAlign = 'left'
     this.canvasContext.font = '20px Caesar Dressing'
-    this.canvasContext.fillText('High scores:', 510, 320)
-    this.canvasContext.fillText(data[0]['username'] + ' ' + data[0]['score'], 520, 340)
-    this.canvasContext.fillText(data[1]['username'] + ' ' + data[1]['score'], 520, 360)
-    this.canvasContext.fillText(data[2]['username'] + ' ' + data[2]['score'], 520, 380)
+    var lineHeight = 320
+    this.canvasContext.fillText('High scores:', 510, lineHeight)
+    self = this
+    data.forEach( function(user) {
+      lineHeight += 20
+      self.canvasContext.fillText(user['username'] + ' ' + user['score'], 520, lineHeight)
+    })
   }
 
   _drawGameOverScreen(finalScore) {
@@ -194,6 +203,27 @@ class RenderGame {
   }
 
   // =========================
+  // Map new items
+  // =========================
+
+  mapNewItems() {
+    let adjustedFrame = this.frameCounter - 150
+    if ((adjustedFrame >= 0) && (adjustedFrame % this.fpb == 0)) { //always start with first block on inital 150th frame
+      let mapIndex = adjustedFrame / this.fpb
+      let newItemValue = this.mapArray[mapIndex]
+      if (newItemValue == 1) {
+        this.blocksArray.push( new this.blockClass(this.canvas, this.loadedImages['stoneBlockImage']) )
+      } 
+      else if (newItemValue == 2) {
+        this.groundArray = this.groundArray.concat(this._createGroundFeature())
+      }
+      else if (newItemValue == 3) {
+        this.cratesArray.push( new this.crateClass(this.canvas, this.loadedImages['crateImageArray']) )
+      }
+    }
+  }
+  
+  // =========================
   // Dino
   // =========================
 
@@ -237,14 +267,6 @@ class RenderGame {
     if (this.groundArray[0].x <= -this.groundArray[0].xSize) {
       this.groundArray.shift()
     }
-    
-    // Check for ground feature
-    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
-      let groundFeatureValue = this.generatedGroundArray.shift()
-      if (groundFeatureValue == 2) {
-        this.groundArray = this.groundArray.concat(this._createGroundFeature())
-      }
-    }
 
     // Check for new ground
     let newGroundLoc = this.groundArray[(this.groundArray.length-1)].isNewGroundNeeded(this.objectVelocity)
@@ -277,14 +299,6 @@ class RenderGame {
   // =========================
 
   timeStepBlocks() {
-    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
-      let newBlockValue = this.generatedBlockArray.shift()
-      if (newBlockValue == 1) {
-        this.blocksArray.push(
-          new this.blockClass(this.canvas, this.loadedImages['stoneBlockImage'])
-        )
-      }
-    }
     for (var i = 0; i < this.blocksArray.length; i++) {
       this.canvasContext.drawImage(this.blocksArray[i].image, this.blocksArray[i].x, this.blocksArray[i].y, this.blocksArray[i].xSize, this.blocksArray[i].ySize)
       if (this.deathInteractionBlock(i)) {
@@ -312,15 +326,7 @@ class RenderGame {
   // Crates 
   // =========================
 
-  timeStepCrates(){
-    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
-      let newCrateValue = this.generatedCrateArray.shift()
-      if (newCrateValue == 3) {
-        this.cratesArray.push(
-          new this.crateClass(this.canvas, this.loadedImages['crateImageArray'])
-        )
-      }
-    }
+  timeStepCrates() {
     for (var i = 0; i < this.cratesArray.length; i++) {
       this.canvasContext.drawImage(this.cratesArray[i].returnImage(), this.cratesArray[i].x, this.cratesArray[i].y, this.cratesArray[i].xSize, this.cratesArray[i].ySize)
       if (this.deathInteractionCrate(i) && this.cratesArray[i].exploded == false) {
@@ -344,18 +350,22 @@ class RenderGame {
     return circlesDifference < radiusSum
   }
 
+  // =========================
+  // Fire Effect/Attack
+  // =========================
+
+  timeStepFireEffect() {
+    if (this.fireEffect.animationCounter > 0) {
+      this.fireEffect.fireEffectSound.play()
+      let fireEffectLocationHash = this.fireEffect.fireLocation(this.dino)
+      this.fireEffect.killCrates(this.cratesArray, fireEffectLocationHash, this.newScore)
+      this.canvasContext.drawImage(this.fireEffect.returnImage(), fireEffectLocationHash['xLoc'], fireEffectLocationHash['yLoc'], fireEffectLocationHash['xSize'], fireEffectLocationHash['ySize'])
+    }
+  }
+
   crateAttack() {
-    var gRender = this
-    let filteredCrates = this.cratesArray.filter( function(crate) {
-      var frontDinoLocX = gRender.dino.x + gRender.dino.xSize
-      var topDinoLocY = gRender.dino.y
-      var bottomDinoLocY = gRender.dino.y + gRender.dino.ySize
-      var punchDistance = 100
-      return (crate.x >= frontDinoLocX - 70) && (crate.x <= frontDinoLocX + punchDistance) && (crate.y >= topDinoLocY - (punchDistance)) && (crate.y <= bottomDinoLocY + (punchDistance))
-    });
-    for (var i = 0; i < filteredCrates.length; i++) {
-      filteredCrates[i].exploded = true
-      this.newScore.explodedCrate()
+    if (this.fireEffect.animationCounter < 1) {
+      this.fireEffect.activateFire()
     }
   }
 }
