@@ -18,7 +18,6 @@ class GameController {
   async setupGame() {
     this.canvas = document.getElementById('canvas')
     var loadedImages = await loadGameImages()
-    console.log(loadedImages)
     this.game = new RenderGame(canvas, loadedImages, Background, Ground, Dino, Block, Score, this, Crate, FireEffect)
     this.game.setup()
   }
@@ -28,7 +27,6 @@ class GameController {
     this.audioElement = audioElement
     var amplitudeArray = JSON.parse(data['analysed'])
     var generatedBlockArray = generateMapFromAmplitudeArray(amplitudeArray)
-    console.log(data["bpm"])
     this.game.startGame(data["bpm"], ((data['bpm']/220)*4), generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     
     self = this
