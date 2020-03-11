@@ -1,0 +1,24 @@
+<body>
+  <div class='error-container'>
+
+    <br> 
+
+    <div class='error_status'>
+      <h1> Error no dinosaurs found in 66 million years... </h1><br>
+    </div>
+
+    <br>
+
+    <div class='not_found_div'>
+      <%= image_tag('error_image.jpg', id:'error_image') %>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('load', function() {
+      setTimeout(() => {
+        window.location.href = "/"
+      }, 2000)
+    })
+  </script>
+</body>
