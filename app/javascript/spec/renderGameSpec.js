@@ -4,10 +4,13 @@ import Ground from '../packs/game/ground.js'
 import Dino from '../packs/game/dino.js'
 import Block from '../packs/game/block.js'
 import Background from '../packs/game/background.js'
+import FireEffect from '../packs/game/fireEffect.js'
 import loadGameImages from '../packs/game/loadImages.js'
+import Crate from '../packs/game/crate.js'
 
 // Import module to be tested
 import RenderGame from '../packs/game/renderGame.js'
+import GameController from '../packs/game/gameController.js'
 
 describe("RenderGame", async function() {
   var renderGame
@@ -33,7 +36,7 @@ describe("RenderGame", async function() {
   }
 
   beforeEach(function() {
-    renderGame = new RenderGame(canvasDouble, loadedImages, Background, Ground, Dino, Block, Score) //Background/Ground double
+    renderGame = new RenderGame(canvasDouble, loadedImages, Background, Ground, Dino, Block, Score, GameController, Crate, FireEffect) //Background/Ground double
     spy = spyOn(canvasContextDouble, "drawImage")
     renderGame.setup()
     renderGame.objectVelocity = 10
