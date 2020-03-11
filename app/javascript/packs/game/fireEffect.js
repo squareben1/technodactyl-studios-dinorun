@@ -1,7 +1,9 @@
 class FireEffect {
-  constructor(fireEffectImageArray) {
+  constructor(fireEffectImageArray, dino) {
     this.fireEffectImageArray = fireEffectImageArray
     this.numImages = fireEffectImageArray.length
+    this.xSize = dino.xSize
+    this.ySize = dino.ySize * 0.8
     this.animationCount = 30
     this.animationCounter = 0
     this.imageInterval = Math.ceil(this.animationCount / this.numImages)
@@ -21,9 +23,24 @@ class FireEffect {
   fireLocation(dino) {
     var xLoc = dino.x + (dino.xSize/2)
     var yLoc = dino.y + ((dino.ySize / 10) * 1)
-    var xSize = dino.xSize
-    var ySize = dino.ySize * 0.8
-    return {xLoc: xLoc, yLoc: yLoc, xSize: xSize, ySize: ySize}
+    return {xLoc: xLoc, yLoc: yLoc, xSize: this.xSize, ySize: this.ySize}
+  }
+
+  killCrates(crateArray, fireEffectLocationHash, score){
+    var bottomOfFire = fireEffectLocationHash['yLoc'] + fireEffectLocationHash['ySize']
+    var topOfFire = fireEffectLocationHash['yLoc']
+    var frontOfFire = fireEffectLocationHash['xLoc'] + fireEffectLocationHash['xSize']
+    var backOfFire = fireEffectLocationHash['xLoc']
+
+    var crateInRange = crateArray.find( function(crate) {
+      return (crate.y >= topOfFire) && (crate.y <= bottomOfFire) && (crate.x >= backOfFire) && (crate.x <= frontOfFire)
+    })
+
+    if (typeof crateInRange !== 'undefined') {
+      console.log('crateExploded')
+      crateInRange.exploded = true
+      score.explodedCrate()
+    }
   }
 }
 

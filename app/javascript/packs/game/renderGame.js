@@ -26,7 +26,6 @@ class RenderGame {
     this.dinoOffScreen = false
     this.blocksArray = []
     this.cratesArray = []
-    this.fireEffect = new this.fireEffectClass(this.loadedImages['fireEffectImageArray'])
     this._drawBackground()
     this._drawGround()
     this._drawDino()
@@ -63,7 +62,12 @@ class RenderGame {
   _drawDino() {
     let newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'], this.loadedImages['dinoJumpImageArray'])
     this.canvasContext.drawImage(newDino.returnCurrentImage(), newDino.x, newDino.y, newDino.xSize, newDino.ySize)
+    this._initializeFire(newDino)
     this.dino = newDino
+  }
+
+  _initializeFire(dino) {
+    this.fireEffect = new this.fireEffectClass(this.loadedImages['fireEffectImageArray'], dino)
   }
 
   //=================================================================================
@@ -116,10 +120,13 @@ class RenderGame {
   _drawTopThree(data) {
     this.canvasContext.textAlign = 'left'
     this.canvasContext.font = '20px serif'
-    this.canvasContext.fillText('High scores:', 510, 320)
-    this.canvasContext.fillText(data[0]['username'] + ' ' + data[0]['score'], 520, 340)
-    this.canvasContext.fillText(data[1]['username'] + ' ' + data[1]['score'], 520, 360)
-    this.canvasContext.fillText(data[2]['username'] + ' ' + data[2]['score'], 520, 380)
+    var lineHeight = 320
+    this.canvasContext.fillText('High scores:', 510, lineHeight)
+    self = this
+    data.forEach( function(user) {
+      lineHeight += 20
+      self.canvasContext.fillText(user['username'] + ' ' + user['score'], 520, lineHeight)
+    })
   }
 
   _drawGameOverScreen(finalScore) {
@@ -337,6 +344,7 @@ class RenderGame {
   timeStepFireEffect() {
     if (this.fireEffect.animationCounter > 0) {
       let fireEffectLocationHash = this.fireEffect.fireLocation(this.dino)
+      this.fireEffect.killCrates(this.cratesArray, fireEffectLocationHash, this.newScore)
       this.canvasContext.drawImage(this.fireEffect.returnImage(), fireEffectLocationHash['xLoc'], fireEffectLocationHash['yLoc'], fireEffectLocationHash['xSize'], fireEffectLocationHash['ySize'])
     }
   }
@@ -344,18 +352,6 @@ class RenderGame {
   crateAttack() {
     if (this.fireEffect.animationCounter < 1) {
       this.fireEffect.activateFire()
-      var gRender = this
-      let filteredCrates = this.cratesArray.filter( function(crate) {
-        var frontDinoLocX = gRender.dino.x + gRender.dino.xSize
-        var topDinoLocY = gRender.dino.y
-        var bottomDinoLocY = gRender.dino.y + gRender.dino.ySize
-        var punchDistance = 100
-        return (crate.x >= frontDinoLocX - 70) && (crate.x <= frontDinoLocX + punchDistance) && (crate.y >= topDinoLocY - (punchDistance)) && (crate.y <= bottomDinoLocY + (punchDistance))
-      });
-      for (var i = 0; i < filteredCrates.length; i++) {
-        filteredCrates[i].exploded = true
-        this.newScore.explodedCrate()
-      }
     }
   }
 }
