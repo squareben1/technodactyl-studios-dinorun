@@ -8,7 +8,11 @@ class Score {
   }
 
   jumpScore() {
-    this.currentScore += 10
+    this.currentScore += 100
+  }
+
+  explodedCrate() {
+    this.currentScore += 1000
   }
 }
 

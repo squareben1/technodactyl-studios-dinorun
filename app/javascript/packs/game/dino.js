@@ -66,8 +66,8 @@ class Dino {
     if (this.jumpImageCounter < this.imageInterval * 2) {
       imageIndex = Math.floor(this.jumpImageCounter / (this.imageInterval));    
     } else if(this.y > 269 && this.jumpCounter < 10){
-      imageIndex = Math.floor((this.y - 270)/ 71) + 7;
-    } else{
+      imageIndex = Math.min(Math.floor((this.y - 270)/ 71) + 7, this.numImages-1) 
+    } else {
       imageIndex = Math.floor(((this.jumpImageCounter - (this.imageInterval * 2))/ (this.imageInterval / 2)) % 5) + 2
     }
     imageToReturn = this.jumpImageArray[imageIndex];
