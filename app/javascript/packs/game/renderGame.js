@@ -74,10 +74,8 @@ class RenderGame {
   //                           Animate Game
   //=================================================================================
 
-  startGame(bpm, difficulty, generatedMapArray) { //frequencyArray, 
-    this.generatedBlockArray = [...generatedMapArray]
-    this.generatedGroundArray = [...generatedMapArray]
-    this.generatedCrateArray = [...generatedMapArray]
+  startGame(bpm, difficulty, generatedMapArray) { //frequencyArray,
+    this.mapArray = generatedMapArray
     this._generateFramesPerBeat(bpm)
     this._calculateObjectVelocity(difficulty)
     this.animateGame()
@@ -100,6 +98,7 @@ class RenderGame {
       cancelAnimationFrame(animationFrameHandle);
       animationFrameHandle = requestAnimationFrame(function() {
         self.frameCounter++
+        self.mapNewItems()
         self.timeStepBackground()
         self.timeStepGround()
         self.timeStepBlocks()
@@ -187,6 +186,27 @@ class RenderGame {
   }
 
   // =========================
+  // Map new items
+  // =========================
+
+  mapNewItems() {
+    let adjustedFrame = this.frameCounter - 150
+    if ((adjustedFrame >= 0) && (adjustedFrame % this.fpb == 0)) { //always start with first block on inital 150th frame
+      let mapIndex = adjustedFrame / this.fpb
+      let newItemValue = this.mapArray[mapIndex]
+      if (newItemValue == 1) {
+        this.blocksArray.push( new this.blockClass(this.canvas, this.loadedImages['stoneBlockImage']) )
+      } 
+      else if (newItemValue == 2) {
+        this.groundArray = this.groundArray.concat(this._createGroundFeature())
+      }
+      else if (newItemValue == 3) {
+        this.cratesArray.push( new this.crateClass(this.canvas, this.loadedImages['crateImageArray']) )
+      }
+    }
+  }
+  
+  // =========================
   // Dino
   // =========================
 
@@ -230,14 +250,6 @@ class RenderGame {
     if (this.groundArray[0].x <= -this.groundArray[0].xSize) {
       this.groundArray.shift()
     }
-    
-    // Check for ground feature
-    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
-      let groundFeatureValue = this.generatedGroundArray.shift()
-      if (groundFeatureValue == 2) {
-        this.groundArray = this.groundArray.concat(this._createGroundFeature())
-      }
-    }
 
     // Check for new ground
     let newGroundLoc = this.groundArray[(this.groundArray.length-1)].isNewGroundNeeded(this.objectVelocity)
@@ -270,14 +282,6 @@ class RenderGame {
   // =========================
 
   timeStepBlocks() {
-    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
-      let newBlockValue = this.generatedBlockArray.shift()
-      if (newBlockValue == 1) {
-        this.blocksArray.push(
-          new this.blockClass(this.canvas, this.loadedImages['stoneBlockImage'])
-        )
-      }
-    }
     for (var i = 0; i < this.blocksArray.length; i++) {
       this.canvasContext.drawImage(this.blocksArray[i].image, this.blocksArray[i].x, this.blocksArray[i].y, this.blocksArray[i].xSize, this.blocksArray[i].ySize)
       if (this.deathInteractionBlock(i)) {
@@ -305,15 +309,7 @@ class RenderGame {
   // Crates 
   // =========================
 
-  timeStepCrates(){
-    if (this.frameCounter >= 150 && ((this.frameCounter - 150) % this.fpb == 0)) { //always start with first block on inital 150th frame
-      let newCrateValue = this.generatedCrateArray.shift()
-      if (newCrateValue == 3) {
-        this.cratesArray.push(
-          new this.crateClass(this.canvas, this.loadedImages['crateImageArray'])
-        )
-      }
-    }
+  timeStepCrates() {
     for (var i = 0; i < this.cratesArray.length; i++) {
       this.canvasContext.drawImage(this.cratesArray[i].returnImage(), this.cratesArray[i].x, this.cratesArray[i].y, this.cratesArray[i].xSize, this.cratesArray[i].ySize)
       if (this.deathInteractionCrate(i) && this.cratesArray[i].exploded == false) {
