@@ -14,6 +14,7 @@ class Dino {
     this.imageInterval = 10;
     this.animationCounterMax = this.numImages * this.imageInterval;
     this.animationCounter = 0;
+    this.jumpSound = this.createJumpSound()
   }
 
   applyGravity() {
@@ -36,7 +37,15 @@ class Dino {
     if (this.spaceCounter < 2) {
       this.spaceCounter += 1;
       this.jumpCounter = 30;
+      this.jumpSound.play()
     }
+  }
+
+  createJumpSound() {
+    var jumpSound = document.createElement('audio')
+    jumpSound.src = 'jump_sound.wav'
+    jumpSound.type = 'audio/wav'
+    return jumpSound
   }
 
   returnCurrentImage(){
