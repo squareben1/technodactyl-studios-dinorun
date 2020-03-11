@@ -54,7 +54,7 @@ class RenderGame {
     if (this.gameOver == false) {
       this.newScore.updateScore(100)
     }
-    this.canvasContext.font = "30px Arial"
+    this.canvasContext.font = "30px Caesar Dressing"
     this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
 
   }
@@ -117,7 +117,7 @@ class RenderGame {
 
   _drawTopThree(data) {
     this.canvasContext.textAlign = 'left'
-    this.canvasContext.font = '20px serif'
+    this.canvasContext.font = '20px Caesar Dressing'
     this.canvasContext.fillText('High scores:', 510, 320)
     this.canvasContext.fillText(data[0]['username'] + ' ' + data[0]['score'], 520, 340)
     this.canvasContext.fillText(data[1]['username'] + ' ' + data[1]['score'], 520, 360)
@@ -127,7 +127,7 @@ class RenderGame {
   _drawGameOverScreen(finalScore) {
     this.canvasContext.drawImage(this.loadedImages['endSignImage'], 270, 0)
     this.canvasContext.textAlign = 'center'
-    this.canvasContext.font = '40px serif'
+    this.canvasContext.font = '40px Caesar Dressing'
     this.canvasContext.fillStyle = 'black'
     this.canvasContext.fillText(`Your Final Score: ${finalScore}`, 640, 290)
     this.canvasContext.drawImage(this.loadedImages['replayImage'], 680, 300, 100, 100)
