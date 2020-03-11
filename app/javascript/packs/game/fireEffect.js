@@ -20,7 +20,6 @@ class FireEffect {
   activateFire() {
     this.fireEffectSound.play()
     this.animationCounter = this.animationCount
-    console.log("fire")
   }
 
   returnImage() {
