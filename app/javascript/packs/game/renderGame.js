@@ -141,14 +141,18 @@ class RenderGame {
     this.canvasContext.fillText(`Your Final Score: ${finalScore}`, 640, 290)
     this.canvasContext.drawImage(this.loadedImages['replayImage'], 680, 300, 100, 100)
     var self = this
-    var resetGame = function(event) {
+    this.resetGameClick = function(event) {
       if ( event.x > 720 && event.x < 800 && event.y > 360 && event.y < 440) {
-        self.setup()
-        self.canvas.removeEventListener('click', resetGame)
-        document.querySelector('#logged-in').style.display = 'block'
+        self.resetGame()
       }
     }
-    this.canvas.addEventListener('click', resetGame)
+    this.canvas.addEventListener('click', this.resetGameClick)
+  }
+
+  resetGame() {
+    self.setup()
+    self.canvas.removeEventListener('click', self.resetGameClick)
+    document.querySelector('#logged-in').style.display = 'block'
   }
 
   _drawSign(image) {

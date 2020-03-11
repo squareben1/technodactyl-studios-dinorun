@@ -26,7 +26,7 @@ class Crate {
   }
 
   objectCentre() {
-    return [this.x + (this.xSize / 2), this.y + (this.ySize / 2)]
+    return [this.x + (this.xSize / 4), this.y + (this.ySize / 4)]
   }
 
   objectRadius() {
