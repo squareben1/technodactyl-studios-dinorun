@@ -71,7 +71,6 @@ window.addEventListener('load', function() {
   document.querySelector('#start_game_btn').addEventListener('click', function() {
     getSong(function(data, audio) {
       userMessageDiv.innerHTML = ''
-      document.querySelector('#logged-in').style.display = 'none'
       gameController.startGame(data, audio)
     })
   })
