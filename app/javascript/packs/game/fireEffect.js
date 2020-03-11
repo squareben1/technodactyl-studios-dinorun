@@ -7,10 +7,20 @@ class FireEffect {
     this.animationCount = 30
     this.animationCounter = 0
     this.imageInterval = Math.ceil(this.animationCount / this.numImages)
+    this.fireEffectSound = this.createFireSound()
+  }
+
+  createFireSound() {
+    var fireSound = document.createElement('audio')
+    fireSound.src = 'firesound2.wav'
+    fireSound.type = 'audio/wav'
+    return fireSound
   }
 
   activateFire() {
+    this.fireEffectSound.play()
     this.animationCounter = this.animationCount
+    console.log("fire")
   }
 
   returnImage() {
