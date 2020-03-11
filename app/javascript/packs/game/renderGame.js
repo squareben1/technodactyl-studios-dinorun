@@ -30,7 +30,7 @@ class RenderGame {
     this._drawGround()
     this._drawDino()
     this.newScore = new this.scoreClass()
-    this._drawScore()
+    this._drawScore(0)
   }
 
   _drawBackground() {
@@ -51,9 +51,9 @@ class RenderGame {
     this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, newGround.x, newGround.y)
   }
 
-  _drawScore() {
+  _drawScore(score) {
     if (this.gameOver == false) {
-      this.newScore.updateScore(100)
+      this.newScore.updateScore(score)
     }
     this.canvasContext.font = "30px Arial"
     this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
@@ -106,7 +106,7 @@ class RenderGame {
         self.timeStepCrates()
         self.timeStepFireEffect()
         self.timeStepDino()
-        self._drawScore()
+        self._drawScore(100)
         self.deathInteractionGround()
         if (self.gameOver == true) {
           clearInterval(gameInterval)
