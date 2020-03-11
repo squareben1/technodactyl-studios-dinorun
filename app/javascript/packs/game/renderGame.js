@@ -76,9 +76,6 @@ class RenderGame {
 
   startGame(bpm, difficulty, generatedMapArray) { //frequencyArray,
     this.mapArray = generatedMapArray
-    this.generatedBlockArray = [...generatedMapArray]
-    this.generatedGroundArray = [...generatedMapArray]
-    this.generatedCrateArray = [...generatedMapArray]
     this._generateFramesPerBeat(bpm)
     this._calculateObjectVelocity(difficulty)
     this.animateGame()
