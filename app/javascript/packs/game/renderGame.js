@@ -13,7 +13,6 @@ class RenderGame {
     this.fps = 50
     this.gameController = gameController
     this.crateClass = crateClass
-    this.gameWon = false
   }
 
   //=================================================================================
@@ -31,7 +30,6 @@ class RenderGame {
     this._drawDino()
     this.newScore = new this.scoreClass()
     this._drawScore()
-    this.gameWon = false
   }
 
   _drawBackground() {
@@ -106,11 +104,11 @@ class RenderGame {
         self.deathInteractionGround()
         if (self.gameController.audioElement.ended) {
           clearInterval(gameInterval)
-          self.animateVictory()
+          self.animateEnding()
         }
         if (self.gameOver == true) {
           clearInterval(gameInterval)
-          self.animateDeath()
+          self.animateEnding()
           self.gameController.playDeathSound()
         }
       })
@@ -144,44 +142,12 @@ class RenderGame {
     this.canvas.addEventListener('click', resetGame)
   }
 
-  animateVictory() {
-    var gameOverFrameCounter = 0
-    var velocityDeducter = this.objectVelocity / 11
-    var self = this;
-    var animationFrameHandle;
-    this.dino.jump()
-    var gameOverInterval = setInterval(function() {
-      cancelAnimationFrame(animationFrameHandle)
-      animationFrameHandle = requestAnimationFrame(function() {
-        if (gameOverFrameCounter % 10 == 0) {
-          var newVelocity = Math.floor(self.objectVelocity - velocityDeducter)
-          if (newVelocity > 0){
-            self.objectVelocity = newVelocity
-          } else {
-            self.objectVelocity = 0
-          }
-        }
-        self.timeStepBackground()
-        self.timeStepGround()
-        self.timeStepBlocks()
-        self.timeStepCrates()
-        self.timeStepDino()
-        self._drawScore()
-        gameOverFrameCounter++;
-        if (gameOverFrameCounter == 47) {
-          clearInterval(gameOverInterval)
-          self.gameController.gameComplete(self.newScore)
-          self._drawGameOverScreen(self.newScore.currentScore)
-        }
-      })
-    }, self.frameInterval)
-  }
-
-  animateDeath() {
+  animateEnding() {
     var gameOverFrameCounter = 0
     var velocityDeducter = this.objectVelocity / 9
     var self = this;
     var animationFrameHandle;
+    if (self.gameOver == false) { self.dino.jump() }
     var gameOverInterval = setInterval(function() {
       cancelAnimationFrame(animationFrameHandle)
       animationFrameHandle = requestAnimationFrame(function() {
@@ -198,8 +164,13 @@ class RenderGame {
         self.timeStepBlocks()
         self.timeStepCrates()
         self._drawScore()
-        self.timeStepDeadDino(gameOverFrameCounter)
+        self.gameOver ? self.timeStepDeadDino(gameOverFrameCounter) : self.timeStepDino()
         gameOverFrameCounter++;
+        if (gameOverFrameCounter == 47 && self.gameOver == false) {
+          clearInterval(gameOverInterval)
+          self.gameController.gameComplete(self.newScore)
+          self._drawGameOverScreen(self.newScore.currentScore)
+        }
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
           self.gameController.gameComplete(self.newScore)
@@ -219,23 +190,6 @@ class RenderGame {
   // =========================
   // Dino
   // =========================
-
-  timeStepJumpDino() {
-    if (this.groundArray[0].x <= 300) {
-      let filteredGround = this.groundArray.filter(function(item) {
-        return item.x >= -20 && item.x <= 220;
-      });
-      if (filteredGround.length > 0 && this.dino.y <= this.canvas.height - 240 && this.dino.y >= this.canvas.height - 259 && this.dino.jumpCounter < 1) {
-        this.dino.resetJump();
-        this.dino.y = this.canvas.height - 240;
-      }
-      else {
-        this.dino.applyGravity();
-      }
-      this.dino.applyJump();
-    }
-    this.canvasContext.drawImage(this.dino.returnCurrentImage(), this.dino.x, this.dino.y + 10, this.dino.xSize, this.dino.ySize);
-  }
 
   timeStepDino() {
     if (this.groundArray[0].x <= 300) {
