@@ -142,6 +142,10 @@ class RenderGame {
     this.canvas.addEventListener('click', resetGame)
   }
 
+  _drawSign(image) {
+    this.canvasContext.drawImage(this.loadedImages[image], 800, 450)
+  }
+
   animateEnding() {
     var gameOverFrameCounter = 0
     var velocityDeducter = this.objectVelocity / 9
@@ -170,11 +174,13 @@ class RenderGame {
           clearInterval(gameOverInterval)
           self.gameController.gameComplete(self.newScore)
           self._drawGameOverScreen(self.newScore.currentScore)
+          self._drawSign('winSignImage')
         }
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
           self.gameController.gameComplete(self.newScore)
           self._drawGameOverScreen(self.newScore.currentScore)
+          self._drawSign('loseSignImage') 
         }
       })
     }, self.frameInterval)
