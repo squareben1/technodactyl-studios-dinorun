@@ -37,7 +37,6 @@ class FireEffect {
     })
 
     if (typeof crateInRange !== 'undefined') {
-      console.log('crateExploded')
       crateInRange.exploded = true
       score.explodedCrate()
     }
