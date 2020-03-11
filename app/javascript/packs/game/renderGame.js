@@ -1,5 +1,5 @@
 class RenderGame {
-  constructor(canvas, loadedImages, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController, crateClass) {
+  constructor(canvas, loadedImages, backgroundClass, groundClass, dinoClass, blockClass, scoreClass, gameController, crateClass, fireEffectClass) {
     this.canvas = canvas
     this.loadedImages = loadedImages
     this.canvasContext = this.canvas.getContext('2d')
@@ -8,6 +8,7 @@ class RenderGame {
     this.dinoClass = dinoClass
     this.blockClass = blockClass
     this.scoreClass = scoreClass
+    this.fireEffectClass = fireEffectClass
     this.groundLevel = 100
     this.frameInterval = 20
     this.fps = 50
@@ -25,6 +26,7 @@ class RenderGame {
     this.dinoOffScreen = false
     this.blocksArray = []
     this.cratesArray = []
+    this.fireEffect = new this.fireEffectClass(this.loadedImages['fireEffectImageArray'])
     this._drawBackground()
     this._drawGround()
     this._drawDino()
@@ -98,6 +100,7 @@ class RenderGame {
         self.timeStepGround()
         self.timeStepBlocks()
         self.timeStepCrates()
+        self.timeStepFireEffect()
         self.timeStepDino()
         self._drawScore()
         self.deathInteractionGround()
@@ -327,18 +330,32 @@ class RenderGame {
     return circlesDifference < radiusSum
   }
 
+  // =========================
+  // Fire Effect/Attack
+  // =========================
+
+  timeStepFireEffect() {
+    if (this.fireEffect.animationCounter > 0) {
+      let fireEffectLocationHash = this.fireEffect.fireLocation(this.dino)
+      this.canvasContext.drawImage(this.fireEffect.returnImage(), fireEffectLocationHash['xLoc'], fireEffectLocationHash['yLoc'], fireEffectLocationHash['xSize'], fireEffectLocationHash['ySize'])
+    }
+  }
+
   crateAttack() {
-    var gRender = this
-    let filteredCrates = this.cratesArray.filter( function(crate) {
-      var frontDinoLocX = gRender.dino.x + gRender.dino.xSize
-      var topDinoLocY = gRender.dino.y
-      var bottomDinoLocY = gRender.dino.y + gRender.dino.ySize
-      var punchDistance = 100
-      return (crate.x >= frontDinoLocX - 70) && (crate.x <= frontDinoLocX + punchDistance) && (crate.y >= topDinoLocY - (punchDistance)) && (crate.y <= bottomDinoLocY + (punchDistance))
-    });
-    for (var i = 0; i < filteredCrates.length; i++) {
-      filteredCrates[i].exploded = true
-      this.newScore.explodedCrate()
+    if (this.fireEffect.animationCounter < 1) {
+      this.fireEffect.activateFire()
+      var gRender = this
+      let filteredCrates = this.cratesArray.filter( function(crate) {
+        var frontDinoLocX = gRender.dino.x + gRender.dino.xSize
+        var topDinoLocY = gRender.dino.y
+        var bottomDinoLocY = gRender.dino.y + gRender.dino.ySize
+        var punchDistance = 100
+        return (crate.x >= frontDinoLocX - 70) && (crate.x <= frontDinoLocX + punchDistance) && (crate.y >= topDinoLocY - (punchDistance)) && (crate.y <= bottomDinoLocY + (punchDistance))
+      });
+      for (var i = 0; i < filteredCrates.length; i++) {
+        filteredCrates[i].exploded = true
+        this.newScore.explodedCrate()
+      }
     }
   }
 }

@@ -5,6 +5,7 @@ import Dino from './dino.js'
 import Block from './block.js'
 import Crate from './crate.js'
 import Background from './background.js'
+import FireEffect from './fireEffect.js'
 import RenderGame from './renderGame.js'
 import loadGameImages from './loadImages.js'
 import { generateMapFromAmplitudeArray } from '../game/mapGenerator.js'
@@ -17,7 +18,8 @@ class GameController {
   async setupGame() {
     this.canvas = document.getElementById('canvas')
     var loadedImages = await loadGameImages()
-    this.game = new RenderGame(canvas, loadedImages, Background, Ground, Dino, Block, Score, this, Crate)
+    console.log(loadedImages)
+    this.game = new RenderGame(canvas, loadedImages, Background, Ground, Dino, Block, Score, this, Crate, FireEffect)
     this.game.setup()
   }
 
