@@ -55,8 +55,9 @@ class RenderGame {
     if (this.gameOver == false) {
       this.newScore.updateScore(score)
     }
-    this.canvasContext.font = "30px Arial"
+    this.canvasContext.font = "30px Caesar Dressing"
     this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
+
   }
 
   _drawDino() {
@@ -107,9 +108,13 @@ class RenderGame {
         self.timeStepDino()
         self._drawScore(100)
         self.deathInteractionGround()
+        if (self.gameController.audioElement.ended) {
+          clearInterval(gameInterval)
+          self.animateEnding()
+        }
         if (self.gameOver == true) {
           clearInterval(gameInterval)
-          self.animateDeath()
+          self.animateEnding()
           self.gameController.playDeathSound()
         }
       })
@@ -118,7 +123,7 @@ class RenderGame {
 
   _drawTopThree(data) {
     this.canvasContext.textAlign = 'left'
-    this.canvasContext.font = '20px serif'
+    this.canvasContext.font = '20px Caesar Dressing'
     var lineHeight = 320
     this.canvasContext.fillText('High scores:', 510, lineHeight)
     self = this
@@ -131,7 +136,7 @@ class RenderGame {
   _drawGameOverScreen(finalScore) {
     this.canvasContext.drawImage(this.loadedImages['endSignImage'], 270, 0)
     this.canvasContext.textAlign = 'center'
-    this.canvasContext.font = '40px serif'
+    this.canvasContext.font = '40px Caesar Dressing'
     this.canvasContext.fillStyle = 'black'
     this.canvasContext.fillText(`Your Final Score: ${finalScore}`, 640, 290)
     this.canvasContext.drawImage(this.loadedImages['replayImage'], 680, 300, 100, 100)
@@ -146,11 +151,16 @@ class RenderGame {
     this.canvas.addEventListener('click', resetGame)
   }
 
-  animateDeath() {
+  _drawSign(image) {
+    this.canvasContext.drawImage(this.loadedImages[image], 800, 450)
+  }
+
+  animateEnding() {
     var gameOverFrameCounter = 0
     var velocityDeducter = this.objectVelocity / 9
     var self = this;
     var animationFrameHandle;
+    if (self.gameOver == false) { self.dino.jump() }
     var gameOverInterval = setInterval(function() {
       cancelAnimationFrame(animationFrameHandle)
       animationFrameHandle = requestAnimationFrame(function() {
@@ -167,12 +177,19 @@ class RenderGame {
         self.timeStepBlocks()
         self.timeStepCrates()
         self._drawScore()
-        self.timeStepDeadDino(gameOverFrameCounter)
+        self.gameOver ? self.timeStepDeadDino(gameOverFrameCounter) : self.timeStepDino()
         gameOverFrameCounter++;
+        if (gameOverFrameCounter == 47 && self.gameOver == false) {
+          clearInterval(gameOverInterval)
+          self.gameController.gameComplete(self.newScore)
+          self._drawGameOverScreen(self.newScore.currentScore)
+          self._drawSign('winSignImage')
+        }
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
           self.gameController.gameComplete(self.newScore)
           self._drawGameOverScreen(self.newScore.currentScore)
+          self._drawSign('loseSignImage') 
         }
       })
     }, self.frameInterval)

@@ -116,6 +116,8 @@ var backgroundImageUrl = "images/bg.png"
 var stoneBlockImageUrl = "images/deserttileset/png/Objects/StoneBlock.png"
 var endSignImageUrl = "images/endsign.png"
 var replayImageUrl = "images/replay.png"
+var winSignImageUrl = "images/winSignImage.png"
+var loseSignImageUrl = 'images/loseSignImage.png'
 
 // Export function
 // ===============================
@@ -129,6 +131,8 @@ export default async function loadGameImages(){
   var stoneBlockImage = await loadImage(stoneBlockImageUrl)
   var endSignImage = await loadImage(endSignImageUrl)
   var replayImage = await loadImage(replayImageUrl)
+  var winSignImage = await loadImage(winSignImageUrl)
+  var loseSignImage = await loadImage(loseSignImageUrl)
   var crateImageArray = await loadImages(crateImageUrlArray)
   var fireEffectImageArray = await loadImages(fireEffectImageUrlArray)
 
@@ -141,6 +145,8 @@ export default async function loadGameImages(){
     stoneBlockImage: stoneBlockImage,
     endSignImage: endSignImage,
     replayImage: replayImage,
+    winSignImage : winSignImage, 
+    loseSignImage : loseSignImage,
     crateImageArray: crateImageArray,
     fireEffectImageArray: fireEffectImageArray
   }
