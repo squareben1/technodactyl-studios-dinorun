@@ -145,14 +145,36 @@ class RenderGame {
   }
 
   animateVictory() {
-    var self = this
-    if (self.gameWon == false) {
-      self.gameWon = true
-      setTimeout(function() {
-        self.gameController.gameComplete(self.newScore)
-        self._drawGameOverScreen(self.newScore.currentScore)
-      }, 1000)
-    }
+    var gameOverFrameCounter = 0
+    var velocityDeducter = this.objectVelocity / 11
+    var self = this;
+    var animationFrameHandle;
+    this.dino.jump()
+    var gameOverInterval = setInterval(function() {
+      cancelAnimationFrame(animationFrameHandle)
+      animationFrameHandle = requestAnimationFrame(function() {
+        if (gameOverFrameCounter % 10 == 0) {
+          var newVelocity = Math.floor(self.objectVelocity - velocityDeducter)
+          if (newVelocity > 0){
+            self.objectVelocity = newVelocity
+          } else {
+            self.objectVelocity = 0
+          }
+        }
+        self.timeStepBackground()
+        self.timeStepGround()
+        self.timeStepBlocks()
+        self.timeStepCrates()
+        self.timeStepDino()
+        self._drawScore()
+        gameOverFrameCounter++;
+        if (gameOverFrameCounter == 47) {
+          clearInterval(gameOverInterval)
+          self.gameController.gameComplete(self.newScore)
+          self._drawGameOverScreen(self.newScore.currentScore)
+        }
+      })
+    }, self.frameInterval)
   }
 
   animateDeath() {
@@ -197,6 +219,23 @@ class RenderGame {
   // =========================
   // Dino
   // =========================
+
+  timeStepJumpDino() {
+    if (this.groundArray[0].x <= 300) {
+      let filteredGround = this.groundArray.filter(function(item) {
+        return item.x >= -20 && item.x <= 220;
+      });
+      if (filteredGround.length > 0 && this.dino.y <= this.canvas.height - 240 && this.dino.y >= this.canvas.height - 259 && this.dino.jumpCounter < 1) {
+        this.dino.resetJump();
+        this.dino.y = this.canvas.height - 240;
+      }
+      else {
+        this.dino.applyGravity();
+      }
+      this.dino.applyJump();
+    }
+    this.canvasContext.drawImage(this.dino.returnCurrentImage(), this.dino.x, this.dino.y + 10, this.dino.xSize, this.dino.ySize);
+  }
 
   timeStepDino() {
     if (this.groundArray[0].x <= 300) {
