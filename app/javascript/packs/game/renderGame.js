@@ -31,6 +31,7 @@ class RenderGame {
     this._drawDino()
     this.newScore = new this.scoreClass()
     this._drawScore()
+    this.gameWon = false
   }
 
   _drawBackground() {
