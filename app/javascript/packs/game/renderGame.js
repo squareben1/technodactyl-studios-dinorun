@@ -180,18 +180,18 @@ class RenderGame {
         self.timeStepGround()
         self.timeStepBlocks()
         self.timeStepCrates()
-        self._drawScore()
+        self._drawScore(0)
         self.gameOver ? self.timeStepDeadDino(gameOverFrameCounter) : self.timeStepDino()
         gameOverFrameCounter++;
         if (gameOverFrameCounter == 47 && self.gameOver == false) {
           clearInterval(gameOverInterval)
-          self.gameController.gameComplete(self.newScore)
+          self.gameController.gameComplete(self.newScore.currentScore)
           self._drawGameOverScreen(self.newScore.currentScore)
           self._drawSign('winSignImage')
         }
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
-          self.gameController.gameComplete(self.newScore)
+          self.gameController.gameComplete(self.newScore.currentScore)
           self._drawGameOverScreen(self.newScore.currentScore)
           self._drawSign('loseSignImage') 
         }

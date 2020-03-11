@@ -93,7 +93,7 @@ class GameController {
     // Ajax score to leaderboard database
     // Display navbar
     // Play theme tune
-    this.uploadScore(score.currentScore, this.songData['id'])
+    this.uploadScore(score, this.songData['id'])
   }
 }
 
