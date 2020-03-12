@@ -1,13 +1,10 @@
 require 'rails_helper'
+require './spec/features/web_helpers'
 
 feature 'user can upload song', js: true do
   scenario ' user clicks choose file and upload song', driver: :selenium_chrome_headless do
     User.create(username: 'Imraan', email: 'imraan21@hotmail.co.uk', password: 'securepass1')
-    visit '/'
-    click_button "Login"
-    fill_in 'login[email]', with: 'imraan21@hotmail.co.uk'
-    fill_in 'login[password]', with: 'securepass1'
-    click_button 'Sign in'
+    log_in
     attach_file("song[mp3]", Rails.root + "spec/fixtures/test_music.mp3")
     click_button "Create Song"
     sleep(2)
