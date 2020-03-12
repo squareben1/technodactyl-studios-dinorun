@@ -106,8 +106,8 @@ class GameController {
     // Ajax score to leaderboard database
     // Display navbar
     // Play theme tune
-    document.querySelector('#touch_left').removeEventListener('touchstart', gController.dinoJump)
-    document.querySelector('#touch_right').removeEventListener('touchstart', gController.dinoAttack)
+    document.querySelector('#touch_left').removeEventListener('touchstart', this.dinoJump)
+    document.querySelector('#touch_right').removeEventListener('touchstart', this.dinoAttack)
     this.uploadScore(score, this.songData['id'])
   }
 }
