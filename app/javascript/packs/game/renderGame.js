@@ -77,10 +77,11 @@ class RenderGame {
   //                           Animate Game
   //=================================================================================
 
-  startGame(bpm, difficulty, generatedMapArray) { //frequencyArray,
+  startGame(bpm, itemsOnScreen, generatedMapArray) { //frequencyArray,
+    var scaledItemsOnScreen = itemsOnScreen * (canvas.width / 1280)
     this.mapArray = generatedMapArray
     this._generateFramesPerBeat(bpm)
-    this._calculateObjectVelocity(difficulty)
+    this._calculateObjectVelocity(scaledItemsOnScreen)
     this.animateGame()
   }
 
@@ -89,9 +90,9 @@ class RenderGame {
     this.fpb = (Math.round(this.fps / bps) / 2) * 2
   }
 
-  _calculateObjectVelocity(difficulty) {
+  _calculateObjectVelocity(itemsOnScreen) {
     let pixelsToDino = this.canvas.width - this.dino.x - this.dino.xSize
-    this.objectVelocity = (Math.round((pixelsToDino / this.fpb) / difficulty) / 2) * 2
+    this.objectVelocity = (Math.round((pixelsToDino / this.fpb) / itemsOnScreen) / 2) * 2
   }
 
   animateGame() {
