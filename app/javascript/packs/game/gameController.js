@@ -36,6 +36,16 @@ class GameController {
       gController.audioElement.play()
     }, 3500)
 
+    document.querySelector('#touch_left').addEventListener('touchstart', function(e) {
+      e.preventDefault()
+      gController.game.dino.jump()
+    })
+
+    document.querySelector('#touch_right').addEventListener('touchstart', function(e) {
+      e.preventDefault()
+      gController.game.crateAttack()
+    })
+
     document.body.onkeyup = function(e){
       if (e.keyCode == 32) {
         gController.game.dino.jump()

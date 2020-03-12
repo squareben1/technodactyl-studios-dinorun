@@ -1,38 +1,44 @@
-<span id="user-message"></span>
-<br>
-<div id="logged-out" style='display: none;'>
-  <button id='signup'>Signup</button>
-  <form id="register-form" style='display: none;'>
-    <input type='text' id="register[username]" name="register[username]" placeholder="Username" required>
-    <input type='email' id="register[email]" name='register[email]' placeholder="Email" required>
-    <input type='password' id="register[password]" name='register[password]' placeholder="Password" required>
-    <input type="submit" id="register[button]" value="Register">
-  </form>
+<nav id='navbar'>
+  <span id="user-message"></span>
   <br>
-  <button id='login'>Login</button>
-  <form id='login-form' style="display: none;">
-    <input type='text' id='login[email]' name='login[email]' placeholder='Email'>
-    <input type='password' id='login[password]' name ='login[password]' placeholder='Password'>
-    <input type='submit' id='login[button]' value='Sign in'>
-  </form>
-</div>
-<div id="logged-in" style='display: none;'>
-  <button id='logout'>Logout</button>
-  <br>
-  <div class='upload-music'>
-    <%= render 'form', song: @song%>
+  <div id="logged-out" style='display: none;'>
+    <button id='signup'>Signup</button>
+    <form id="register-form" style='display: none;'>
+      <input type='text' id="register[username]" name="register[username]" placeholder="Username" required>
+      <input type='email' id="register[email]" name='register[email]' placeholder="Email" required>
+      <input type='password' id="register[password]" name='register[password]' placeholder="Password" required>
+      <input type="submit" id="register[button]" value="Register">
+    </form>
+    <br>
+    <button id='login'>Login</button>
+    <form id='login-form' style="display: none;">
+      <input type='text' id='login[email]' name='login[email]' placeholder='Email'>
+      <input type='password' id='login[password]' name ='login[password]' placeholder='Password'>
+      <input type='submit' id='login[button]' value='Sign in'>
+    </form>
   </div>
-  <select id="song_selection">
-    <option value="">--select--</option>
-  </select>
-  <button id='start_game_btn'>Play</button>
-  <div id='song_player'></div>
-  <div id="instruction">
-    Click <strong>Spacebar</strong> for jump.<br>
-    Click <strong>d</strong> to destroy crates floating on the air. Hit them for more points!<br> 
-    Click <strong>r</strong> once the game is over to open the song selector <br> 
-    Click <strong>g</strong> once the game is over to quick replay the same song <br> 
-    You can't destroy stones on the ground. They are too hard for the dinosaur.<br>
+  <div id="logged-in" style='display: none;'>
+    <button id='logout'>Logout</button>
+    <br>
+    <div class='upload-music'>
+      <%= render 'form', song: @song%>
+    </div>
+    <select id="song_selection">
+      <option value="">--select--</option>
+    </select>
+    <button id='start_game_btn'>Play</button>
+    <div id='song_player'></div>
+    <div id="instruction">
+      Click <strong>Spacebar</strong> for jump.<br>
+      Click <strong>d</strong> to destroy crates floating on the air. Hit them for more points!<br> 
+      Click <strong>r</strong> once the game is over to open the song selector <br> 
+      Click <strong>g</strong> once the game is over to quick replay the same song <br> 
+      You can't destroy stones on the ground. They are too hard for the dinosaur.<br>
+    </div>
   </div>
+</nav>
+<div id='canvas_container'></div>
+<div class='touch_event_container'>
+  <div id='touch_left'></div>
+  <div id='touch_right'></div>
 </div>
-<canvas id='canvas' width='1700' height="720"></canvas>
