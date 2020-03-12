@@ -155,7 +155,7 @@ class RenderGame {
         self.resetGame()
       }
     }
-    this.canvas.addEventListener('click', this.resetGameClick)
+    document.addEventListener('click', this.resetGameClick)
   }
 
   resetGame() {
