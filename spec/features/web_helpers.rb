@@ -8,5 +8,10 @@ def log_in
 end
 
 def sign_up
-  
+  visit '/'
+  click_button "Signup"
+  fill_in 'register[username]', with: 'Imraan'
+  fill_in 'register[email]', with: 'imraan21@hotmail.co.uk'
+  fill_in 'register[password]', with: 'securepass1'
+  click_button 'Register'
 end

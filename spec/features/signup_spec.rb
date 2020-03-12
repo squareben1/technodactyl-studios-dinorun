@@ -11,23 +11,13 @@ feature 'user can signup', js: true do
   end
 
   scenario 'user clicks signup and fills in form to signup and not to see sign up form', driver: :selenium_chrome_headless do
-    visit '/'
-    click_button "Signup"
-    fill_in 'register[username]', with: 'Imraan'
-    fill_in 'register[email]', with: 'imraan21@hotmail.co.uk'
-    fill_in 'register[password]', with: 'securepass1'
-    click_button 'Register'
+    sign_up
     expect(page).not_to have_button 'Register'
     expect(page).to have_button 'Logout'
   end
 
   scenario 'user clicks signup and fills in form to signup', driver: :selenium_chrome_headless do
-    visit '/'
-    click_button "Signup"
-    fill_in 'register[username]', with: 'Imraan'
-    fill_in 'register[email]', with: 'imraan21@hotmail.co.uk'
-    fill_in 'register[password]', with: 'securepass1'
-    click_button 'Register'
+    sign_up
     expect(page).to have_content 'Imraan welcome to DinoRun!'
   end
 
