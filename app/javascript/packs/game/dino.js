@@ -39,7 +39,7 @@ class Dino {
   jump() {
     if (this.spaceCounter < 2) {
       this.spaceCounter += 1;
-      this.jumpCounter = 30;
+      this.jumpCounter = this.gravity*3;
       this.jumpSound.play()
     }
   }

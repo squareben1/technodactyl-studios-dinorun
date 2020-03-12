@@ -55,12 +55,15 @@ class RenderGame {
     if (this.gameOver == false) {
       this.newScore.updateScore(score)
     }
-    this.canvasContext.font = "30px Caesar Dressing"
+    var fontSize = Math.round(this.canvas.height/27)
+    this.canvasContext.font = `${fontSize}px Caesar Dressing`
     this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - (this.canvas.width * 0.1), this.canvas.height / 14.4)
   }
 
   _drawDino() {
-    let newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'], this.loadedImages['dinoJumpImageArray'], this.canvas, 10, 10)
+    var imageInterval = 10
+    var gravity = 10
+    var newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'], this.loadedImages['dinoJumpImageArray'], this.canvas, imageInterval, gravity)
     this.canvasContext.drawImage(newDino.returnCurrentImage(), newDino.x, newDino.y, newDino.xSize, newDino.ySize)
     this._initializeFire(newDino)
     this.dino = newDino
@@ -121,8 +124,9 @@ class RenderGame {
   }
 
   _drawTopThree(data) {
+    var fontSize = Math.round(this.canvas.height/36)
     this.canvasContext.textAlign = 'left'
-    this.canvasContext.font = '20px Caesar Dressing'
+    this.canvasContext.font = `${fontSize}px Caesar Dressing`
     var lineHeight = Math.round(this.canvas.height / 2.25)
     var lineWidth = Math.round(this.canvas.width / 2.46)
     this.canvasContext.fillText('High scores:', lineWidth, lineHeight)
@@ -136,7 +140,7 @@ class RenderGame {
   _drawGameOverScreen(finalScore) {
     var endSignX = Math.round(this.canvas.width/4.74)
     var pixelSize = Math.round(this.canvas.height / 18)
-    this.canvasContext.drawImage(this.loadedImages['endSignImage'], endSignX, 0)
+    this.canvasContext.drawImage(this.loadedImages['endSignImage'], endSignX, 0, Math.round(this.canvas.width/1.52), Math.round(this.canvas.height/1.65))
     this.canvasContext.textAlign = 'center'
     this.canvasContext.font = `${pixelSize}px Caesar Dressing`
     this.canvasContext.fillStyle = 'black'
@@ -146,7 +150,7 @@ class RenderGame {
     this.canvasContext.drawImage(this.loadedImages['replayImage'], resetBtnX, resetBtnY, this.groundLevel, this.groundLevel)
     var self = this
     this.resetGameClick = function(event) {
-      if ( (event.x > resetBtnX) && (event.x < resetBtnX + self.groundLevel) && (event.y > resetBtnY) && (event.y < resetBtnY + self.groundLevel)) {
+      if ( (event.x > resetBtnX) && (event.x < resetBtnX + (self.groundLevel*2)) && (event.y > resetBtnY) && (event.y < resetBtnY + (self.groundLevel*2))) {
         self.resetGame()
       }
     }
@@ -160,7 +164,7 @@ class RenderGame {
   }
 
   _drawSign(image) {
-    this.canvasContext.drawImage(this.loadedImages[image], Math.round(this.canvas.width/1.6), Math.round(this.canvas.height/1.6))
+    this.canvasContext.drawImage(this.loadedImages[image], Math.round(this.canvas.width/1.6), Math.round(this.canvas.height/1.6), Math.round(this.canvas.width/4.3), Math.round(this.canvas.height/2.6))
   }
 
   animateEnding() {
