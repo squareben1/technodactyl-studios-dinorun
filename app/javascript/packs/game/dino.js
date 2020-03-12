@@ -13,8 +13,9 @@ class Dino {
     this.jumpImageCounter = 0;
     this.numRunImages = runImageArray.length;
     this.numJumpImages = jumpImageArray.length;
+    this.numDeadImages = deadImageArray.length;
     this.imageInterval = imageInterval;
-    this.animationCounterMax = this.numRunImages * this.imageInterval;
+    this.animationCounterMax = this.numRunImages * (this.imageInterval / 2) ;
     this.animationCounter = 0;
     this.jumpSound = this.createJumpSound()
   }
@@ -62,7 +63,7 @@ class Dino {
   }
 
   imageRun() {
-    var imageIndex = Math.min(Math.floor(this.animationCounter / this.imageInterval), 10)
+    var imageIndex = Math.min(Math.floor(this.animationCounter / (this.imageInterval / 2 )), 10)
     var imageToReturn = this.runImageArray[imageIndex];
     this.animationCounter++;
     if (this.animationCounter >= this.animationCounterMax) {
@@ -87,7 +88,7 @@ class Dino {
   }
 
   imageDead(counter) {
-    let imageIndex = Math.floor(counter / 10);
+    let imageIndex = Math.floor(counter / this.imageInterval);
     return this.deadImageArray[imageIndex]
   }
 
