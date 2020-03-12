@@ -159,10 +159,11 @@ class RenderGame {
   }
 
   resetGame() {
+    console.log('hi')
     self.setup()
     self.canvas.removeEventListener('click', self.resetGameClick)
-    //  $("#navbar").toggle()
-    document.querySelector('#logged-in').style.display = 'block'
+    $("#navbar").toggle()
+    // document.querySelector('#logged-in').style.display = 'block'
   }
 
   _drawSign(image) {
