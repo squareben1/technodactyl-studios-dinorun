@@ -36,9 +36,16 @@
   z-index: 0;
 }
 
-#touch_right, #touch_left {
+#touch_right {
   position: relative;
-  width: 50%;
+  width: 30%;
+  float: right;
+  height: 100%;
+}
+
+#touch_left {
+  position: relative;
+  width: 30%;
   float: right;
   height: 100%;
 }
