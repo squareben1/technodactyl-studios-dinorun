@@ -1,9 +1,9 @@
 class Dino {
   constructor(runImageArray, deadImageArray, jumpImageArray, canvas, imageInterval, gravity) {
-    this.x = canvas.height / 7.2;
-    this.y = canvas.height / 7.2;
-    this.xSize = canvas.height / 6;
-    this.ySize = canvas.height / 6;
+    this.x = Math.round(canvas.height / 7.2);
+    this.y = this.x;
+    this.xSize = Math.round(canvas.height / 6);
+    this.ySize = this.xSize;
     this.gravity = gravity;
     this.spaceCounter = 0;
     this.jumpCounter = 0;

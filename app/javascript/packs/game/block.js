@@ -1,9 +1,9 @@
 class Block {
   constructor(canvas, image) {
-    this.xSize = canvas.height / 9
-    this.ySize = canvas.height / 9
+    this.xSize = Math.round(canvas.height / 9)
+    this.ySize = this.xSize
     this.x = canvas.width
-    this.y = canvas.height - this.xSize - (canvas.height / 6)
+    this.y = Math.round(canvas.height - this.xSize - (canvas.height / 6))
     this.image = image
   }
 
