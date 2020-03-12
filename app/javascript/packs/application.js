@@ -61,13 +61,6 @@ window.addEventListener('load', function() {
 
   // Event listner for when form submitted, refactor by changing form to AJAX submit and performing the below in a callback
   // Option to use ActionCable to automatically push new songs to the songList
-  // document.querySelector('#create_song_btn').addEventListener('click', function() {
-  //   document.querySelector('#create_song_btn').style.display = 'none'
-  //   setTimeout(function() {
-  //     updateSongList()
-  //     document.querySelector("#song_mp3").value = ""
-  //   }, 1000)
-  // })
 
   document.querySelector('#start_game_btn').addEventListener('click', function() {
     getSong(function(data, audio) {

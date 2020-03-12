@@ -160,7 +160,7 @@ class RenderGame {
 
   resetGame() {
     self.setup()
-    self.canvas.removeEventListener('click', self.resetGameClick)
+    document.removeEventListener('click', self.resetGameClick)
     document.querySelector('#logged-in').style.display = 'block'
   }
 
