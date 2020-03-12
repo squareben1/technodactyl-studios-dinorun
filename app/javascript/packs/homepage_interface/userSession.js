@@ -17,13 +17,15 @@ var signup = function(event) {
     userMessage = document.getElementById("user-message")
     if (data['username']) {
       userMessage.innerHTML = data['username'] + ' welcome to DinoRun!'
-      $("#logged-out").hide()
-      $("#logged-in").show()
+      $("#user-message").show()
+      $("#logged-out").toggle()
+      $("#logged-in").toggle()
     } else {
       userMessage.innerHTML = ''
       for (const message in data.error_message) {
         userMessage.innerHTML += data.error_message[message][0] + '<br>'
       }
+      $("#user-message").show()
     }
   })}
 }
@@ -43,10 +45,12 @@ var login = function(event) {
     userMessage = document.getElementById("user-message")
     if (data['username']) {
       userMessage.innerHTML = data['username'] + ' welcome back to DinoRun!'
-      $("#logged-out").hide()
-      $("#logged-in").show()
+      $("#user-message").show()
+      $("#logged-out").toggle()
+      $("#logged-in").toggle()
     } else {
       userMessage.innerHTML = 'Email or password is not correct!'
+      $("#user-message").show()
     }
   })
 }
@@ -59,6 +63,7 @@ var logout = function() {
   }).done(function( data ) {
     userMessage = document.getElementById("user-message")
     userMessage.innerHTML = ""
+    $("#user-message").hide()
     $("#logged-out").show()
     $("#logged-in").hide()
   })

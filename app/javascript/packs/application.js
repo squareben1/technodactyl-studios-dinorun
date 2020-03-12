@@ -71,6 +71,7 @@ window.addEventListener('load', function() {
   document.querySelector('#start_game_btn').addEventListener('click', function() {
     getSong(function(data, audio) {
       userMessageDiv.innerHTML = ''
+      $('#user-message').hide()
       gameController.startGame(data, audio)
     })
   })

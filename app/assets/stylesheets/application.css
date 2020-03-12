@@ -133,7 +133,19 @@ body {
   background-color: rgba(255, 255, 255, 0.5);
   padding: 2vh;
   border-radius: 5px;
-  /* font-family: "roboto"; */
+  font-size: 2vh;
+  line-height: 3vh;
+}
+
+#user-message {
+  display: none;
+  min-width: 30vw;
+  position: absolute;
+  top: 30vh;
+  left: 35vw;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 2vh;
+  border-radius: 5px;
   font-size: 2vh;
   line-height: 3vh;
 }
