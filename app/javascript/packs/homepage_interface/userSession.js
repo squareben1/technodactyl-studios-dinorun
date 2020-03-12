@@ -4,7 +4,6 @@ var signup = function(event) {
   var username = document.getElementById("register[username]")
   var email = document.getElementById("register[email]")
   var password = document.getElementById("register[password]")
-  if (isValid) {
   $.ajax({
     url: '/user.json',
     type: "POST",
@@ -27,7 +26,7 @@ var signup = function(event) {
       }
       $("#user-message").show()
     }
-  })}
+  })
 }
 
 var login = function(event) {
