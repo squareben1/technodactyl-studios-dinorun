@@ -13,7 +13,12 @@ class ApplicationController < ActionController::Base
   end
 
   def assign_user
-    @user = User.find(session[:user_id]) if session[:user_id]
+    begin
+      @user = User.find(session[:user_id]) if session[:user_id]
+    rescue
+      reset_session
+      redirect_to('/')
+    end
   end
 
   def add_csrf_token_to_json_request_header
