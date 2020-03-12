@@ -4,6 +4,7 @@ class CreateSongs < ActiveRecord::Migration[6.0]
       t.string :title
       t.string :bpm
       t.text :analysed
+      t.text :spotify_url
 
       t.timestamps
     end

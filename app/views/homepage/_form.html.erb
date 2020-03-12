@@ -1,14 +1,60 @@
+<!-- this is for spotify -->
+<form id="spotify-search">
+  <input type="text" id="query" placeholder="Type the name of a track (e.g. Beyonce - Baby Boy)" />
+  <input type="submit" value="Search track" />
+</form>
+<div id="result">
+  <div id="text"></div>
+  <div>
+    <svg width="100%" height="40" id="svg"></svg>
+    <button id="play">Play track</button>
+  </div>
+<audio id="audio"></audio>
+</div>
+<%= form_with(model: song, remote: false, id: "spotify-upload-form") do |form| %>
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= form.label :bpm %>
+    <%= form.text_field :bpm %>
+  </div>
+
+  <div class="field">
+    <%= form.label :analysed %>
+    <%= form.text_field :analysed %>
+  </div>
+
+  <div class="field">
+    <%= form.label :spotify_url %>
+    <%= form.text_field :spotify_url %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit 'Create Spotify Song', id: 'create_spotify_song_btn'%>
+  </div>
+
+<% end %>
+<!-- this is for spotify -->
+
+
 <%= form_with(model: song, remote: true, id: "upload-form") do |form| %>
+
   <div class="field">
-    <%= form.hidden_field :title %>
+    <%= form.label :title %>
+    <%= form.text_field :title %>
   </div>
 
   <div class="field">
-    <%= form.hidden_field :bpm %>
+    <%= form.label :bpm %>
+    <%= form.text_field :bpm %>
   </div>
 
   <div class="field">
-    <%= form.hidden_field :analysed %>
+    <%= form.label :analysed %>
+    <%= form.text_field :analysed %>
   </div>
 
   <div class="field">

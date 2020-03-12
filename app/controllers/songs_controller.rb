@@ -16,6 +16,8 @@ class SongsController < ApplicationController
   # POST /songs.json
   def create
     @song = Song.new(song_params)
+    spotify_url = @song.spotify_url
+    @song.mp3 = URI.parse(spotify_url)
     @song.save!
     render json: { status: 200 }
   end
@@ -28,6 +30,6 @@ class SongsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def song_params
-      params.require(:song).permit(:title, :bpm, :analysed, :mp3)
+      params.require(:song).permit(:title, :bpm, :analysed, :spotify_url, :mp3)
     end
 end
