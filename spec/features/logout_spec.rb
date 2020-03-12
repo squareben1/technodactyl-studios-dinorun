@@ -1,4 +1,5 @@
 require 'rails_helper'
+require './spec/features/web_helpers'
 
 feature 'user can login', js: true do
   scenario 'user clicks logout and can see the sign up/ log in page', driver: :selenium_chrome_headless do

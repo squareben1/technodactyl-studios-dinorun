@@ -1,4 +1,5 @@
 require 'rails_helper'
+require './spec/features/web_helpers'
 
 feature 'user can upload song', js: true do
   scenario ' user clicks choose file and upload song', driver: :selenium_chrome_headless do

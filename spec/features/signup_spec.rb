@@ -1,4 +1,5 @@
 require 'rails_helper'
+require './spec/features/web_helpers'
 
 feature 'user can signup', js: true do
 
