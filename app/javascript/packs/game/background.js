@@ -2,7 +2,7 @@ class Background {
   constructor(image, canvas) {
     this.x = 0
     this.y = 0
-    this.xSize = canvas.height / 0.5625
+    this.xSize = canvas.width
     this.ySize = canvas.height
     this.image = image
     this.parallaxCorrection = 5
