@@ -37,12 +37,12 @@ class GameController {
     }, 3500)
 
     gController.dinoJump = function(e) {
-      e.preventDefault()
+      // e.preventDefault()
       gController.game.dino.jump()
     }
 
     gController.dinoAttack = function(e) {
-      e.preventDefault()
+      // e.preventDefault()
       gController.game.crateAttack()
     }
 
