@@ -2,12 +2,14 @@ import Background from '../packs/game/background.js'
 
 describe("Background", function() {
   var imageDouble
+  var canvasDouble
   var background
   var velocity
 
   beforeEach(function() {
     imageDouble = {}
-    background = new Background(imageDouble, 1280, 720)
+    canvasDouble = { width: 1280, height: 720 }
+    background = new Background(imageDouble, canvasDouble)
     velocity = 60
   })
 
