@@ -63,7 +63,7 @@ describe("Dino", function() {
     });
 
     it("returns second image in dinoImgArray", function() {
-      dino.animationCounter = dino.imageInterval;
+      dino.animationCounter = dino.imageInterval / 2;
       expect(dino.imageRun()).toEqual(dinoRunImageArray[1]);
     });
 
