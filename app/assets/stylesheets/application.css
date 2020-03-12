@@ -54,9 +54,14 @@
   height: 5vh;
 }
 
-#logged-out,
-#logged-in {
+#logged-out {
   display: flex;
+}
+
+#logged-in {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 #signup,
