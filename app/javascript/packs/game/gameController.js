@@ -24,6 +24,7 @@ class GameController {
 
   startGame(data, audioElement) {
     document.querySelector('#logged-in').style.display = 'none'
+    // $("#navbar").toggle()
     this.songData = data
     this.audioElement = audioElement
     var amplitudeArray = JSON.parse(data['analysed'])

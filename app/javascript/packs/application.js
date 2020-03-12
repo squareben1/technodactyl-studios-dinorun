@@ -37,11 +37,10 @@ require("packs/homepage_interface/userInterface")
 // mp3 Analysis Packs
 require("packs/mp3_analysis/mp3_info")
 
-
 import GameController from './game/gameController.js'
 import SongAnalyser from './mp3_analysis/mp3_info.js'
 import { updateSongList, getSong } from './homepage_interface/songSelector.js'
-import { toggleLogInForm, toggleSignUpForm } from './homepage_interface/userInterface.js'
+import { toggleLogInForm, toggleSignUpForm, toggleInstructions } from './homepage_interface/userInterface.js'
 import { generateCanvas } from './homepage_interface/generateCanvas.js'
 
 
@@ -76,15 +75,18 @@ window.addEventListener('load', function() {
     })
   })
 
+  document.querySelector('#instruction-button').addEventListener('click', toggleInstructions)
+
   // Signup and Login
   document.querySelector('#login').addEventListener('click', toggleLogInForm)
   document.querySelector('#signup').addEventListener('click', toggleSignUpForm)
 
-  
   document.body.addEventListener("ajax:success", function(event) {
     userMessageDiv.innerHTML = "The Song is successfully analysed. Enjoy the game"
   })
   document.body.addEventListener("ajax:error", function(event) {  
     userMessageDiv.innerHTML = "Song exists mate. Pick the song from the list below"
   })
+
+
 })

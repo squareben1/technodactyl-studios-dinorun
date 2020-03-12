@@ -1,9 +1,13 @@
 function toggleLogInForm(){
-  $("#login-form").toggle()
+  $("#login-form").toggle("slide")
 }
 
 function toggleSignUpForm() {
-  $("#register-form").toggle()
+  $("#register-form").toggle("slide")
 }
 
-export { toggleLogInForm, toggleSignUpForm } 
+function toggleInstructions(){
+  $("#instruction").toggle()
+}
+
+export { toggleLogInForm, toggleSignUpForm, toggleInstructions } 

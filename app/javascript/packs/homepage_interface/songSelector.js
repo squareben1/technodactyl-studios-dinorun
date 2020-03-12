@@ -6,7 +6,7 @@ function updateSongList() {
     datatype: JSON,
     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
   }).done(function( data ) {
-    songSelector.innerHTML = "<option value='' id=''>--Select Song--</option>"
+    songSelector.innerHTML = "<option value='' id=''>Select Song</option>"
     data.forEach(function(song) {
       songSelector.innerHTML += `<option value="${song['id']}">${song['title']}</option>`
     })
