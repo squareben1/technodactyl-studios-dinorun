@@ -8,6 +8,7 @@ function toggleSignUpForm() {
 
 function toggleInstructions(){
   $("#instruction").toggle()
+  $("#user-message").hide()
 }
 
 export { toggleLogInForm, toggleSignUpForm, toggleInstructions } 
