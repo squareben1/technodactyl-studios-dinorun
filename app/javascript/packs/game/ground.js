@@ -1,10 +1,10 @@
 class Ground {
   constructor(canvas, image) {
     this.canvasWidth = canvas.width 
+    this.xSize = Math.round(canvas.height / 6)
+    this.ySize = this.xSize
     this.x = canvas.width
-    this.y = canvas.height - 120
-    this.xSize = 120
-    this.ySize = 120
+    this.y = canvas.height - this.ySize
     this.image = image
   }
 

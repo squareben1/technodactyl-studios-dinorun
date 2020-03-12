@@ -5,6 +5,8 @@ describe("Dino", function() {
   var imageDouble2
   var dinoRunImageArray
   var dinoDeadImageArray
+  var dinoJumpImageArray
+  var canvasDouble
   var dino
   
   beforeEach(function() {
@@ -12,7 +14,9 @@ describe("Dino", function() {
     imageDouble2 = { a: 1 };
     dinoRunImageArray = [imageDouble, imageDouble2];
     dinoDeadImageArray = [imageDouble, imageDouble2];
-    dino = new Dino(dinoRunImageArray, dinoDeadImageArray);
+    dinoJumpImageArray = [imageDouble, imageDouble2];
+    canvasDouble = { width: 1280, height: 720 };
+    dino = new Dino(dinoRunImageArray, dinoDeadImageArray, dinoJumpImageArray, canvasDouble, 10, 10);
   });
 
   describe("#applyGravity", function() {
@@ -33,7 +37,6 @@ describe("Dino", function() {
 
   describe("#resetJump", function() {
     it("resets spaceCounter after jump", function() {
-      // rename?
       dino.spaceCounter = 2;
       dino.resetJump();
       expect(dino.spaceCounter).toEqual(0);
@@ -60,7 +63,7 @@ describe("Dino", function() {
     });
 
     it("returns second image in dinoImgArray", function() {
-      dino.animationCounter = dino.imageInterval;
+      dino.animationCounter = dino.imageInterval / 2;
       expect(dino.imageRun()).toEqual(dinoRunImageArray[1]);
     });
 

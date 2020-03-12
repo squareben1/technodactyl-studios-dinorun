@@ -36,6 +36,19 @@ class GameController {
       gController.audioElement.play()
     }, 3500)
 
+    gController.dinoJump = function(e) {
+      e.preventDefault()
+      gController.game.dino.jump()
+    }
+
+    gController.dinoAttack = function(e) {
+      e.preventDefault()
+      gController.game.crateAttack()
+    }
+
+    document.querySelector('#touch_left').addEventListener('touchstart', gController.dinoJump)
+    document.querySelector('#touch_right').addEventListener('touchstart', gController.dinoAttack)
+
     document.body.onkeyup = function(e){
       if (e.keyCode == 32) {
         gController.game.dino.jump()
@@ -93,6 +106,8 @@ class GameController {
     // Ajax score to leaderboard database
     // Display navbar
     // Play theme tune
+    document.querySelector('#touch_left').removeEventListener('touchstart', gController.dinoJump)
+    document.querySelector('#touch_right').removeEventListener('touchstart', gController.dinoAttack)
     this.uploadScore(score, this.songData['id'])
   }
 }

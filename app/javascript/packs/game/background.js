@@ -1,9 +1,9 @@
 class Background {
-  constructor(image, width, height) {
+  constructor(image, canvas) {
     this.x = 0
     this.y = 0
-    this.xSize = width
-    this.ySize = height
+    this.xSize = canvas.width
+    this.ySize = canvas.height
     this.image = image
     this.parallaxCorrection = 5
   }

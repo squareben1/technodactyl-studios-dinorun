@@ -42,17 +42,18 @@ import GameController from './game/gameController.js'
 import SongAnalyser from './mp3_analysis/mp3_info.js'
 import { updateSongList, getSong } from './homepage_interface/songSelector.js'
 import { toggleLogInForm, toggleSignUpForm } from './homepage_interface/userInterface.js'
+import { generateCanvas } from './homepage_interface/generateCanvas.js'
 
 
 // Load Page => new game
 window.addEventListener('load', function() {
+  generateCanvas()
   var gameController
   var songAnalyser
   var userMessageDiv = document.querySelector('#user-message')
-  
   gameController = new GameController
   gameController.setupGame()
-
+  
   songAnalyser = new SongAnalyser
   songAnalyser.setup()
 

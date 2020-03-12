@@ -17,14 +17,14 @@ describe("Block", function() {
   })
 
   describe('#objectCentre', function() {
-    it('returns centre point of dino object', function() {
-      expect(block.objectCentre()).toEqual([1320, 560])
+    it('returns centre point of block object, adjusted for gameplay', function() {
+      expect(block.objectCentre()).toEqual([1300, 540])
     })
   })
 
   describe('#objectRadius', function() {
-    it('returns radius of object circle', function() {
-      expect(block.objectRadius()).toEqual(40)
+    it('returns radius of object circle, adjusted for gameplay', function() {
+      expect(block.objectRadius()).toEqual(20)
     })
   })
 })

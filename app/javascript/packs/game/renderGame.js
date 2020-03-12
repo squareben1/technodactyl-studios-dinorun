@@ -9,8 +9,8 @@ class RenderGame {
     this.blockClass = blockClass
     this.scoreClass = scoreClass
     this.fireEffectClass = fireEffectClass
-    this.groundLevel = 100
-    this.frameInterval = 20
+    this.groundLevel = this.canvas.height / 7.2
+    this.frameInterval = 10
     this.fps = 50
     this.gameController = gameController
     this.crateClass = crateClass
@@ -30,13 +30,13 @@ class RenderGame {
     this._drawGround()
     this._drawDino()
     this.newScore = new this.scoreClass()
-    this._drawScore(0)
+    this._drawScore()
   }
 
   _drawBackground() {
     this.backgroundArray = []
-    let firstBackground = new this.backgroundClass(this.loadedImages['backgroundImage'], this.canvas.width, this.canvas.height)
-    let secondBackground = new this.backgroundClass(this.loadedImages['backgroundImage'], this.canvas.width, this.canvas.height)
+    let firstBackground = new this.backgroundClass(this.loadedImages['backgroundImage'], this.canvas)
+    let secondBackground = new this.backgroundClass(this.loadedImages['backgroundImage'], this.canvas)
     secondBackground.x = this.canvas.width
     this.backgroundArray.push(firstBackground, secondBackground)
     for (var i = 0; i < this.backgroundArray.length; i++) {
@@ -51,17 +51,19 @@ class RenderGame {
     this.canvasContext.drawImage(newGround.image, newGround.x, newGround.y, newGround.x, newGround.y)
   }
 
-  _drawScore(score) {
+  _drawScore(score = 0) {
     if (this.gameOver == false) {
       this.newScore.updateScore(score)
     }
-    this.canvasContext.font = "30px Caesar Dressing"
-    this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - 200, 50)
-
+    var fontSize = Math.round(this.canvas.height/27)
+    this.canvasContext.font = `${fontSize}px Caesar Dressing`
+    this.canvasContext.strokeText(`${this.newScore.currentScore}`, this.canvas.width - (this.canvas.width * 0.1), this.canvas.height / 14.4)
   }
 
   _drawDino() {
-    let newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'], this.loadedImages['dinoJumpImageArray'])
+    var imageInterval = 10
+    var gravity = Math.round(this.canvas.height / 72)
+    var newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'], this.loadedImages['dinoJumpImageArray'], this.canvas, imageInterval, gravity)
     this.canvasContext.drawImage(newDino.returnCurrentImage(), newDino.x, newDino.y, newDino.xSize, newDino.ySize)
     this._initializeFire(newDino)
     this.dino = newDino
@@ -75,10 +77,11 @@ class RenderGame {
   //                           Animate Game
   //=================================================================================
 
-  startGame(bpm, difficulty, generatedMapArray) { //frequencyArray,
+  startGame(bpm, itemsOnScreen, generatedMapArray) { //frequencyArray,
+    var scaledItemsOnScreen = itemsOnScreen * (canvas.width / 1280)
     this.mapArray = generatedMapArray
     this._generateFramesPerBeat(bpm)
-    this._calculateObjectVelocity(difficulty)
+    this._calculateObjectVelocity(scaledItemsOnScreen)
     this.animateGame()
   }
 
@@ -87,9 +90,9 @@ class RenderGame {
     this.fpb = (Math.round(this.fps / bps) / 2) * 2
   }
 
-  _calculateObjectVelocity(difficulty) {
+  _calculateObjectVelocity(itemsOnScreen) {
     let pixelsToDino = this.canvas.width - this.dino.x - this.dino.xSize
-    this.objectVelocity = (Math.round((pixelsToDino / this.fpb) / difficulty) / 2) * 2
+    this.objectVelocity = (Math.round((pixelsToDino / this.fpb) / itemsOnScreen) / 2) * 2
   }
 
   animateGame() {
@@ -122,27 +125,33 @@ class RenderGame {
   }
 
   _drawTopThree(data) {
+    var fontSize = Math.round(this.canvas.height/36)
     this.canvasContext.textAlign = 'left'
-    this.canvasContext.font = '20px Caesar Dressing'
-    var lineHeight = 320
-    this.canvasContext.fillText('High scores:', 510, lineHeight)
+    this.canvasContext.font = `${fontSize}px Caesar Dressing`
+    var lineHeight = Math.round(this.canvas.height / 2.25)
+    var lineWidth = Math.round(this.canvas.width / 2.46)
+    this.canvasContext.fillText('High scores:', lineWidth, lineHeight)
     self = this
     data.forEach( function(user) {
-      lineHeight += 20
-      self.canvasContext.fillText(user['username'] + ' ' + user['score'], 520, lineHeight)
+      lineHeight += Math.round(self.canvas.height / 36)
+      self.canvasContext.fillText(user['username'].substring(0, 10) + ' ' + user['score'], lineWidth, lineHeight)
     })
   }
 
   _drawGameOverScreen(finalScore) {
-    this.canvasContext.drawImage(this.loadedImages['endSignImage'], 270, 0)
+    var endSignX = Math.round(this.canvas.width/4.74)
+    var pixelSize = Math.round(this.canvas.height / 18)
+    this.canvasContext.drawImage(this.loadedImages['endSignImage'], endSignX, 0, Math.round(this.canvas.width/1.52), Math.round(this.canvas.height/1.65))
     this.canvasContext.textAlign = 'center'
-    this.canvasContext.font = '40px Caesar Dressing'
+    this.canvasContext.font = `${pixelSize}px Caesar Dressing`
     this.canvasContext.fillStyle = 'black'
-    this.canvasContext.fillText(`Your Final Score: ${finalScore}`, 640, 290)
-    this.canvasContext.drawImage(this.loadedImages['replayImage'], 680, 300, 100, 100)
+    this.canvasContext.fillText(`Your Final Score: ${finalScore}`, Math.round(this.canvas.width/2), Math.round(this.canvas.height/2.5))
+    var resetBtnX = Math.round((this.canvas.width*2.8)/5)
+    var resetBtnY = Math.round(this.canvas.height/2.4)
+    this.canvasContext.drawImage(this.loadedImages['replayImage'], resetBtnX, resetBtnY, this.groundLevel, this.groundLevel)
     var self = this
     this.resetGameClick = function(event) {
-      if ( event.x > 720 && event.x < 800 && event.y > 360 && event.y < 440) {
+      if ( (event.x > resetBtnX) && (event.x < resetBtnX + (self.groundLevel*2)) && (event.y > resetBtnY) && (event.y < resetBtnY + (self.groundLevel*2))) {
         self.resetGame()
       }
     }
@@ -156,7 +165,7 @@ class RenderGame {
   }
 
   _drawSign(image) {
-    this.canvasContext.drawImage(this.loadedImages[image], 800, 450)
+    this.canvasContext.drawImage(this.loadedImages[image], Math.round(this.canvas.width/1.6), Math.round(this.canvas.height/1.6), Math.round(this.canvas.width/4.3), Math.round(this.canvas.height/2.6))
   }
 
   animateEnding() {
@@ -180,7 +189,7 @@ class RenderGame {
         self.timeStepGround()
         self.timeStepBlocks()
         self.timeStepCrates()
-        self._drawScore(0)
+        self._drawScore()
         self.gameOver ? self.timeStepDeadDino(gameOverFrameCounter) : self.timeStepDino()
         gameOverFrameCounter++;
         if (gameOverFrameCounter == 47 && self.gameOver == false) {
@@ -188,6 +197,7 @@ class RenderGame {
           self.gameController.gameComplete(self.newScore.currentScore)
           self._drawGameOverScreen(self.newScore.currentScore)
           self._drawSign('winSignImage')
+          self.gameOver = true
         }
         if (gameOverFrameCounter == 79) {
           clearInterval(gameOverInterval)
@@ -232,27 +242,32 @@ class RenderGame {
   // =========================
 
   timeStepDino() {
-    if (this.groundArray[0].x <= 300) {
+    if (this.groundArray[0].x <= Math.round(this.canvas.width / 4.27)) {
+      var groundPastDino = this.dino.x - this.groundArray[0].xSize
+      var groundBeforeDino = this.dino.x + this.groundArray[0].xSize
       let filteredGround = this.groundArray.filter(function(item) {
-        return item.x >= -20 && item.x <= 220;
+        return (item.x >= groundPastDino) && (item.x <= groundBeforeDino);
       });
-      if (filteredGround.length > 0 && this.dino.y <= this.canvas.height - 240 && this.dino.y >= this.canvas.height - 259 && this.dino.jumpCounter < 1) {
+      var dinoGroundLevelY = this.canvas.height - this.dino.ySize - this.groundArray[0].ySize
+      var dinoGroundUpperLevelY = Math.round(dinoGroundLevelY / 1.04)
+      if ((filteredGround.length > 0) && (this.dino.jumpCounter < 1) && (this.dino.y <= dinoGroundLevelY) && (this.dino.y >= dinoGroundUpperLevelY)) {
         this.dino.resetJump();
-        this.dino.y = this.canvas.height - 240;
+        this.dino.y = dinoGroundLevelY;
       }
       else {
         this.dino.applyGravity();
       }
       this.dino.applyJump();
     }
-    this.canvasContext.drawImage(this.dino.returnCurrentImage(), this.dino.x, this.dino.y + 10, this.dino.xSize, this.dino.ySize);
+    this.canvasContext.drawImage(this.dino.returnCurrentImage(), this.dino.x, this.dino.y + Math.round(this.groundLevel/10), this.dino.xSize, this.dino.ySize);
   }
 
   timeStepDeadDino(counter) {
     if (this.dinoOffScreen == true) {
       var dinoXLoc = this.dino.y
     } else {
-      var dinoXLoc = this.canvas.height - 230
+      var dinoGroundLevelY = Math.round(this.canvas.height - this.dino.ySize - this.groundArray[0].ySize + this.groundLevel/10)
+      var dinoXLoc = dinoGroundLevelY
     }
     this.canvasContext.drawImage(this.dino.imageDead(counter), this.dino.x, dinoXLoc, this.dino.xSize, this.dino.ySize);
   }
@@ -294,7 +309,7 @@ class RenderGame {
     var leftGroundFeatureBlock = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][2])
     var rightGroundFeatureBlock = new this.groundClass(this.canvas, this.loadedImages['groundImageArray'][0])
     leftGroundFeatureBlock.x = lastGroundXLoc
-    rightGroundFeatureBlock.x = lastGroundXLoc + leftGroundFeatureBlock.xSize + 250
+    rightGroundFeatureBlock.x = lastGroundXLoc + leftGroundFeatureBlock.xSize + Math.round(this.canvas.width/5)
     return [leftGroundFeatureBlock, rightGroundFeatureBlock]
   }
 
