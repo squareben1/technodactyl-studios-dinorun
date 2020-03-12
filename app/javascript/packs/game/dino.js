@@ -7,6 +7,7 @@ class Dino {
     this.gravity = gravity;
     this.spaceCounter = 0;
     this.jumpCounter = 0;
+    this.addJump = 30;
     this.runImageArray = runImageArray;
     this.deadImageArray = deadImageArray;
     this.jumpImageArray = jumpImageArray;
@@ -26,7 +27,7 @@ class Dino {
 
   applyJump() {
     if (this.jumpCounter > 0) {
-      this.y -= (this.jumpCounter / 2) * 2;
+      this.y -= ((this.jumpCounter * (this.gravity * 0.1)) / 2) * 2;
       this.jumpCounter -= 1;
     }
   }
@@ -39,7 +40,7 @@ class Dino {
   jump() {
     if (this.spaceCounter < 2) {
       this.spaceCounter += 1;
-      this.jumpCounter = this.gravity*3;
+      this.jumpCounter = this.addJump;
       this.jumpSound.play()
     }
   }

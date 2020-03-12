@@ -10,7 +10,7 @@ class RenderGame {
     this.scoreClass = scoreClass
     this.fireEffectClass = fireEffectClass
     this.groundLevel = this.canvas.height / 7.2
-    this.frameInterval = 20
+    this.frameInterval = 10
     this.fps = 50
     this.gameController = gameController
     this.crateClass = crateClass
@@ -62,7 +62,7 @@ class RenderGame {
 
   _drawDino() {
     var imageInterval = 10
-    var gravity = 10
+    var gravity = Math.round(this.canvas.height / 72)
     var newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'], this.loadedImages['dinoJumpImageArray'], this.canvas, imageInterval, gravity)
     this.canvasContext.drawImage(newDino.returnCurrentImage(), newDino.x, newDino.y, newDino.xSize, newDino.ySize)
     this._initializeFire(newDino)
