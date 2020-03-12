@@ -2,8 +2,8 @@ class Crate {
   constructor(canvas, imageArray) {
     this.x = canvas.width
     this.y = Math.floor(Math.random() * (canvas.height/2)) 
-    this.xSize = 80
-    this.ySize = 80
+    this.xSize = canvas.height / 9
+    this.ySize = canvas.height / 9
     this.imageArray = imageArray
     this.exploded = false
     this.explosionCounter = 0

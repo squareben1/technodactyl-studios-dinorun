@@ -30,13 +30,13 @@ class RenderGame {
     this._drawGround()
     this._drawDino()
     this.newScore = new this.scoreClass()
-    this._drawScore(0)
+    this._drawScore()
   }
 
   _drawBackground() {
     this.backgroundArray = []
-    let firstBackground = new this.backgroundClass(this.loadedImages['backgroundImage'], this.canvas.width, this.canvas.height)
-    let secondBackground = new this.backgroundClass(this.loadedImages['backgroundImage'], this.canvas.width, this.canvas.height)
+    let firstBackground = new this.backgroundClass(this.loadedImages['backgroundImage'], this.canvas)
+    let secondBackground = new this.backgroundClass(this.loadedImages['backgroundImage'], this.canvas)
     secondBackground.x = this.canvas.width
     this.backgroundArray.push(firstBackground, secondBackground)
     for (var i = 0; i < this.backgroundArray.length; i++) {
@@ -61,7 +61,7 @@ class RenderGame {
   }
 
   _drawDino() {
-    let newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'], this.loadedImages['dinoJumpImageArray'])
+    let newDino = new this.dinoClass(this.loadedImages['dinoRunImageArray'], this.loadedImages['dinoDeadImageArray'], this.loadedImages['dinoJumpImageArray'], this.canvas, 5, 10)
     this.canvasContext.drawImage(newDino.returnCurrentImage(), newDino.x, newDino.y, newDino.xSize, newDino.ySize)
     this._initializeFire(newDino)
     this.dino = newDino

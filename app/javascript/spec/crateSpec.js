@@ -19,7 +19,7 @@ describe("Crate", function() {
   describe('#objectCentre', function() {
     it('returns centre point of crate object', function() {
       crate.y = 520
-      expect(crate.objectCentre()).toEqual([1320, 560])
+      expect(crate.objectCentre()).toEqual([1300, 540])
     })
   })
 

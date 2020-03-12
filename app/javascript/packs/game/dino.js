@@ -1,29 +1,31 @@
 class Dino {
-  constructor(runImageArray, deadImageArray, jumpImageArray) {
-    this.x = 100;
-    this.y = 100;
-    this.xSize = 120;
-    this.ySize = 120;
+  constructor(runImageArray, deadImageArray, jumpImageArray, canvas, imageInterval, gravity) {
+    this.x = canvas.height / 7.2;
+    this.y = canvas.height / 7.2;
+    this.xSize = canvas.height / 6;
+    this.ySize = canvas.height / 6;
+    this.gravity = gravity;
     this.spaceCounter = 0;
     this.jumpCounter = 0;
     this.runImageArray = runImageArray;
     this.deadImageArray = deadImageArray;
     this.jumpImageArray = jumpImageArray;
     this.jumpImageCounter = 0;
-    this.numImages = runImageArray.length;
-    this.imageInterval = 10;
-    this.animationCounterMax = this.numImages * this.imageInterval;
+    this.numRunImages = runImageArray.length;
+    this.numJumpImages = jumpImageArray.length;
+    this.imageInterval = imageInterval;
+    this.animationCounterMax = this.numRunImages * this.imageInterval;
     this.animationCounter = 0;
     this.jumpSound = this.createJumpSound()
   }
 
   applyGravity() {
-    this.y += 10;
+    this.y += this.gravity;
   }
 
   applyJump() {
     if (this.jumpCounter > 0) {
-      this.y -= (this.jumpCounter / 5) * 5;
+      this.y -= (this.jumpCounter / 2) * 2;
       this.jumpCounter -= 1;
     }
   }
@@ -60,7 +62,7 @@ class Dino {
   }
 
   imageRun() {
-    var imageIndex = Math.floor(this.animationCounter / this.imageInterval);
+    var imageIndex = Math.min(Math.floor(this.animationCounter / this.imageInterval), 10)
     var imageToReturn = this.runImageArray[imageIndex];
     this.animationCounter++;
     if (this.animationCounter >= this.animationCounterMax) {
@@ -74,8 +76,8 @@ class Dino {
     var imageToReturn
     if (this.jumpImageCounter < this.imageInterval * 2) {
       imageIndex = Math.floor(this.jumpImageCounter / (this.imageInterval));    
-    } else if(this.y > 269 && this.jumpCounter < 10){
-      imageIndex = Math.min(Math.floor((this.y - 270)/ 71) + 7, this.numImages-1) 
+    } else if ((this.jumpCounter < this.gravity) && (this.y - (2*this.ySize) > 0)) {
+      imageIndex = Math.min(Math.round((this.y - (2*this.ySize))/ this.ySize) + 7, this.numJumpImages-1) 
     } else {
       imageIndex = Math.floor(((this.jumpImageCounter - (this.imageInterval * 2))/ (this.imageInterval / 2)) % 5) + 2
     }
