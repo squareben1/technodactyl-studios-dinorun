@@ -106,17 +106,19 @@ body {
   font-size: 3vh;
 }
 
+.upload-music {
+  align-self: center;
+}
+
 #upload-form {
   display: flex;
   flex-direction: row;
   font-family: "Caesar Dressing";
-  align-self: center;
+  align-items: center;
 }
 
-.upload-music {
-  margin-top: 1vh;
-  display: flex;
-  align-self: center;
+div.field, div.actions {
+  margin: 0;
 }
 
 #song_selection {
