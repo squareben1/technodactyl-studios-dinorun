@@ -106,6 +106,10 @@ body {
   font-size: 3vh;
 }
 
+#create_song_btn {
+  padding-left: 2vh;
+}
+
 .upload-music {
   align-self: center;
 }

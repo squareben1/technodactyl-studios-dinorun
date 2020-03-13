@@ -85,5 +85,5 @@ window.addEventListener('load', function() {
     $('#user-message').text('Song exists mate. Pick the song from the list above').show()
   })
 
-  $('#create_song_btn').click( () => $('#create_song_btn').hide() )
+  $('#create_song_btn').click( () => $('#create_song_btn').hide("slide") )
 })

@@ -182,7 +182,7 @@ class SongAnalyser{
 
   showCreateSongButton() {
     $('#user-message').text('').hide()
-    $('#create_song_btn').show()
+    $('#create_song_btn').show("slide")
   }
 
   hideCreateSongButton() {
