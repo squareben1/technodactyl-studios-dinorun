@@ -51,18 +51,11 @@ class SongAnalyser{
       var tempo = self.countFlatLineGroupings(gettingTempo);
       var finalTempo = tempo * 6;
       song_bpm.value = finalTempo;
-      console.log("bpm", finalTempo)
 
       /// Volume Amplitude Array
-      var pcmData = source.buffer.getChannelData(0)
       var amplitudeArray = self.slice(buffer, finalTempo, audioCtx);
 
       /// Frequency Array
-      lowPassBuffer = self.getSampleClip(lowPassBuffer, (finalTempo * songLength/60));
-      lowPassBuffer = self.normalizeArray(lowPassBuffer);
-      lowPassBuffer = lowPassBuffer.filter(function(value) {
-        return !Number.isNaN(value);
-      });
       song_analysed.value = JSON.stringify(amplitudeArray);
 
       // Post completion
@@ -131,7 +124,6 @@ class SongAnalyser{
   }
 
   countFlatLineGroupings(data) {
-    var groupings = 0;
     var newArray = this.normalizeArray(data);
 
     function getMax(a) {
