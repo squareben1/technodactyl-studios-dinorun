@@ -76,12 +76,13 @@ window.addEventListener('load', function() {
   document.querySelector('#signup').addEventListener('click', toggleSignUpForm)
 
   document.body.addEventListener("ajax:success", function(event) {
-    userMessageDiv.innerHTML = "The Song is successfully analysed. Enjoy the game"
+    $('#user-message').text('The Song is successfully analysed. Enjoy the game').show()
     updateSongList()
     document.querySelector("#song_mp3").value = ""
   })
+
   document.body.addEventListener("ajax:error", function(event) {  
-    userMessageDiv.innerHTML = "Song exists mate. Pick the song from the list below"
+    $('#user-message').text('Song exists mate. Pick the song from the list above').show()
   })
 
 
