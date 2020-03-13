@@ -112,6 +112,7 @@ class RenderGame {
         self._drawScore(100)
         self.deathInteractionGround()
         if (self.gameController.audioElement.ended) {
+          self.newScore.updateScore(150000)
           clearInterval(gameInterval)
           self.animateEnding()
         }

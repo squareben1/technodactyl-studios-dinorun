@@ -31,9 +31,9 @@ class GameController {
     this.game.startGame(data["bpm"], ((data['bpm']/220)*4), generatedBlockArray) //bpm, difficulty(blocks on screen, lower = faster and fewer)
     
     var gController = this
+    gController.audioElement.currentTime = 0
 
     setTimeout(function() {
-      gController.audioElement.currentTime = 0
       gController.audioElement.play()
     }, 3500)
 
