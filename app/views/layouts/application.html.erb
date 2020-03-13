@@ -17,9 +17,9 @@
           beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}
         }).done(function( data ) {
           if (data) {
-            $('#logged-in').css('display', 'block')
+            $('#logged-out').toggle()
           } else {
-            $('#logged-out').css('display', 'block')
+            $('#logged-in').toggle()
           }
         })
       })()

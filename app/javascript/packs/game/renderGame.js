@@ -161,7 +161,7 @@ class RenderGame {
   resetGame() {
     self.setup()
     document.removeEventListener('click', self.resetGameClick)
-    document.querySelector('#logged-in').style.display = 'block'
+    $("#navbar").toggle()
   }
 
   _drawSign(image) {

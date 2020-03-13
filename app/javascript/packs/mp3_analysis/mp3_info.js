@@ -181,16 +181,16 @@ class SongAnalyser{
   }
 
   showCreateSongButton() {
-    document.querySelector('#create_song_progress').innerHTML = ''
-    document.querySelector('#create_song_btn').style.display = "inline-block"
+    $('#user-message').text('').hide()
+    $('#create_song_btn').show("slide")
   }
 
   hideCreateSongButton() {
-    document.querySelector('#create_song_btn').style.display = "none"
+    $('#create_song_btn').hide()
   }
 
   displayProgressBar() {
-    document.querySelector('#create_song_progress').innerHTML = 'Song analysis in progress'
+    $('#user-message').text('Song analysis in progress').show()
   }
 }
 

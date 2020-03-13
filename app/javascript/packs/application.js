@@ -37,16 +37,16 @@ require("packs/homepage_interface/userInterface")
 // mp3 Analysis Packs
 require("packs/mp3_analysis/mp3_info")
 
-
 import GameController from './game/gameController.js'
 import SongAnalyser from './mp3_analysis/mp3_info.js'
 import { updateSongList, getSong } from './homepage_interface/songSelector.js'
-import { toggleLogInForm, toggleSignUpForm } from './homepage_interface/userInterface.js'
+import { toggleLogInForm, toggleSignUpForm, toggleInstructions, touchOrWebInstructions } from './homepage_interface/userInterface.js'
 import { generateCanvas } from './homepage_interface/generateCanvas.js'
 
 
 // Load Page => new game
 window.addEventListener('load', function() {
+  touchOrWebInstructions()
   generateCanvas()
   var gameController
   var songAnalyser
@@ -65,21 +65,26 @@ window.addEventListener('load', function() {
   document.querySelector('#start_game_btn').addEventListener('click', function() {
     getSong(function(data, audio) {
       userMessageDiv.innerHTML = ''
+      $('#user-message').hide()
       gameController.startGame(data, audio)
     })
   })
+
+  document.querySelector('#instruction-button').addEventListener('click', toggleInstructions)
 
   // Signup and Login
   document.querySelector('#login').addEventListener('click', toggleLogInForm)
   document.querySelector('#signup').addEventListener('click', toggleSignUpForm)
 
-  
   document.body.addEventListener("ajax:success", function(event) {
-    userMessageDiv.innerHTML = "The Song is successfully analysed. Enjoy the game"
+    $('#user-message').text('The Song is successfully analysed. Enjoy the game').show()
     updateSongList()
     document.querySelector("#song_mp3").value = ""
   })
+
   document.body.addEventListener("ajax:error", function(event) {  
-    userMessageDiv.innerHTML = "Song exists mate. Pick the song from the list below"
+    $('#user-message').text('Song exists mate. Pick the song from the list above').show()
   })
+
+  $('#create_song_btn').click( () => $('#create_song_btn').hide("slide") )
 })
