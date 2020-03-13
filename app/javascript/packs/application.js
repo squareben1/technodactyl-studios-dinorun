@@ -40,12 +40,13 @@ require("packs/mp3_analysis/mp3_info")
 import GameController from './game/gameController.js'
 import SongAnalyser from './mp3_analysis/mp3_info.js'
 import { updateSongList, getSong } from './homepage_interface/songSelector.js'
-import { toggleLogInForm, toggleSignUpForm, toggleInstructions } from './homepage_interface/userInterface.js'
+import { toggleLogInForm, toggleSignUpForm, toggleInstructions, touchOrWebInstructions } from './homepage_interface/userInterface.js'
 import { generateCanvas } from './homepage_interface/generateCanvas.js'
 
 
 // Load Page => new game
 window.addEventListener('load', function() {
+  touchOrWebInstructions()
   generateCanvas()
   var gameController
   var songAnalyser
