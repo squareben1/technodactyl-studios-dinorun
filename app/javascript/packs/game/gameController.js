@@ -33,6 +33,7 @@ class GameController {
     var gController = this
 
     setTimeout(function() {
+      gController.audioElement.currentTime = 0
       gController.audioElement.play()
     }, 3500)
 
