@@ -36,7 +36,8 @@
   z-index: 0;
 }
 
-#touch_right, #touch_left {
+#touch_right,
+#touch_left {
   position: relative;
   width: 50%;
   float: right;
@@ -44,6 +45,113 @@
 }
 
 #navbar {
+  margin: 0;
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(255, 255, 255, 0.5);
+  height: 5vh;
+}
+
+#logged-out {
+  display: flex;
+}
+
+#logged-in {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#signup,
+#login {
+  background-color: transparent;
+  border: none;
+  font-family: "Caesar Dressing";
+  font-size: 3vh;
+  margin-left: 1vh;
+}
+
+#register-form,
+#login-form {
+  align-self: center;
+  margin-left: 1vh;
+}
+
+#logged-out input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid black;
+  font-size: 2vh;
+}
+
+#logged-out input[type="submit"] {
+  font-family: "Caesar Dressing";
+  border: none;
+  cursor: pointer;
+  font-size: 2.5vh;
+}
+
+body {
+  margin: 0;
+}
+
+#logged-in button,
+#create_song_btn {
+  background-color: transparent;
+  font-family: "Caesar Dressing";
+  border: none;
+  cursor: pointer;
+  font-size: 3vh;
+}
+
+#create_song_btn {
+  padding-left: 2vh;
+}
+
+.upload-music {
+  align-self: center;
+}
+
+#upload-form {
+  display: flex;
+  flex-direction: row;
+  font-family: "Caesar Dressing";
+  align-items: center;
+}
+
+div.field, div.actions {
+  margin: 0;
+}
+
+#song_selection {
+  background-color: transparent;
+  border: none;
+  font-family: "Caesar Dressing";
+  font-size: 2vh;
+}
+
+#instruction {
+  position: absolute;
+  top: 30vh;
+  left: 30vw;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 2vh;
+  border-radius: 5px;
+  font-size: 2vh;
+  line-height: 3vh;
+}
+
+#user-message {
+  display: none;
+  min-width: 30vw;
+  position: absolute;
+  top: 30vh;
+  left: 35vw;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 2vh;
+  border-radius: 5px;
+  font-size: 2vh;
+  line-height: 3vh;
 }

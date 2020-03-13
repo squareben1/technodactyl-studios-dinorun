@@ -18,6 +18,6 @@ feature 'user can login', js: true do
     log_in
     expect(page).not_to have_button('Sign in')
     expect(page).to have_button('Logout')
-    expect(page).to have_content 'Mp3'
+    expect(page).to have_css('#song_mp3')
   end
 end

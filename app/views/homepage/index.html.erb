@@ -1,7 +1,7 @@
 <nav id='navbar'>
   <span id="user-message"></span>
   <br>
-  <div id="logged-out" style='display: none;'>
+  <div id="logged-out">
     <button id='signup'>Signup</button>
     <form id="register-form" style='display: none;'>
       <input type='text' id="register[username]" name="register[username]" placeholder="Username" required>
@@ -17,24 +17,24 @@
       <input type='submit' id='login[button]' value='Sign in'>
     </form>
   </div>
-  <div id="logged-in" style='display: none;'>
-    <button id='logout'>Logout</button>
-    <br>
+  <div id="logged-in">
     <div class='upload-music'>
       <%= render 'form', song: @song%>
     </div>
     <select id="song_selection">
-      <option value="">--select--</option>
+      <option value="">Select Song</option>
     </select>
     <button id='start_game_btn'>Play</button>
     <div id='song_player'></div>
-    <div id="instruction">
+    <button id="instruction-button">Instructions</button>
+    <div id="instruction" style="display: none;">
       Click <strong>Spacebar</strong> for jump.<br>
       Click <strong>d</strong> to destroy crates floating on the air. Hit them for more points!<br> 
       Click <strong>r</strong> once the game is over to open the song selector <br> 
       Click <strong>g</strong> once the game is over to quick replay the same song <br> 
       You can't destroy stones on the ground. They are too hard for the dinosaur.<br>
     </div>
+    <button id='logout'>Logout</button>
   </div>
 </nav>
 <div id='canvas_container'></div>

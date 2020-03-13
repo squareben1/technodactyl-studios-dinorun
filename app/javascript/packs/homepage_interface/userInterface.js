@@ -1,9 +1,20 @@
 function toggleLogInForm(){
-  $("#login-form").toggle()
+  if ( $("#register-form").css('display') === 'block' ) {
+    $("#register-form").toggle("slide")
+  }
+  $("#login-form").toggle("slide")
 }
 
 function toggleSignUpForm() {
-  $("#register-form").toggle()
+  if ( $("#login-form").css('display') === 'block' ) {
+    $("#login-form").toggle("slide")
+  }
+  $("#register-form").toggle("slide")
 }
 
-export { toggleLogInForm, toggleSignUpForm } 
+function toggleInstructions(){
+  $("#instruction").toggle()
+  $("#user-message").hide()
+}
+
+export { toggleLogInForm, toggleSignUpForm, toggleInstructions } 
