@@ -1,5 +1,7 @@
 # technodactyl-studios-dinorun
 
+(Side Scrolling Music-Based Procedurally Generated 2D Game)
+
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
