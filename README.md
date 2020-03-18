@@ -1,4 +1,5 @@
-# technodactyl-studios-dinorun
+# Dinorun
+### Technodactyl Studios
 
 (Side Scrolling Music-Based Procedurally Generated 2D Game)
 
