@@ -1,4 +1,7 @@
-# technodactyl-studios-dinorun
+# Dinorun
+### Technodactyl Studios
+
+(Side Scrolling Music-Based Procedurally Generated 2D Game)
 
 
 This README would normally document whatever steps are necessary to get the
