@@ -1,175 +1,148 @@
 class SongAnalyser{
   setup() {
-    var song = this
-    var audio_file = document.getElementById("song_mp3");
+    var songAnalyser = this
+    var audio_file = document.getElementById("song_mp3")
     audio_file.onchange = function() {
       if (audio_file.value == '') {
         return ''
       }
-      song.hideCreateSongButton()
-      song.displayProgressBar()
-      var file = this.files[0];
-      song_title.value = file.name;
-      var reader = new FileReader();
-      var context = new (window.AudioContext || window.webkitAudioContext)();
+      songAnalyser.hideCreateSongButton()
+      songAnalyser.displayProgressBar()
+      var file = this.files[0]
+      song_title.value = file.name
+      var reader = new FileReader()
+      var context = new (window.AudioContext || window.webkitAudioContext)()
       reader.onload = function() {
         context.decodeAudioData(reader.result, function(buffer) {
-          song.json(buffer); 
-        });
-      };
-      reader.readAsArrayBuffer(file);
-    };
+          songAnalyser.buffertoJSON(buffer)
+        })
+      }
+      reader.readAsArrayBuffer(file)
+    }
   }
 
   //// getting both amplitude array and bpm of the audio file
-  json(buffer) {
-    var offlineContext = new OfflineAudioContext(
-      1,
-      buffer.length,
-      buffer.sampleRate
-    );
-    var source = offlineContext.createBufferSource();
-    source.buffer = buffer;
-    var filter = offlineContext.createBiquadFilter();
-    filter.type = "lowpass";
-    source.connect(filter);
-    filter.connect(offlineContext.destination);
-    source.start(0);
-    self = this;
+  buffertoJSON(buffer) {
+    var offlineContext = new OfflineAudioContext(1, buffer.length, buffer.sampleRate)
+    var source = offlineContext.createBufferSource()
+    source.buffer = buffer
+    var filter = offlineContext.createBiquadFilter()
+    filter.type = "lowpass"
+    source.connect(filter)
+    filter.connect(offlineContext.destination)
+    self = this
 
-    offlineContext.startRendering().then(function(lowPassAudioBuffer) {
-      var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      var song = audioCtx.createBufferSource();
-      song.buffer = lowPassAudioBuffer;
-      var songLength = song.buffer.duration
-      song.connect(audioCtx.destination);
-      var lowPassBuffer = song.buffer.getChannelData(0);
+    offlineContext.startRendering().then( function(lowPassAudioBuffer) {
+      // Tempo
+      var pcmData = lowPassAudioBuffer.getChannelData(0)
+      var normalizedPCMData = self.normalizeArray(pcmData)
+      var tempo = self.analyseTempo(normalizedPCMData, lowPassAudioBuffer.sampleRate)
+      song_bpm.value = tempo
 
-      /// Tempo
-      var gettingTempo = self.getSampleClip(lowPassBuffer, 400);
-      gettingTempo = self.normalizeArray(gettingTempo);
-      var tempo = self.countFlatLineGroupings(gettingTempo);
-      var finalTempo = tempo * 6;
-      song_bpm.value = finalTempo;
-
-      /// Volume Amplitude Array
-      var amplitudeArray = self.slice(buffer, finalTempo, audioCtx);
-
-      /// Frequency Array
-      song_analysed.value = JSON.stringify(amplitudeArray);
+      // Amplitude Array
+      var maxSampleAmplitude = self.bufferToMaxAmplitudePerBeat(lowPassAudioBuffer, tempo)
+      maxSampleAmplitude = self.normalizeArray(maxSampleAmplitude)
+      song_analysed.value = JSON.stringify(maxSampleAmplitude)
 
       // Post completion
       self.showCreateSongButton()
-    });
-  }
-
-  getSampleClip(data, samples) {
-    var newArray = [];
-    var modulus_coefficient = Math.round(data.length / samples);
-
-    for (var i = 0; i < data.length; i++) {
-      if (i % modulus_coefficient == 0) {
-        newArray.push(data[i]);
-      }
-    }
-    return newArray;
-  }
-
-  // return an array of amplitudes for the supplied `audioBuffer`
-  // each item in the array will represent the average amplitude (in dB)
-  // for a chunk of audio `bpm` seconds long
-  slice(audioBuffer, bpm, context) {
-    var channels = audioBuffer.numberOfChannels,
-      sampleRate = context.sampleRate,
-      len = audioBuffer.length,
-      samples = Math.round(sampleRate * (60/bpm)),
-      output = [],
-      amplitude,
-      values;
-    // loop by chunks of `t` seconds
-    for (let i = 0; i < len; i += samples ) {
-      values = [];
-      // loop through each sample in the chunk
-      for (let j = 0; j < samples && j + i < len; ++j ) {
-        amplitude = 0;
-        // sum the samples across all channels
-        for (let k = 0; k < channels; ++k ) {
-          amplitude += audioBuffer.getChannelData(k)[i + j];
-        }
-        values.push(amplitude);
-      }
-      output.push(this.dB(values));
-    }
-    return output;
-  }
-
-  dB( buffer ) {
-    var len = buffer.length, total = 0, i = 0, rms, db;
-    while ( i < len ) {
-      total += ( buffer[i] * buffer[i++] );
-    }
-    rms = Math.sqrt( total / len );
-    db = 20 * ( Math.log(rms) / Math.LN10 );
-    return db;
+    })
+    source.start()
   }
 
   normalizeArray(data) {
-    var newArray = [];
-
+    var maxLow = 0
     for (var i = 0; i < data.length; i++) {
-      newArray.push(Math.abs(Math.round((data[i + 1] - data[i]) * 1000)));
+      if (data[i] < maxLow) {
+        maxLow = data[i]
+      }
     }
+    maxLow = Math.abs(maxLow)
 
-    return newArray;
+    var maxHigh = 0
+    for (var i = 0; i < data.length; i++) {
+      if (data[i] > maxHigh) {
+        maxHigh = data[i]
+      }
+    }
+    var max = (maxLow > maxHigh ? maxLow : maxHigh)
+
+    var normalizedArray = []
+    for (var i = 0; i < data.length; i++) {
+      let value = Math.abs(data[i])
+      normalizedArray.push(Math.round((value / max) * 1000))
+    }
+    return normalizedArray
   }
 
-  countFlatLineGroupings(data) {
-    var newArray = this.normalizeArray(data);
+  analyseTempo(normalizedPCMData, sampleRate) {
+    var peaksArray = this.getPeaksAtThreshold(normalizedPCMData, 750)
+    var tempoCounts = this.countIntervalsBetweenNearbyPeaks(peaksArray, sampleRate)
+    var tempo = tempoCounts.sort((a, b) => b.count - a.count)[0].tempo
+    return tempo
+  }
 
-    function getMax(a) {
-      var m = -Infinity,
-        i = 0,
-        n = a.length;
+  getPeaksAtThreshold(data, threshold) {
+    var peaksArray = []
+    var length = data.length
+    for(var i = 0; i < length; i++) {
+      if (data[i] > threshold) {
+        peaksArray.push(i)
+        i += 10000
+      }
+    }
+    return peaksArray
+  }
 
-      for (; i != n; ++i) {
-        if (a[i] > m) {
-          m = a[i];
+  countIntervalsBetweenNearbyPeaks(peaksArray, sampleRate) {
+    var tempoCounts = []
+    peaksArray.forEach( function(peak, index) {
+      for (var i = 0; i < 10; i++) {
+        var interval = peaksArray[index + i] - peak
+        if (Number.isNaN(interval) || interval == 0) {
+          continue
+        }
+        var tempo = Math.round(60 / (interval / sampleRate))
+        while (tempo < 70) tempo *= 2
+        var foundTempo = tempoCounts.some( function(tempoCount) {
+          if (tempoCount.tempo === tempo) {
+            return tempoCount.count++
+          }
+        })
+        if (!foundTempo) {
+          tempoCounts.push({tempo: tempo, count: 1})
         }
       }
-      return m;
-    }
+    })
+    return tempoCounts
+  }
 
-    function getMin(a) {
-      var m = Infinity,
-        i = 0,
-        n = a.length;
+  // return an array of amplitudes for the supplied `audioBuffer`
+  bufferToMaxAmplitudePerBeat(audioBuffer, bpm) {
+    var sampleSize = Math.round(audioBuffer.sampleRate * (60/bpm))
+    var numChannels = audioBuffer.numberOfChannels
+    var amplitudeArray = []
 
-      for (; i != n; ++i) {
-        if (a[i] < m) {
-          m = a[i];
+    // loop through each sample
+    for (var i = 0; i < audioBuffer.length; i += sampleSize) {
+      var maxSampleAmplitude = 0
+      // loop through each value in sample
+      for (let j = 0; j < sampleSize; j++) {
+        let avgValueAmplitude = 0
+        // sum the samples across all channels
+        for (let k = 0; k < numChannels; k++) {
+          avgValueAmplitude += audioBuffer.getChannelData(k)[i + j]
+        }
+        avgValueAmplitude /= numChannels
+        if (maxSampleAmplitude < avgValueAmplitude) {
+          maxSampleAmplitude = avgValueAmplitude
         }
       }
-      return m;
-    }
-
-    var max = getMax(newArray);
-    var min = getMin(newArray);
-    var count = 0;
-    var threshold = Math.round((max - min) * 0.2);
-
-    for (var i = 0; i < newArray.length; i++) {
-      if (
-        newArray[i] > threshold &&
-        newArray[i + 1] < threshold &&
-        newArray[i + 2] < threshold &&
-        newArray[i + 3] < threshold &&
-        newArray[i + 6] < threshold
-      ) {
-        count++;
+      amplitudeArray.push(maxSampleAmplitude)
+      if (i + sampleSize > audioBuffer.length) {
+        return amplitudeArray
       }
     }
-
-    return count;
   }
 
   showCreateSongButton() {
