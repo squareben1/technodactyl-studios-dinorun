@@ -76,9 +76,13 @@ class SongAnalyser{
   }
 
   analyseTempo(normalizedPCMData, sampleRate) {
+    console.log(normalizedPCMData)
     var peaksArray = this.getPeaksAtThreshold(normalizedPCMData, 750)
+    console.log(peaksArray)
     var tempoCounts = this.countIntervalsBetweenNearbyPeaks(peaksArray, sampleRate)
+    console.log(tempoCounts)
     var tempo = tempoCounts.sort((a, b) => b.count - a.count)[0].tempo
+    console.log(tempo)
     return tempo
   }
 
