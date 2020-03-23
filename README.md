@@ -39,8 +39,11 @@ The application has been developed using Ruby v2.6.5, Ruby on Rails v6.0.2.2 and
 - PostgreSQL (can be installed from the terminal using homebrew ```brew install postgres```)
 
 Once the above has been installed, clone or download the git repository, move to the program root directory, then run the following in the command line to install the program:
-- ```bundle```
-- ```yarn```
+
+```
+bundle
+yarn
+```
 
 Since the application requires persistent data, such as users and mp3 files, a PSQL database is used in conjunction with ApplicationRecord. To set the database up, first ensure you have PSQL installed and running as a service, then create a copy of ```config/example.application.yml``` named as ```application.yml```. Inside this new file, insert your database credentials.
 
