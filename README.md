@@ -15,16 +15,16 @@
 ':      `;;        ,;     `.    ':`,,.__,,_ /
  `;`:;`;:`       ,;  '.    ;,      ';';':';;`
               .,; '    '-._ `':.;    
-            .:; `          '._ `';;,
-          ;:` `    :'`'       ',__.)
-        `;:;:.,...;'`'
-      ';. '`'::'`''  .'`'
-    ,'   `';;:,..::;`'`'
-, .;`      `'::''`
-,`;`.
+            .:; `          '._ `';;,                      __
+          ;:` `    :'`'       ',__.)                     / _)
+        `;:;:.,...;'`'                          _.----._/ /
+      ';. '`'::'`''  .'`'                      /         / 
+    ,'   `';;:,..::;`'`'                    __/ (  | (  |           
+, .;`      `'::''`                         /__.-'|_|--|_|          
+,`;`.                                             
 ```
 
-### Overview
+## Overview
 
 Dinorun is a side scrolling platform game where the levels are procedurally generated based on audio files uplaoded by the user. 
 
@@ -32,7 +32,7 @@ It's built as a Single Page App, with a responsive design. It is played using th
 
 The level scores are stored in a database. The top three scores for the current level are displayed on the end screen.
 
-### How to Install and Run
+## How to Install
 
 The application has been developed using Ruby v2.6.5, Ruby on Rails v6.0.2.2 and PostgreSQL. Therefore to install the application please ensure you have the following installed:
 - ruby 2.6.5 (can be installed from the terminal using homebrew ```brew install ruby``` and version checked using rvm ```rvm use 2.6.5```)
@@ -54,7 +54,7 @@ rails db:create
 rails db:migrate
 ```
 
-### Usage
+## How to Run
 
 To run the application in development, run `rails s` in the command line, then navigate to `http://localhost:3000/`.
 
@@ -70,7 +70,7 @@ Testing Suites:
 To run the backend tests run `rspec` in the command line
 To run the frontend tests run `rails s` in the command line, then navigate to `http://localhost:3000/jasmine`
 
-### Gameplay
+## Gameplay
 
 #### Song Selection
 ![Gameplay](docs/dinorun_song_selection.png)
@@ -88,7 +88,7 @@ Game developed in pure Javascript without frameworks.
 ![Game Flow]()
 
 
-### Credits
+## Credits
 
 [Chris Wood](https://github.com/cpcwood)
 
