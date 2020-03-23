@@ -1,7 +1,6 @@
 # Dinorun
 
 ### Technodactyl Studios resents their debut game - DINORUN
-============
 ```
                   ,
                ,  ;:._.-`''.
